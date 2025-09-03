@@ -17,7 +17,7 @@ hero:
       size: xl
       color: neutral
       variant: subtle
-      to: https://github.com/nuxt-ui-pro/saas
+      to: https://github.com/nuxt-ui-templates/saas
       target: _blank
 sections:
   - title: Enterprise-Grade Solutions
