@@ -21,9 +21,14 @@ useSeoMeta({
       :links="page.hero.links"
     >
       <template #top>
-        <div class="absolute rounded-full dark:bg-primary blur-[300px] size-60 sm:size-80 transform -translate-x-1/2 left-1/2 -translate-y-80" />
+        <HeroBackground />
+      </template>
 
-        <LazyStarsBg />
+      <template #title>
+        <MDC
+          :value="page.title"
+          unwrap="p"
+        />
       </template>
 
       <PromotionalVideo />
@@ -86,8 +91,6 @@ useSeoMeta({
       variant="naked"
       class="overflow-hidden"
     >
-      <div class="absolute rounded-full dark:bg-primary blur-[250px] size-40 sm:size-50 transform -translate-x-1/2 left-1/2 -translate-y-80" />
-
       <LazyStarsBg />
     </UPageCTA>
   </div>

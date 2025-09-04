@@ -13,11 +13,7 @@ const items = computed(() => [{
   to: '/blog'
 }, {
   label: 'Changelog',
-  to: '/changelog',
-  badge: {
-    label: 'New',
-    color: 'primary' as const
-  }
+  to: '/changelog'
 }])
 </script>
 
@@ -25,7 +21,7 @@ const items = computed(() => [{
   <UHeader>
     <template #left>
       <NuxtLink to="/">
-        <LogoPro class="w-auto h-6 shrink-0" />
+        <AppLogo class="w-auto h-6 shrink-0" />
       </NuxtLink>
       <TemplateMenu />
     </template>

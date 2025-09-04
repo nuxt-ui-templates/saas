@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-ui-pro-template-saas",
+  "name": "nuxt-ui-template-saas",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,7 +16,7 @@
     "@iconify-json/simple-icons": "^1.2.48",
     "@nuxt/content": "^3.6.3",
     "@nuxt/image": "^1.11.0",
-    "@nuxt/ui-pro": "^3.3.2",
+    "@nuxt/ui": "^4.0.0-alpha.1",
     "@standard-schema/spec": "^1.0.0",
     "@vueuse/nuxt": "^13.7.0",
     "better-sqlite3": "^12.2.0",
