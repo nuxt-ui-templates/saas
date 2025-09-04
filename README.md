@@ -5,7 +5,7 @@
 Fully built SaaS application to launch your next project with a landing page, a pricing page, a documentation and a blog powered by [Nuxt UI](https://ui.nuxt.com) components.
 
 - [Live demo](https://saas-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/getting-started/installation)
+- [Documentation](https://ui4.nuxt.com/docs/getting-started/installation/nuxt)
 
 <a href="https://saas-template.nuxt.dev/" target="_blank">
   <picture>
@@ -52,28 +52,6 @@ pnpm preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Nuxt Studio integration
-
-Studio is an intuitive CMS interface to edit your Nuxt Content websites.
-
-It take advantage of the Preview API included in Nuxt Content to propose the best editing experience for your content files. Editors can benefit from a user-friendly interface to edit their Markdown, YAML or JSON files.
-
-You can import your project on the platform without any extra setup.
-
-However to enable the live preview on the platform, you just need to activate studio in the content configuration of your `nuxt.config.ts` file.
-
-```ts [nuxt.config.ts]
-export default defineNuxtConfig({
-  content: {
-    preview: {
-      api: 'https://api.nuxt.studio'
-    }
-  }
-})
-```
-
-Read more on [Nuxt Studio docs](https://content.nuxt.com/studio/setup).
 
 ## Renovate integration
 
