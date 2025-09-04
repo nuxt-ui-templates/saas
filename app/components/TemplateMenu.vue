@@ -23,6 +23,9 @@
     }, {
       label: 'Chat',
       to: 'https://chat-template.nuxt.dev/'
+    }, {
+      label: 'Portfolio',
+      to: 'https://portfolio-template.nuxt.dev/'
     }]"
     :ui="{ content: 'w-(--reka-dropdown-menu-trigger-width) min-w-0' }"
     size="xs"
