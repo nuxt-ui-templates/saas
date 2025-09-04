@@ -90,13 +90,27 @@ function onSubmit() {
 
     <template #left>
       <p class="text-muted text-sm">
-        Copyright © {{ new Date().getFullYear() }}. All rights reserved.
+        Built with Nuxt UI • © {{ new Date().getFullYear() }}
       </p>
     </template>
 
     <template #right>
-      <UColorModeButton />
-
+      <UButton
+        to="https://go.nuxt.com/discord"
+        target="_blank"
+        icon="i-simple-icons-discord"
+        aria-label="Discord"
+        color="neutral"
+        variant="ghost"
+      />
+      <UButton
+        to="https://go.nuxt.com/x"
+        target="_blank"
+        icon="i-simple-icons-x"
+        aria-label="X"
+        color="neutral"
+        variant="ghost"
+      />
       <UButton
         to="https://github.com/nuxt-ui-templates/saas"
         target="_blank"

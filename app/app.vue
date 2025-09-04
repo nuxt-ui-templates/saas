@@ -43,6 +43,10 @@ const links = [{
   label: 'Blog',
   icon: 'i-lucide-pencil',
   to: '/blog'
+}, {
+  label: 'Changelog',
+  icon: 'i-lucide-history',
+  to: '/changelog'
 }]
 
 provide('navigation', navigation)
