@@ -19,7 +19,6 @@ useSeoMeta({
       :title="page.title"
       :description="page.description"
       :links="page.hero.links"
-      :ui="{ container: 'md:pt-18 lg:pt-20' }"
     >
       <template #top>
         <HeroBackground />
@@ -28,7 +27,7 @@ useSeoMeta({
       <template #title>
         <MDC
           :value="page.title"
-          class="*:leading-11 sm:*:leading-19"
+          unwrap="p"
         />
       </template>
 
