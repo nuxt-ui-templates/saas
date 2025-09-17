@@ -18,7 +18,7 @@ Fully built SaaS application to launch your next project with a landing page, a 
 ## Quick Start
 
 ```bash [Terminal]
-npx nuxi init -t github:nuxt-ui-templates/saas
+npm create nuxt@latest -- -t github:nuxt-ui-templates/saas
 ```
 
 ## Deploy your own
