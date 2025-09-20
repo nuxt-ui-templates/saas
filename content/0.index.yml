@@ -9,7 +9,7 @@ hero:
     - label: Get started
       icon: i-lucide-arrow-right
       trailing: true
-      to: https://ui4.nuxt.com/docs/getting-started/installation/nuxt
+      to: https://ui.nuxt.com/docs/getting-started/installation/nuxt
       target: _blank
       size: xl
     - label: Use this template
@@ -140,7 +140,7 @@ cta:
   description: Join thousands of developers building with Nuxt and Nuxt UI. Get this template and start shipping today.
   links:
     - label: Start building
-      to: 'https://ui4.nuxt.com/docs/getting-started/installation/nuxt'
+      to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt'
       target: _blank
       trailingIcon: i-lucide-arrow-right
     - label: View on GitHub
