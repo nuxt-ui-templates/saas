@@ -30,7 +30,8 @@
       label: 'Changelog',
       to: 'https://changelog-template.nuxt.dev/'
     }]"
-    :ui="{ content: 'w-(--reka-dropdown-menu-trigger-width) min-w-0' }"
+    :content="{ align: 'start' }"
+    :ui="{ content: 'min-w-fit' }"
     size="xs"
   >
     <UButton
