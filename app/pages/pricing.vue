@@ -76,7 +76,7 @@ const items = ref([
       :title="page.faq.title"
       :description="page.faq.description"
     >
-      <UPageAccordion
+      <UAccordion
         :items="page.faq.items"
         multiple
         class="max-w-4xl mx-auto"
