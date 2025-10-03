@@ -70,7 +70,6 @@ faq:
   items:
     - label: Is this a secure service?
       content: Qui sunt nostrud aliquip reprehenderit enim proident veniam magna aliquip velit occaecat eiusmod nisi deserunt sunt.
-      defaultOpen: true
     - label: How can I cancel my subscription?
       content: Consectetur irure Lorem nostrud adipisicing aliqua mollit Lorem sit officia magna eiusmod cupidatat.
     - label: How does the free trial work?

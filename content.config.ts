@@ -102,8 +102,7 @@ export const collections = {
         items: z.array(
           z.object({
             label: z.string().nonempty(),
-            content: z.string().nonempty(),
-            defaultOpen: z.boolean().optional()
+            content: z.string().nonempty()
           })
         )
       })
