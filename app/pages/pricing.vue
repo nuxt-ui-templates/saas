@@ -76,10 +76,16 @@ const items = ref([
       :title="page.faq.title"
       :description="page.faq.description"
     >
-      <UPageAccordion
+      <UAccordion
         :items="page.faq.items"
-        multiple
-        class="max-w-4xl mx-auto"
+        :unmount-on-hide="false"
+        :default-value="['0']"
+        type="multiple"
+        class="max-w-3xl mx-auto"
+        :ui="{
+          trigger: 'text-base text-highlighted',
+          body: 'text-base text-muted'
+        }"
       />
     </UPageSection>
   </div>
