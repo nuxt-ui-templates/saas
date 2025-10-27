@@ -19,6 +19,17 @@ export default defineNuxtConfig({
     '/docs': { redirect: '/docs/getting-started', prerender: false }
   },
 
+  app: {
+    pageTransition: {
+      name: 'blur',
+      mode: 'out-in'
+    },
+    layoutTransition: {
+      name: 'blur',
+      mode: 'out-in'
+    }
+  },
+
   compatibilityDate: '2024-07-11',
 
   nitro: {
