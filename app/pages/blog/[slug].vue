@@ -34,59 +34,61 @@ if (post.value.image?.src) {
 </script>
 
 <template>
-  <UContainer v-if="post">
-    <UPageHeader
-      :title="post.title"
-      :description="post.description"
-    >
-      <template #headline>
-        <UBadge
-          v-bind="post.badge"
-          variant="subtle"
-        />
-        <span class="text-muted">&middot;</span>
-        <time class="text-muted">{{ new Date(post.date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' }) }}</time>
-      </template>
+  <div v-if="post">
+    <UContainer>
+      <UPageHeader
+        :title="post.title"
+        :description="post.description"
+      >
+        <template #headline>
+          <UBadge
+            v-bind="post.badge"
+            variant="subtle"
+          />
+          <span class="text-muted">&middot;</span>
+          <time class="text-muted">{{ new Date(post.date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' }) }}</time>
+        </template>
 
-      <div class="flex flex-wrap items-center gap-3 mt-4">
-        <UButton
-          v-for="(author, index) in post.authors"
-          :key="index"
-          :to="author.to"
-          color="neutral"
-          variant="subtle"
-          target="_blank"
-          size="sm"
-        >
-          <UAvatar
-            v-bind="author.avatar"
-            alt="Author avatar"
-            size="2xs"
+        <div class="flex flex-wrap items-center gap-3 mt-4">
+          <UButton
+            v-for="(author, index) in post.authors"
+            :key="index"
+            :to="author.to"
+            color="neutral"
+            variant="subtle"
+            target="_blank"
+            size="sm"
+          >
+            <UAvatar
+              v-bind="author.avatar"
+              alt="Author avatar"
+              size="2xs"
+            />
+
+            {{ author.name }}
+          </UButton>
+        </div>
+      </UPageHeader>
+
+      <UPage>
+        <UPageBody>
+          <ContentRenderer
+            v-if="post"
+            :value="post"
           />
 
-          {{ author.name }}
-        </UButton>
-      </div>
-    </UPageHeader>
+          <USeparator v-if="surround?.length" />
 
-    <UPage>
-      <UPageBody>
-        <ContentRenderer
-          v-if="post"
-          :value="post"
-        />
+          <UContentSurround :surround="surround" />
+        </UPageBody>
 
-        <USeparator v-if="surround?.length" />
-
-        <UContentSurround :surround="surround" />
-      </UPageBody>
-
-      <template
-        v-if="post?.body?.toc?.links?.length"
-        #right
-      >
-        <UContentToc :links="post.body.toc.links" />
-      </template>
-    </UPage>
-  </UContainer>
+        <template
+          v-if="post?.body?.toc?.links?.length"
+          #right
+        >
+          <UContentToc :links="post.body.toc.links" />
+        </template>
+      </UPage>
+    </UContainer>
+  </div>
 </template>
