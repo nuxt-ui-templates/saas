@@ -28,7 +28,7 @@ const createLinkSchema = () => z.object({
 const createImageSchema = () => z.object({
   src: z.string().nonempty().editor({ input: 'media' }),
   alt: z.string().optional(),
-  loading: z.string().optional(),
+  loading: z.enum(['lazy', 'eager']).optional(),
   srcset: z.string().optional()
 })
 
