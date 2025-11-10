@@ -18,24 +18,26 @@ defineOgImageComponent('Saas')
 </script>
 
 <template>
-  <UContainer>
-    <UPageHeader
-      v-bind="page"
-      class="py-[50px]"
-    />
+  <div v-if="page">
+    <UContainer>
+      <UPageHeader
+        v-bind="page"
+        class="py-[50px]"
+      />
 
-    <UPageBody>
-      <UChangelogVersions>
-        <UChangelogVersion
-          v-for="(version, index) in versions"
-          :key="index"
-          v-bind="version"
-        >
-          <template #body>
-            <ContentRenderer :value="version.body" />
-          </template>
-        </UChangelogVersion>
-      </UChangelogVersions>
-    </UPageBody>
-  </UContainer>
+      <UPageBody>
+        <UChangelogVersions>
+          <UChangelogVersion
+            v-for="(version, index) in versions"
+            :key="index"
+            v-bind="version"
+          >
+            <template #body>
+              <ContentRenderer :value="version.body" />
+            </template>
+          </UChangelogVersion>
+        </UChangelogVersions>
+      </UPageBody>
+    </UContainer>
+  </div>
 </template>
