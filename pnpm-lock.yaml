@@ -9,19 +9,19 @@ importers:
   .:
     dependencies:
       '@iconify-json/lucide':
-        specifier: ^1.2.82
+        specifier: ^1.2.86
         version: 1.2.86
       '@iconify-json/simple-icons':
-        specifier: ^1.2.63
+        specifier: ^1.2.67
         version: 1.2.67
       '@nuxt/content':
-        specifier: ^3.9.0
+        specifier: ^3.11.0
         version: 3.11.0(better-sqlite3@12.6.2)(magicast@0.5.1)
       '@nuxt/image':
         specifier: ^2.0.0
         version: 2.0.0(db0@0.3.4(better-sqlite3@12.6.2))(ioredis@5.8.2)(magicast@0.5.1)
       '@nuxt/ui':
-        specifier: ^4.3.0
+        specifier: ^4.4.0
         version: 4.4.0(@nuxt/content@3.11.0(better-sqlite3@12.6.2)(magicast@0.5.1))(@tiptap/extensions@3.16.0(@tiptap/core@3.16.0(@tiptap/pm@3.16.0))(@tiptap/pm@3.16.0))(@tiptap/y-tiptap@3.0.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.5)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29))(change-case@5.4.4)(db0@0.3.4(better-sqlite3@12.6.2))(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.5.1)(tailwindcss@4.1.18)(typescript@5.9.3)(vite@7.2.7(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.2))(vue-router@4.6.3(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))(yjs@13.6.29)(zod@4.3.5)
       '@standard-schema/spec':
         specifier: ^1.1.0
@@ -30,7 +30,7 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0(magicast@0.5.1)(nuxt@4.2.2(@parcel/watcher@2.5.1)(@types/node@24.9.1)(@vue/compiler-sfc@3.5.25)(better-sqlite3@12.6.2)(cac@6.7.14)(db0@0.3.4(better-sqlite3@12.6.2))(eslint@9.39.2(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.52.5)(terser@5.44.0)(typescript@5.9.3)(vite@7.2.7(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.2))(vue-tsc@3.2.2(typescript@5.9.3))(yaml@2.8.2))(vue@3.5.25(typescript@5.9.3))
       better-sqlite3:
-        specifier: ^12.5.0
+        specifier: ^12.6.2
         version: 12.6.2
       nuxt:
         specifier: ^4.2.2
@@ -42,7 +42,7 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       zod:
-        specifier: ^4.2.1
+        specifier: ^4.3.5
         version: 4.3.5
     devDependencies:
       '@nuxt/eslint':
@@ -55,7 +55,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vue-tsc:
-        specifier: ^3.2.1
+        specifier: ^3.2.2
         version: 3.2.2(typescript@5.9.3)
 
 packages:
