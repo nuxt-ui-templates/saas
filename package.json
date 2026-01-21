@@ -21,6 +21,7 @@
     "better-sqlite3": "^12.5.0",
     "nuxt": "^4.2.2",
     "nuxt-og-image": "^5.1.13",
+    "tailwindcss": "^4.1.18",
     "zod": "^4.2.1"
   },
   "devDependencies": {
