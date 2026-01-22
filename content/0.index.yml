@@ -1,7 +1,7 @@
 title: Ship Your [SaaS]{class="text-primary"} at light speed
 description: Build production-ready SaaS applications with Nuxt UI's powerful components, authentication flows, and enterprise features. The same component library trusted by the entire Nuxt ecosystem.
 seo:
-  title: Nuxt UI SaaS Template
+  title: Nuxt SaaS Template
   description: Create stunning, fast and production-ready SaaS applications with Nuxt UI. 100+ Vue components, authentication, dark mode, and enterprise features built on Tailwind CSS.
 navigation: false
 hero:
