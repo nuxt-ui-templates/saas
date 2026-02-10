@@ -58,26 +58,28 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UAuthForm
-    :fields="fields"
-    :schema="schema"
-    :providers="providers"
-    title="Create an account"
-    :submit="{ label: 'Create account' }"
-    @submit="onSubmit"
-  >
-    <template #description>
-      Already have an account? <ULink
-        to="/login"
-        class="text-primary font-medium"
-      >Login</ULink>.
-    </template>
+  <div>
+    <UAuthForm
+      :fields="fields"
+      :schema="schema"
+      :providers="providers"
+      title="Create an account"
+      :submit="{ label: 'Create account' }"
+      @submit="onSubmit"
+    >
+      <template #description>
+        Already have an account? <ULink
+          to="/login"
+          class="text-primary font-medium"
+        >Login</ULink>.
+      </template>
 
-    <template #footer>
-      By signing up, you agree to our <ULink
-        to="/"
-        class="text-primary font-medium"
-      >Terms of Service</ULink>.
-    </template>
-  </UAuthForm>
+      <template #footer>
+        By signing up, you agree to our <ULink
+          to="/"
+          class="text-primary font-medium"
+        >Terms of Service</ULink>.
+      </template>
+    </UAuthForm>
+  </div>
 </template>

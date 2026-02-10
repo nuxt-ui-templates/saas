@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'docs'
+  layout: 'default'
 })
 
 const route = useRoute()
@@ -30,28 +30,30 @@ defineOgImageComponent('Saas')
 </script>
 
 <template>
-  <UPage v-if="page">
-    <UPageHeader
-      :title="page.title"
-      :description="page.description"
-    />
-
-    <UPageBody>
-      <ContentRenderer
-        v-if="page.body"
-        :value="page"
+  <div v-if="page">
+    <UPage>
+      <UPageHeader
+        :title="page.title"
+        :description="page.description"
       />
 
-      <USeparator v-if="surround?.length" />
+      <UPageBody>
+        <ContentRenderer
+          v-if="page.body"
+          :value="page"
+        />
 
-      <UContentSurround :surround="surround" />
-    </UPageBody>
+        <USeparator v-if="surround?.length" />
 
-    <template
-      v-if="page?.body?.toc?.links?.length"
-      #right
-    >
-      <UContentToc :links="page.body.toc.links" />
-    </template>
-  </UPage>
+        <UContentSurround :surround="surround" />
+      </UPageBody>
+
+      <template
+        v-if="page?.body?.toc?.links?.length"
+        #right
+      >
+        <UContentToc :links="page.body.toc.links" />
+      </template>
+    </UPage>
+  </div>
 </template>
