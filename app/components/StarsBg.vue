@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   size?: { min: number, max: number }
 }>(), {
   starCount: 300,
-  color: 'var(--ui-primary)',
+  color: 'var(--ui-text-dimmed)',
   speed: 'normal',
   size: () => ({
     min: 1,

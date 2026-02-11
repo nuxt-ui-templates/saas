@@ -5,12 +5,20 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/ui',
     '@nuxt/content',
+    '@nuxt/fonts',
     '@vueuse/nuxt',
     'nuxt-og-image'
   ],
 
   devtools: {
     enabled: true
+  },
+
+  fonts: {
+    families: [
+      { name: 'Geist', provider: 'google' },
+      { name: 'Geist Mono', provider: 'google' }
+    ]
   },
 
   css: ['~/assets/css/main.css'],

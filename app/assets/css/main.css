@@ -4,7 +4,8 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Geist', 'Inter', sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
 
   --color-green-50: #EFFDF5;
   --color-green-100: #D9FBE8;
@@ -20,8 +21,27 @@
 }
 
 .dark {
-  --ui-bg: var(--ui-color-neutral-950);
-  --ui-bg-muted: var(--ui-color-neutral-900);
-  --ui-bg-elevated: var(--ui-color-neutral-900);
-  --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-bg: #000000;
+  --ui-bg-muted: #0a0a0a;
+  --ui-bg-elevated: #111111;
+  --ui-bg-accented: #1a1a1a;
+  --ui-border: #222222;
+  --ui-border-muted: #1a1a1a;
+  --ui-border-accented: #333333;
+  --ui-text: #ededed;
+  --ui-text-muted: #888888;
+  --ui-text-dimmed: #666666;
+}
+
+:root {
+  --ui-bg: #ffffff;
+  --ui-bg-muted: #fafafa;
+  --ui-bg-elevated: #f5f5f5;
+  --ui-bg-accented: #eeeeee;
+  --ui-border: #e5e5e5;
+  --ui-border-muted: #eeeeee;
+  --ui-border-accented: #cccccc;
+  --ui-text: #171717;
+  --ui-text-muted: #666666;
+  --ui-text-dimmed: #888888;
 }

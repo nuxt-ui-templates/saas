@@ -19,6 +19,11 @@ useSeoMeta({
       :title="page.title"
       :description="page.description"
       :links="page.hero.links"
+      :ui="{
+        root: 'py-24 sm:py-32 lg:py-40',
+        title: 'text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance',
+        description: 'text-lg sm:text-xl max-w-2xl text-pretty'
+      }"
     >
       <template #top>
         <HeroBackground />
@@ -42,6 +47,10 @@ useSeoMeta({
       :orientation="section.orientation"
       :reverse="section.reverse"
       :features="section.features"
+      :ui="{
+        title: 'text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight',
+        description: 'text-base sm:text-lg text-pretty'
+      }"
     >
       <ImagePlaceholder />
     </UPageSection>
@@ -49,6 +58,10 @@ useSeoMeta({
     <UPageSection
       :title="page.features.title"
       :description="page.features.description"
+      :ui="{
+        title: 'text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight',
+        description: 'text-base sm:text-lg text-pretty'
+      }"
     >
       <UPageGrid>
         <UPageCard
@@ -56,6 +69,11 @@ useSeoMeta({
           :key="index"
           v-bind="item"
           spotlight
+          :ui="{
+            root: 'border border-[var(--ui-border)] hover:border-[var(--ui-border-accented)] transition-colors duration-200',
+            title: 'text-base font-semibold',
+            description: 'text-sm text-pretty'
+          }"
         />
       </UPageGrid>
     </UPageSection>
@@ -65,6 +83,10 @@ useSeoMeta({
       :headline="page.testimonials.headline"
       :title="page.testimonials.title"
       :description="page.testimonials.description"
+      :ui="{
+        title: 'text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight',
+        description: 'text-base sm:text-lg text-pretty'
+      }"
     >
       <UPageColumns class="xl:columns-4">
         <UPageCard
@@ -72,7 +94,10 @@ useSeoMeta({
           :key="index"
           variant="subtle"
           :description="testimonial.quote"
-          :ui="{ description: 'before:content-[open-quote] after:content-[close-quote]' }"
+          :ui="{
+            root: 'border border-[var(--ui-border)] hover:border-[var(--ui-border-accented)] transition-colors duration-200',
+            description: 'before:content-[open-quote] after:content-[close-quote] text-sm leading-relaxed'
+          }"
         >
           <template #footer>
             <UUser
@@ -90,6 +115,10 @@ useSeoMeta({
       v-bind="page.cta"
       variant="naked"
       class="overflow-hidden"
+      :ui="{
+        title: 'text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight',
+        description: 'text-base sm:text-lg text-pretty'
+      }"
     >
       <LazyStarsBg />
     </UPageCTA>

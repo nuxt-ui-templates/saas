@@ -18,21 +18,26 @@ const items = computed(() => [{
 </script>
 
 <template>
-  <UHeader>
+  <UHeader :ui="{ root: 'border-b border-[var(--ui-border)]' }">
     <template #left>
-      <NuxtLink to="/">
-        <AppLogo class="w-auto h-6 shrink-0" />
+      <NuxtLink
+        to="/"
+        class="flex items-center gap-2"
+      >
+        <AppLogo class="w-auto h-5 shrink-0" />
       </NuxtLink>
-      <TemplateMenu />
     </template>
 
     <UNavigationMenu
       :items="items"
       variant="link"
+      :ui="{
+        link: 'text-sm font-normal text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] transition-colors'
+      }"
     />
 
     <template #right>
-      <UColorModeButton />
+      <UColorModeButton size="sm" />
 
       <UButton
         icon="i-lucide-log-in"
@@ -40,22 +45,26 @@ const items = computed(() => [{
         variant="ghost"
         to="/login"
         class="lg:hidden"
+        size="sm"
       />
 
       <UButton
-        label="Sign in"
+        label="Log In"
         color="neutral"
-        variant="outline"
+        variant="ghost"
         to="/login"
         class="hidden lg:inline-flex"
+        size="sm"
+        :ui="{ label: 'text-sm font-normal' }"
       />
 
       <UButton
-        label="Sign up"
+        label="Sign Up"
         color="neutral"
-        trailing-icon="i-lucide-arrow-right"
-        class="hidden lg:inline-flex"
         to="/signup"
+        class="hidden lg:inline-flex"
+        size="sm"
+        :ui="{ label: 'text-sm font-medium' }"
       />
     </template>
 
@@ -69,7 +78,7 @@ const items = computed(() => [{
       <USeparator class="my-6" />
 
       <UButton
-        label="Sign in"
+        label="Log In"
         color="neutral"
         variant="subtle"
         to="/login"
@@ -77,7 +86,7 @@ const items = computed(() => [{
         class="mb-3"
       />
       <UButton
-        label="Sign up"
+        label="Sign Up"
         color="neutral"
         to="/signup"
         block

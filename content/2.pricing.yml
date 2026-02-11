@@ -1,82 +1,82 @@
-title: A plan for every need
-description: Our plans are designed to meet the requirements of both beginners and players. Get the right plan that suits you.
+title: Simple, transparent pricing
+description: Start for free. Scale as you grow. No hidden fees, no surprises.
 seo:
   title: Pricing
-  description: Choose the plan that's right for you.
+  description: Simple, transparent pricing that scales with your team.
 navigation.icon: i-lucide-credit-card
 plans:
-  - title: Basic
-    description: A basic plan for individuals.
+  - title: Hobby
+    description: Perfect for personal projects and experiments.
     price:
-      month: $9.9
-      year: $99.9
+      month: $0
+      year: $0
     button:
-      label: Get Started
+      label: Start for Free
       color: neutral
       variant: subtle
     features:
-      - 1 GB Storage
-      - 1 Email Account
-      - 1 Domain
-      - 1 Website
-      - 1 Database
-      - 1 SSL Certificate
-      - 1 Support Ticket
-  - title: Standard
-    description: A standard plan for small teams.
+      - Automatic HTTPS
+      - Preview Deployments
+      - Edge Network CDN
+      - Serverless Functions
+      - 100 GB Bandwidth
+      - Community Support
+      - 1 Team Member
+  - title: Pro
+    description: For professional developers and growing teams.
     price:
-      month: $19.9
-      year: $199.9
+      month: $20
+      year: $200
     highlight: true
     scale: true
     button:
-      label: Get Started
+      label: Start Free Trial
     features:
-      - 10 GB Storage
-      - 10 Email Accounts
-      - 10 Domains
-      - 10 Websites
-      - 10 Databases
-      - 10 SSL Certificates
-      - 10 Support Tickets
-  - title: Premium
-    description: A premium plan for large teams.
+      - Everything in Hobby
+      - 1 TB Bandwidth
+      - Advanced Analytics
+      - Password Protection
+      - Custom Domains
+      - Priority Support
+      - 10 Team Members
+  - title: Enterprise
+    description: For large teams requiring security, compliance, and support.
     price:
-      month: $29.9
-      year: $299.9
+      month: Custom
+      year: Custom
     button:
-      label: Get Started
+      label: Contact Sales
       color: neutral
       variant: subtle
     features:
-      - 100 GB Storage
-      - 100 Email Accounts
-      - 100 Domains
-      - 100 Websites
-      - 100 Databases
-      - 100 SSL Certificates
-      - 100 Support Tickets
+      - Everything in Pro
+      - Unlimited Bandwidth
+      - SSO / SAML
+      - Audit Logs
+      - SLA Guarantees
+      - Dedicated Support
+      - Unlimited Members
 logos:
   title: Trusted by the world's best
   icons:
     - i-simple-icons-amazonaws
-    - i-simple-icons-heroku
-    - i-simple-icons-netlify
-    - i-simple-icons-vercel
-    - i-simple-icons-cloudflare
+    - i-simple-icons-google
+    - i-simple-icons-meta
+    - i-simple-icons-github
+    - i-simple-icons-stripe
 faq:
   title: Frequently asked questions
-  description: Culpa consectetur dolor pariatur commodo aliqua amet tempor nisi enim deserunt elit cillum.
+  description: Everything you need to know about our pricing and plans.
   items:
-    - label: Is this a secure service?
-      content: Qui sunt nostrud aliquip reprehenderit enim proident veniam magna aliquip velit occaecat eiusmod nisi deserunt sunt.
-    - label: How can I cancel my subscription?
-      content: Consectetur irure Lorem nostrud adipisicing aliqua mollit Lorem sit officia magna eiusmod cupidatat.
+    - label: Can I use the platform for free?
+      content: Yes. The Hobby plan is completely free and includes everything you need for personal projects, including automatic HTTPS, preview deployments, and edge network CDN.
     - label: How does the free trial work?
-      content: Quis officia commodo magna eu qui aliquip duis.
+      content: The Pro plan comes with a 14-day free trial. No credit card required. You can explore all Pro features and decide if it's right for your team.
     - label: Can I switch plans later?
-      content: Dolore irure ullamco dolore eu occaecat magna eiusmod dolor aliqua culpa labore.
+      content: Absolutely. You can upgrade, downgrade, or cancel your plan at any time. Changes take effect immediately and billing is prorated.
+    - label: What payment methods do you accept?
+      content: We accept all major credit cards, wire transfers for Enterprise plans, and can accommodate custom billing requirements for large organizations.
     - label: Do you offer refunds?
-      content: Duis mollit nostrud voluptate mollit Lorem dolore commodo veniam incididunt eiusmod.
-    - label: Do you offer support?
-      content: Aliqua sit nisi consequat pariatur Lorem minim irure qui.
+      content: Yes. If you're not satisfied within the first 30 days of a paid plan, we'll issue a full refund. No questions asked.
+    - label: What kind of support is included?
+      content: Hobby plans include community support. Pro plans get priority email support with 24-hour response times. Enterprise plans include dedicated support with custom SLAs.

@@ -1,47 +1,44 @@
 <script setup lang="ts">
 const columns = [{
-  label: 'Resources',
+  label: 'Product',
   children: [{
-    label: 'Help center'
+    label: 'Previews'
   }, {
-    label: 'Docs'
+    label: 'Infrastructure'
   }, {
-    label: 'Roadmap'
+    label: 'AI'
   }, {
-    label: 'Changelog'
+    label: 'Enterprise'
   }]
 }, {
-  label: 'Features',
+  label: 'Resources',
   children: [{
-    label: 'Affiliates'
+    label: 'Docs'
   }, {
-    label: 'Portal'
+    label: 'Guides'
   }, {
-    label: 'Jobs'
+    label: 'Changelog'
   }, {
-    label: 'Sponsors'
+    label: 'Pricing'
   }]
 }, {
   label: 'Company',
   children: [{
     label: 'About'
   }, {
-    label: 'Pricing'
+    label: 'Blog'
   }, {
     label: 'Careers'
   }, {
-    label: 'Blog'
+    label: 'Contact'
   }]
 }]
 
 const toast = useToast()
 
 const email = ref('')
-const loading = ref(false)
 
 function onSubmit() {
-  loading.value = true
-
   toast.add({
     title: 'Subscribed!',
     description: 'You\'ve been subscribed to our newsletter.'
@@ -50,12 +47,9 @@ function onSubmit() {
 </script>
 
 <template>
-  <USeparator
-    icon="i-simple-icons-nuxtdotjs"
-    class="h-px"
-  />
+  <USeparator class="opacity-50" />
 
-  <UFooter :ui="{ top: 'border-b border-default' }">
+  <UFooter :ui="{ top: 'border-b border-[var(--ui-border)]' }">
     <template #top>
       <UContainer>
         <UFooterColumns :columns="columns">
@@ -70,7 +64,7 @@ function onSubmit() {
                   v-model="email"
                   type="email"
                   class="w-full"
-                  placeholder="Enter your email"
+                  placeholder="you@domain.com"
                 >
                   <template #trailing>
                     <UButton
@@ -89,35 +83,38 @@ function onSubmit() {
     </template>
 
     <template #left>
-      <p class="text-muted text-sm">
-        Built with Nuxt UI • © {{ new Date().getFullYear() }}
+      <p class="text-[var(--ui-text-dimmed)] text-sm">
+        {{ '\u00A9' }} {{ new Date().getFullYear() }} Your Company, Inc.
       </p>
     </template>
 
     <template #right>
       <UButton
-        to="https://go.nuxt.com/discord"
+        to="https://github.com/nuxt-ui-templates/saas"
         target="_blank"
-        icon="i-simple-icons-discord"
-        aria-label="Nuxt on Discord"
+        icon="i-simple-icons-github"
+        aria-label="GitHub"
         color="neutral"
         variant="ghost"
+        size="sm"
       />
       <UButton
         to="https://go.nuxt.com/x"
         target="_blank"
         icon="i-simple-icons-x"
-        aria-label="Nuxt on X"
+        aria-label="X"
         color="neutral"
         variant="ghost"
+        size="sm"
       />
       <UButton
-        to="https://github.com/nuxt-ui-templates/saas"
+        to="https://go.nuxt.com/discord"
         target="_blank"
-        icon="i-simple-icons-github"
-        aria-label="Nuxt UI on GitHub"
+        icon="i-simple-icons-discord"
+        aria-label="Discord"
         color="neutral"
         variant="ghost"
+        size="sm"
       />
     </template>
   </UFooter>
