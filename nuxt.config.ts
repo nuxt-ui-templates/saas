@@ -17,13 +17,21 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
-  buildDir: '.nuxt',
 
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false }
   },
 
   compatibilityDate: '2024-07-11',
+
+  nitro: {
+    prerender: {
+      routes: [
+        '/'
+      ],
+      crawlLinks: true
+    }
+  },
 
   hub: {
     db: 'sqlite'

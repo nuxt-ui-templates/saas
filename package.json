@@ -18,7 +18,7 @@
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "^0.10.6",
-    "@onmax/nuxt-better-auth": "0.0.2-alpha.21",
+    "@onmax/nuxt-better-auth": "0.0.2-alpha.23",
     "@standard-schema/spec": "^1.1.0",
     "@vueuse/nuxt": "^14.2.0",
     "better-auth": "1.5.0-beta.13",
@@ -36,12 +36,5 @@
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.4"
   },
-  "packageManager": "pnpm@10.29.2",
-  "pnpm": {
-    "overrides": {
-      "better-auth": "1.5.0-beta.13",
-      "@better-auth/core": "1.5.0-beta.13",
-      "@better-auth/cli": "1.5.0-beta.13"
-    }
-  }
+  "packageManager": "pnpm@10.29.2"
 }

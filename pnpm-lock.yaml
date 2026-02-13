@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  better-auth: 1.5.0-beta.13
-  '@better-auth/core': 1.5.0-beta.13
-  '@better-auth/cli': 1.5.0-beta.13
-
 importers:
 
   .:
@@ -35,8 +30,8 @@ importers:
         specifier: ^0.10.6
         version: 0.10.6(db0@0.3.4(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0)(better-sqlite3@12.6.2)(drizzle-orm@0.45.1(@cloudflare/workers-types@4.20260210.0)(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0)(@prisma/client@5.22.0(prisma@7.3.0(@types/react@19.2.13)(better-sqlite3@12.6.2)(magicast@0.5.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(@types/pg@8.16.0)(better-sqlite3@12.6.2)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.18.0)(postgres@3.4.7)(prisma@7.3.0(@types/react@19.2.13)(better-sqlite3@12.6.2)(magicast@0.5.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)))(mysql2@3.15.3))(ioredis@5.9.2)(magicast@0.5.1)(typescript@5.9.3)(vue-tsc@3.2.4(typescript@5.9.3))
       '@onmax/nuxt-better-auth':
-        specifier: 0.0.2-alpha.21
-        version: 0.0.2-alpha.21(17306b7e7e824f4cfd286ac0946dd19d)
+        specifier: 0.0.2-alpha.23
+        version: 0.0.2-alpha.23(17306b7e7e824f4cfd286ac0946dd19d)
       '@standard-schema/spec':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1443,16 +1438,13 @@ packages:
   '@nuxtjs/mdc@0.20.1':
     resolution: {integrity: sha512-fGmtLDQAmmDHF5Z37Apfc3k806rb2XWDOQFhb5xlDSL7+HiiUjyFy3ctx3qWdlC08dRzfAetmsGOYbfDqYsB/w==}
 
-  '@onmax/nuxt-better-auth@0.0.2-alpha.21':
-    resolution: {integrity: sha512-Q42DoTDQ/0bqSJtv5t0h/Pdo81DiWqvhGufGYuJXTt6jr9+4fWSQAolG+6S168lMeR5F9BMEFpH+L24NmNc9tw==}
+  '@onmax/nuxt-better-auth@0.0.2-alpha.23':
+    resolution: {integrity: sha512-z+UKaMPBlgsc7zbyY9CcqwgldDVabM3MlhSOU+xaa0pmPzqh5XgZUIwS8JdDxqfXkNN4X/ex/Qajea9iwQ6crg==}
     peerDependencies:
       '@nuxthub/core': '>=0.10.5'
-      better-auth: 1.5.0-beta.13
-      convex: '>=1.25.0'
+      better-auth: '>=1.0.0'
     peerDependenciesMeta:
       '@nuxthub/core':
-        optional: true
-      convex:
         optional: true
 
   '@oxc-minify/binding-android-arm-eabi@0.112.0':
@@ -9618,7 +9610,7 @@ snapshots:
       - magicast
       - supports-color
 
-  '@onmax/nuxt-better-auth@0.0.2-alpha.21(17306b7e7e824f4cfd286ac0946dd19d)':
+  '@onmax/nuxt-better-auth@0.0.2-alpha.23(17306b7e7e824f4cfd286ac0946dd19d)':
     dependencies:
       '@better-auth/cli': 1.5.0-beta.13(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260210.0)(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.0)(better-call@1.2.1(zod@4.3.6))(better-sqlite3@12.6.2)(drizzle-kit@0.31.9)(jose@6.1.3)(kysely@0.28.11)(magicast@0.5.1)(mongodb@7.1.0)(mysql2@3.15.3)(nanostores@1.1.0)(postgres@3.4.7)(prisma@7.3.0(@types/react@19.2.13)(better-sqlite3@12.6.2)(magicast@0.5.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vue@3.5.27(typescript@5.9.3))
       '@nuxt/kit': 4.3.1(magicast@0.5.1)
