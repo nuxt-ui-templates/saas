@@ -1,0 +1,333 @@
+diff --git a/dist/blob/runtime/blob.d.ts b/dist/blob/runtime/blob.d.ts
+index 35b2030796e78b2b304e40a44a842270d4761132..ae989fb105986bc39b71096d85cb2cbf5c37dc2d 100644
+--- a/dist/blob/runtime/blob.d.ts
++++ b/dist/blob/runtime/blob.d.ts
+@@ -1,4 +1,4 @@
+-import type { BlobStorage, BlobEnsureOptions } from '@nuxthub/core/blob'
++import type { BlobStorage } from '@nuxthub/core/blob'
+ 
+ /**
+  * The Blob storage instance.
+@@ -26,4 +26,4 @@ export const blob: BlobStorage
+  *
+  * @see https://hub.nuxt.com/docs/blob/usage#validation
+  */
+-export const ensureBlob: (blob: Blob, options: BlobEnsureOptions) => void
++export { ensureBlob } from '@nuxthub/core/blob'
+diff --git a/dist/db/lib/build.mjs b/dist/db/lib/build.mjs
+index 768477014333c3947fb4a15e2fb82329204948bc..2f8a89275248833662fa5ffc761812389b79e44e 100644
+--- a/dist/db/lib/build.mjs
++++ b/dist/db/lib/build.mjs
+@@ -72,6 +72,7 @@ export async function buildDatabaseSchema(buildDir, { relativeDir, alias } = {})
+     }),
+     alias: {
+       ...alias,
++      "@nuxthub/db/schema": entry,
+       "hub:db:schema": entry
+     },
+     platform: "neutral",
+diff --git a/dist/db/lib/client.mjs b/dist/db/lib/client.mjs
+index d74fc6948b817e41a0e05bca4e6500eecacabb15..0b3c6db45da02c168eea7f07a66c11b4023a0cfe 100644
+--- a/dist/db/lib/client.mjs
++++ b/dist/db/lib/client.mjs
+@@ -3,7 +3,7 @@ import { join } from "pathe";
+ async function createD1HttpClient(accountId, databaseId, apiToken, casing) {
+   const d1HttpDriver = async (sql, params, method) => {
+     if (method === "values") method = "all";
+-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/db/${databaseId}/raw`, {
++    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/raw`, {
+       method: "POST",
+       headers: { Authorization: `Bearer ${apiToken}`, "Content-Type": "application/json" },
+       body: JSON.stringify({ sql, params })
+diff --git a/dist/module.mjs b/dist/module.mjs
+index 1ef9c1437928b792369a168489dbf4ac6842e334..670647e6be237d8cc40180d93bd5f80e182fed30 100644
+--- a/dist/module.mjs
++++ b/dist/module.mjs
+@@ -1,9 +1,10 @@
+-import { readFile, writeFile, mkdir, copyFile, stat } from 'node:fs/promises';
++import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+ import { logger, createResolver, addServerPlugin, getLayerDirectories, updateTemplates, addTemplate, addTypeTemplate, addServerHandler, addServerImports, addImportsDir, defineNuxtModule } from '@nuxt/kit';
+ import { join, resolve as resolve$1, relative } from 'pathe';
+ import { defu } from 'defu';
+ import { readPackageJSON, findWorkspaceDir } from 'pkg-types';
+ import { provider } from 'std-env';
++import { createHash } from 'node:crypto';
+ import chokidar from 'chokidar';
+ import { glob } from 'tinyglobby';
+ import { copyDatabaseMigrationsToHubDir, copyDatabaseQueriesToHubDir, copyDatabaseAssets, applyBuildTimeMigrations, getDatabaseSchemaPathMetadata, buildDatabaseSchema } from './db/lib';
+@@ -314,7 +315,7 @@ async function setupDatabase(nuxt, hub, deps) {
+       const dbBinding = d1Databases.find((db) => db.binding === "DB");
+       if (dbBinding) {
+         dbBinding.migrations_table ||= "_hub_migrations";
+-        dbBinding.migrations_dir ||= ".output/server/db/migrations/";
++        dbBinding.migrations_dir ||= "db/migrations/sqlite/";
+       }
+     });
+   }
+@@ -354,12 +355,6 @@ async function generateDatabaseSchema(nuxt, hub) {
+       schemaPaths = await getSchemaPaths();
+       await updateTemplates({ filter: (template) => template.filename.includes("hub/db/schema.entry.ts") });
+       await buildDatabaseSchema(nuxt.options.buildDir, { relativeDir: nuxt.options.rootDir, alias: nuxt.options.alias });
+-      const physicalDbDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "db");
+-      try {
+-        await copyFile(join(nuxt.options.buildDir, "hub/db/schema.mjs"), join(physicalDbDir, "schema.mjs"));
+-        await copyFile(join(nuxt.options.buildDir, "hub/db/schema.d.mts"), join(physicalDbDir, "schema.d.mts"));
+-      } catch (error) {
+-      }
+     });
+     nuxt.hook("close", () => watcher.close());
+   }
+@@ -370,43 +365,36 @@ async function generateDatabaseSchema(nuxt, hub) {
+   });
+   nuxt.hooks.hookOnce("app:templatesGenerated", async () => {
+     await buildDatabaseSchema(nuxt.options.buildDir, { relativeDir: nuxt.options.rootDir, alias: nuxt.options.alias });
+-    const physicalDbDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "db");
+-    await mkdir(physicalDbDir, { recursive: true });
+-    try {
+-      await copyFile(join(nuxt.options.buildDir, "hub/db/schema.mjs"), join(physicalDbDir, "schema.mjs"));
+-      const buildDirSource = join(nuxt.options.buildDir, "hub/db/schema.d.mts");
+-      const nuxtDirSource = join(nuxt.options.rootDir, ".nuxt/hub/db/schema.d.mts");
+-      let schemaTypes;
+-      try {
+-        schemaTypes = await readFile(buildDirSource, "utf-8");
+-      } catch {
+-        try {
+-          schemaTypes = await readFile(nuxtDirSource, "utf-8");
+-        } catch {
+-        }
+-      }
+-      if (schemaTypes && schemaTypes.length > 50) {
+-        await writeFile(join(physicalDbDir, "schema.d.mts"), schemaTypes);
+-      } else if (!nuxt.options.test) {
+-        await writeFile(join(physicalDbDir, "schema.d.mts"), `export * from './schema.mjs'`);
+-      }
+-    } catch (error) {
+-      log$3.warn(`Failed to copy schema to node_modules/.hub/: ${error}`);
+-    }
+   });
+   nuxt.options.alias ||= {};
+   addTypeTemplate({
+     filename: "hub/db/schema.d.ts",
+-    getContents: () => `declare module 'hub:db:schema' {
+-  export * from '#build/hub/db/schema.mjs'
+-}`
++    getContents: () => `declare module '@nuxthub/db/schema' {
++  export * from '#build/hub/db/schema.d.mts'
++}
++
++declare module 'hub:db:schema' {
++  export * from '@nuxthub/db/schema'
++}
++`
+   }, { nitro: true, nuxt: true });
+-  nuxt.options.alias["hub:db:schema"] = "@nuxthub/db/schema";
++  const schemaAlias = join(nuxt.options.buildDir, "hub/db/schema.mjs");
++  nuxt.options.alias["@nuxthub/db/schema"] = schemaAlias;
++  nuxt.options.alias["hub:db:schema"] = schemaAlias;
+ }
+ async function setupDatabaseClient(nuxt, hub) {
+   const { dialect, driver, connection, mode, casing, replicas } = hub.db;
+   const driverForTypes = driver === "d1-http" ? "sqlite-proxy" : driver;
+-  const databaseTypes = `declare module 'hub:db' {
++  const databaseTypes = `import { drizzle as drizzleCore } from 'drizzle-orm/${driverForTypes}'
++
++type DbSchema = typeof import('@nuxthub/db/schema')
++
++declare module '@nuxthub/db' {
++  export const schema: DbSchema
++  export const db: ReturnType<typeof drizzleCore<DbSchema>>
++}
++
++declare module 'hub:db' {
+   export * from '@nuxthub/db'
+ }`;
+   addTypeTemplate({
+@@ -606,12 +594,15 @@ ${hasReplicas ? `    const primary = drizzle({ connection: { uri }, schema${mode
+     _db = drizzle({ connection: { url, authToken }, schema${casingOption} })`
+     );
+   }
+-  const physicalDbDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "db");
+-  await mkdir(physicalDbDir, { recursive: true });
+-  await writeFile(
+-    join(physicalDbDir, "db.mjs"),
+-    drizzleOrmContent.replace(/from '\.\/db\/schema\.mjs'/g, "from './schema.mjs'")
+-  );
++  const dbHash = createHash("sha256").update(drizzleOrmContent).digest("hex").slice(0, 12);
++  const dbShimTemplate = addTemplate({
++    filename: `hub/db.${dbHash}.mjs`,
++    write: true,
++    getContents: () => drizzleOrmContent
++  });
++  nuxt.options.alias ||= {};
++  nuxt.options.alias["@nuxthub/db"] = dbShimTemplate.dst;
++  nuxt.options.alias["hub:db"] = dbShimTemplate.dst;
+   const physicalDbTypes = `import type { DrizzleConfig } from 'drizzle-orm'
+ import { drizzle as drizzleCore } from 'drizzle-orm/${driverForTypes}'
+ import * as schema from './schema.mjs'
+@@ -626,10 +617,6 @@ export { schema }
+  */
+ export const db: ReturnType<typeof drizzleCore<typeof schema>>
+ `;
+-  await writeFile(
+-    join(physicalDbDir, "db.d.ts"),
+-    physicalDbTypes
+-  );
+   const packageJson = {
+     name: "@nuxthub/db",
+     version: "0.0.0",
+@@ -639,18 +626,22 @@ export const db: ReturnType<typeof drizzleCore<typeof schema>>
+       "./schema": { types: "./schema.d.mts", default: "./schema.mjs" }
+     }
+   };
+-  try {
++  nuxt.hook("nitro:build:before", async () => {
++    const physicalDbDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "db");
++    await mkdir(physicalDbDir, { recursive: true });
++    const physicalDbContent = drizzleOrmContent.replace(/from '\.\/db\/schema\.mjs'/g, "from './schema.mjs'");
++    await writeFile(join(physicalDbDir, "db.mjs"), physicalDbContent);
++    await writeFile(join(physicalDbDir, "db.d.ts"), physicalDbTypes);
+     await writeFile(join(physicalDbDir, "package.json"), JSON.stringify(packageJson, null, 2));
+     const schemaPath = join(physicalDbDir, "schema.mjs");
+     const schemaDtsPath = join(physicalDbDir, "schema.d.mts");
+-    const schemaExists = await stat(schemaPath).then((s) => s.size > 20).catch(() => false);
+-    const schemaDtsExists = await stat(schemaDtsPath).then((s) => s.size > 20).catch(() => false);
+-    if (!schemaExists) await writeFile(schemaPath, "export {}");
+-    if (!schemaDtsExists) await writeFile(schemaDtsPath, "export {}");
+-  } catch (error) {
+-    throw new Error(`Failed to create @nuxthub/db package files: ${error.message}`);
+-  }
+-  nuxt.options.alias["hub:db"] = "@nuxthub/db";
++    const schemaSource = join(nuxt.options.buildDir, "hub/db/schema.mjs");
++    const schemaTypesSource = join(nuxt.options.buildDir, "hub/db/schema.d.mts");
++    const schemaCopied = await copyFile(schemaSource, schemaPath).then(() => true).catch(() => false);
++    const schemaTypesCopied = await copyFile(schemaTypesSource, schemaDtsPath).then(() => true).catch(() => false);
++    if (!schemaCopied) await writeFile(schemaPath, "export {}");
++    if (!schemaTypesCopied) await writeFile(schemaDtsPath, "export {}");
++  });
+   addServerImports({ name: "db", from: "@nuxthub/db", meta: { description: `The ${driver} database client.` } });
+   addServerImports({ name: "schema", from: "@nuxthub/db", meta: { description: `The database schema object` } });
+ }
+@@ -745,16 +736,15 @@ export const kv = createStorage({
+   driver: driver(${JSON.stringify(driverOptions)}),
+ });
+ `;
+-  const physicalKvDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "kv");
+-  await mkdir(physicalKvDir, { recursive: true });
+-  await writeFile(
+-    join(physicalKvDir, "kv.mjs"),
+-    kvContent
+-  );
+-  await copyFile(
+-    resolve("kv/runtime/kv.d.ts"),
+-    join(physicalKvDir, "kv.d.ts")
+-  );
++  const kvHash = createHash("sha256").update(kvContent).digest("hex").slice(0, 12);
++  const kvShimTemplate = addTemplate({
++    filename: `hub/kv.${kvHash}.mjs`,
++    write: true,
++    getContents: () => kvContent
++  });
++  nuxt.options.alias ||= {};
++  nuxt.options.alias["@nuxthub/kv"] = kvShimTemplate.dst;
++  nuxt.options.alias["hub:kv"] = kvShimTemplate.dst;
+   const packageJson = {
+     name: "@nuxthub/kv",
+     version: "0.0.0",
+@@ -766,18 +756,26 @@ export const kv = createStorage({
+       }
+     }
+   };
+-  await writeFile(
+-    join(physicalKvDir, "package.json"),
+-    JSON.stringify(packageJson, null, 2)
+-  );
+-  nuxt.options.alias["hub:kv"] = "@nuxthub/kv";
+   addServerImports({ name: "kv", from: "@nuxthub/kv", meta: { description: `The Key-Value storage instance.` } });
+   addTypeTemplate({
+     filename: "hub/kv.d.ts",
+-    getContents: () => `declare module 'hub:kv' {
++    getContents: () => `import type { KVStorage } from '@nuxthub/core/kv'
++
++declare module '@nuxthub/kv' {
++  export const kv: KVStorage
++}
++
++declare module 'hub:kv' {
+   export * from '@nuxthub/kv'
+ }`
+   }, { nitro: true, nuxt: true });
++  nuxt.hook("nitro:build:before", async () => {
++    const physicalKvDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "kv");
++    await mkdir(physicalKvDir, { recursive: true });
++    await writeFile(join(physicalKvDir, "kv.mjs"), kvContent);
++    await copyFile(resolve("kv/runtime/kv.d.ts"), join(physicalKvDir, "kv.d.ts"));
++    await writeFile(join(physicalKvDir, "package.json"), JSON.stringify(packageJson, null, 2));
++  });
+   logWhenReady(nuxt, `\`hub:kv\` using \`${driver}\` driver`);
+ }
+ 
+@@ -840,13 +838,30 @@ import { createDriver } from "@nuxthub/core/blob/drivers/${driver}";
+ export { ensureBlob } from "@nuxthub/core/blob";
+ export const blob = createBlobStorage(createDriver(${JSON.stringify(driverOptions)}));
+ `;
+-  const physicalBlobDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "blob");
+-  await mkdir(physicalBlobDir, { recursive: true });
+-  await writeFile(join(physicalBlobDir, "blob.mjs"), blobContent);
+-  await copyFile(
+-    resolve("blob/runtime/blob.d.ts"),
+-    join(physicalBlobDir, "blob.d.ts")
+-  );
++  const blobHash = createHash("sha256").update(blobContent).digest("hex").slice(0, 12);
++  const blobShimTemplate = addTemplate({
++    filename: `hub/blob.${blobHash}.mjs`,
++    write: true,
++    getContents: () => blobContent
++  });
++  nuxt.options.alias["@nuxthub/blob"] = blobShimTemplate.dst;
++  nuxt.options.alias["hub:blob"] = blobShimTemplate.dst;
++  addServerImports({ name: "blob", from: "@nuxthub/blob", meta: { description: `The Blob storage instance.` } });
++  addServerImports({ name: "ensureBlob", from: "@nuxthub/blob", meta: { description: `Ensure the blob is valid and meets the specified requirements.` } });
++  addTypeTemplate({
++    filename: "hub/blob.d.ts",
++    getContents: () => `import type { BlobStorage } from '@nuxthub/core/blob'
++
++declare module '@nuxthub/blob' {
++  export const blob: BlobStorage
++  export { ensureBlob } from '@nuxthub/core/blob'
++}
++
++declare module 'hub:blob' {
++  export * from '@nuxthub/blob'
++}
++`
++  }, { nitro: true, nuxt: true });
+   const packageJson = {
+     name: "@nuxthub/blob",
+     version: "0.0.0",
+@@ -858,16 +873,16 @@ export const blob = createBlobStorage(createDriver(${JSON.stringify(driverOption
+       }
+     }
+   };
+-  await writeFile(join(physicalBlobDir, "package.json"), JSON.stringify(packageJson, null, 2));
+-  nuxt.options.alias["hub:blob"] = "@nuxthub/blob";
+-  addServerImports({ name: "blob", from: "@nuxthub/blob", meta: { description: `The Blob storage instance.` } });
+-  addServerImports({ name: "ensureBlob", from: "@nuxthub/blob", meta: { description: `Ensure the blob is valid and meets the specified requirements.` } });
+-  addTypeTemplate({
+-    filename: "hub/blob.d.ts",
+-    getContents: () => `declare module 'hub:blob' {
+-  export * from '@nuxthub/blob'
+-}`
+-  }, { nitro: true, nuxt: true });
++  nuxt.hook("nitro:build:before", async () => {
++    const physicalBlobDir = join(nuxt.options.rootDir, "node_modules", "@nuxthub", "blob");
++    await mkdir(physicalBlobDir, { recursive: true });
++    await writeFile(join(physicalBlobDir, "blob.mjs"), blobContent);
++    await copyFile(
++      resolve("blob/runtime/blob.d.ts"),
++      join(physicalBlobDir, "blob.d.ts")
++    );
++    await writeFile(join(physicalBlobDir, "package.json"), JSON.stringify(packageJson, null, 2));
++  });
+   if (blobConfig.driver === "vercel-blob") {
+     nuxt.options.runtimeConfig.public.hub ||= {};
+     nuxt.options.runtimeConfig.public.hub.blobProvider = "vercel-blob";

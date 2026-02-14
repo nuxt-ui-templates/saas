@@ -34,29 +34,50 @@ const items = computed(() => [{
     <template #right>
       <UColorModeButton />
 
-      <UButton
-        icon="i-lucide-log-in"
-        color="neutral"
-        variant="ghost"
-        to="/login"
-        class="lg:hidden"
-      />
+      <BetterAuthState>
+        <template #default="{ loggedIn }">
+          <template v-if="loggedIn">
+            <UButton
+              label="Dashboard"
+              color="neutral"
+              variant="outline"
+              to="/app"
+              class="hidden lg:inline-flex"
+            />
+            <UButton
+              icon="i-lucide-layout-dashboard"
+              color="neutral"
+              variant="ghost"
+              to="/app"
+              class="lg:hidden"
+            />
+          </template>
 
-      <UButton
-        label="Sign in"
-        color="neutral"
-        variant="outline"
-        to="/login"
-        class="hidden lg:inline-flex"
-      />
-
-      <UButton
-        label="Sign up"
-        color="neutral"
-        trailing-icon="i-lucide-arrow-right"
-        class="hidden lg:inline-flex"
-        to="/signup"
-      />
+          <template v-else>
+            <UButton
+              icon="i-lucide-log-in"
+              color="neutral"
+              variant="ghost"
+              to="/login"
+              class="lg:hidden"
+            />
+            <UButton
+              label="Sign in"
+              color="neutral"
+              variant="outline"
+              to="/login"
+              class="hidden lg:inline-flex"
+            />
+            <UButton
+              label="Sign up"
+              color="neutral"
+              trailing-icon="i-lucide-arrow-right"
+              class="hidden lg:inline-flex"
+              to="/signup"
+            />
+          </template>
+        </template>
+      </BetterAuthState>
     </template>
 
     <template #body>
@@ -68,20 +89,34 @@ const items = computed(() => [{
 
       <USeparator class="my-6" />
 
-      <UButton
-        label="Sign in"
-        color="neutral"
-        variant="subtle"
-        to="/login"
-        block
-        class="mb-3"
-      />
-      <UButton
-        label="Sign up"
-        color="neutral"
-        to="/signup"
-        block
-      />
+      <BetterAuthState>
+        <template #default="{ loggedIn }">
+          <UButton
+            v-if="loggedIn"
+            label="Dashboard"
+            color="neutral"
+            to="/app"
+            block
+          />
+
+          <template v-else>
+            <UButton
+              label="Sign in"
+              color="neutral"
+              variant="subtle"
+              to="/login"
+              block
+              class="mb-3"
+            />
+            <UButton
+              label="Sign up"
+              color="neutral"
+              to="/signup"
+              block
+            />
+          </template>
+        </template>
+      </BetterAuthState>
     </template>
   </UHeader>
 </template>

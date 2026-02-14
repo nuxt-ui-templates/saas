@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
   modules: [
+    '@nuxthub/core',
+    '@onmax/nuxt-better-auth',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
@@ -16,7 +19,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   routeRules: {
-    '/docs': { redirect: '/docs/getting-started', prerender: false }
+    '/docs': { redirect: '/docs/getting-started', prerender: false },
+    '/login': { auth: 'guest' },
+    '/signup': { auth: 'guest' },
+    '/app/**': { auth: 'user' }
   },
 
   compatibilityDate: '2024-07-11',
@@ -28,6 +34,19 @@ export default defineNuxtConfig({
       ],
       crawlLinks: true
     }
+  },
+
+  hub: {
+    db: 'sqlite',
+    kv: true
+  },
+
+  auth: {
+    redirects: {
+      login: '/login',
+      guest: '/app'
+    },
+    secondaryStorage: true
   },
 
   eslint: {
