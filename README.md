@@ -23,7 +23,7 @@ npm create nuxt@latest -- -t github:nuxt-ui-templates/saas
 
 ## Deploy your own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=saas&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fsaas&env=BETTER_AUTH_SECRET&envDescription=Better%20Auth%20secret%20key%20(min%2032%20chars).%20Generate%20with%20%60openssl%20rand%20-base64%2032%60&envLink=https%3A%2F%2Fnuxt-better-auth.onmax.me%2Fgetting-started%2Finstallation&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fsaas-dark.png&demo-url=https%3A%2F%2Fsaas-template.nuxt.dev%2F&demo-title=Nuxt%20SaaS%20Template&demo-description=A%20SaaS%20template%20with%20landing%2C%20pricing%2C%20docs%20and%20blog%20powered%20by%20Nuxt%20Content.)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=saas&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fsaas&env=BETTER_AUTH_SECRET&envDescription=Better%20Auth%20secret%20key%20(min%2032%20chars).%20Generate%20with%20%60openssl%20rand%20-base64%2032%60&envLink=https%3A%2F%2Fnuxt-better-auth.onmax.me%2Fgetting-started%2Finstallation&products=%5B%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22productSlug%22%3A%22database%22%2C%22integrationSlug%22%3A%22tursocloud%22%7D%5D&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fsaas-dark.png&demo-url=https%3A%2F%2Fsaas-template.nuxt.dev%2F&demo-title=Nuxt%20SaaS%20Template&demo-description=A%20SaaS%20template%20with%20landing%2C%20pricing%2C%20docs%20and%20blog%20powered%20by%20Nuxt%20Content.)
 
 ## Setup
 
