@@ -12,6 +12,9 @@ useSeoMeta({
 })
 
 const toast = useToast()
+const { signIn } = useUserSession()
+
+const pending = ref(false)
 
 const fields = [{
   name: 'email',
@@ -33,15 +36,11 @@ const fields = [{
 const providers = [{
   label: 'Google',
   icon: 'i-simple-icons-google',
-  onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
-  }
+  disabled: true
 }, {
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  onClick: () => {
-    toast.add({ title: 'GitHub', description: 'Login with GitHub' })
-  }
+  disabled: true
 }]
 
 const schema = z.object({
@@ -51,8 +50,24 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-function onSubmit(payload: FormSubmitEvent<Schema>) {
-  console.log('Submitted', payload)
+async function onSubmit(payload: FormSubmitEvent<Schema>) {
+  pending.value = true
+  try {
+    await signIn.email({
+      email: payload.data.email,
+      password: payload.data.password
+    }, {
+      onSuccess: () => { navigateTo('/app') }
+    })
+  } catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'Login failed',
+      description: error instanceof Error ? error.message : 'Please try again.'
+    })
+  } finally {
+    pending.value = false
+  }
 }
 </script>
 
@@ -63,6 +78,8 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
+    :loading="pending"
+    :disabled="pending"
     @submit="onSubmit"
   >
     <template #description>
