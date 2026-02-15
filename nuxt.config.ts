@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    '@nuxthub/core',
+    '@onmax/nuxt-better-auth',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
@@ -28,6 +30,10 @@ export default defineNuxtConfig({
       ],
       crawlLinks: true
     }
+  },
+
+  hub: {
+    db: 'sqlite'
   },
 
   eslint: {
