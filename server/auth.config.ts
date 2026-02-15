@@ -4,5 +4,4 @@ export default defineServerAuth({
   emailAndPassword: {
     enabled: true
   },
-  trustedOrigins: (origin) => origin.endsWith('.pages.dev')
 })
