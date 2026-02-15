@@ -66,7 +66,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       email: payload.data.email,
       password: payload.data.password
     }, {
-      onSuccess: () => navigateTo(redirectTo.value)
+      onSuccess: async () => { await navigateTo(redirectTo.value) }
     })
   } catch (error) {
     toast.add({
