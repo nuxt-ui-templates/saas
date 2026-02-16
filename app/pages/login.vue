@@ -12,7 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const { execute, error, errorMessage, status, pending } = useUserSignIn().email
+const signInEmail = useUserSignIn().email
 const guestRedirect = '/app'
 
 const fields = [{
@@ -50,18 +50,18 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  await execute({
+  await signInEmail.execute({
     email: payload.data.email,
     password: payload.data.password
   }, {
     onSuccess: async () => { await navigateTo(guestRedirect) }
   })
 
-  if (status.value === 'error') {
+  if (signInEmail.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Login failed',
-      description: errorMessage.value ?? error.value?.message ?? 'Please try again.'
+      description: signInEmail.errorMessage.value ?? signInEmail.error.value?.message ?? 'Please try again.'
     })
   }
 }
@@ -74,8 +74,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
-    :loading="pending"
-    :disabled="pending"
+    :loading="signInEmail.pending.value"
+    :disabled="signInEmail.pending.value"
     @submit="onSubmit"
   >
     <template #description>
