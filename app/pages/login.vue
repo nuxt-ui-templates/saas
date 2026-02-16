@@ -74,8 +74,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
-    :loading="signInEmail.pending.value"
-    :disabled="signInEmail.pending.value"
+    :loading="signInEmail.pending"
+    :disabled="signInEmail.pending"
     @submit="onSubmit"
   >
     <template #description>
