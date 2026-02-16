@@ -13,7 +13,6 @@ useSeoMeta({
 
 const toast = useToast()
 const signInEmail = useUserSignIn().email
-const guestRedirect = '/app'
 
 const fields = [{
   name: 'email',
@@ -54,7 +53,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     email: payload.data.email,
     password: payload.data.password
   }, {
-    onSuccess: async () => { await navigateTo(guestRedirect) }
+    onSuccess: () => navigateTo('/app')
   })
 
   if (signInEmail.status.value === 'error') {
