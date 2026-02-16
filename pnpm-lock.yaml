@@ -1428,7 +1428,7 @@ packages:
     resolution: {integrity: sha512-fGmtLDQAmmDHF5Z37Apfc3k806rb2XWDOQFhb5xlDSL7+HiiUjyFy3ctx3qWdlC08dRzfAetmsGOYbfDqYsB/w==}
 
   '@onmax/nuxt-better-auth@file:../better-auth/onmax-nuxt-better-auth-0.0.2-alpha.24.tgz':
-    resolution: {integrity: sha512-TrPiB0q5DMvd3+JTU2bBsYmCnfHwuUhXPKbWT0ht0MF74AGzEROwJFVhFmfxufnOYXFiKtLxz16cHnEixWhZNA==, tarball: file:../better-auth/onmax-nuxt-better-auth-0.0.2-alpha.24.tgz}
+    resolution: {integrity: sha512-RB+rYmPAIQ4/qmCc0ogd30Pdc8ecQbyq/ggUvIOqyfQ6FPkOZuyjNTspRWYjLpA3/dJV+ihjFsnjfmwoXCkaIw==, tarball: file:../better-auth/onmax-nuxt-better-auth-0.0.2-alpha.24.tgz}
     version: 0.0.2-alpha.24
     peerDependencies:
       '@nuxthub/core': '>=0.10.5'

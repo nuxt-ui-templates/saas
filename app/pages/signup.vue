@@ -15,7 +15,7 @@ const toast = useToast()
 const { email: signUpEmail } = useUserSignUp()
 const guestRedirect = '/app'
 
-const pending = computed(() => signUpEmail.pending.value)
+const pending = signUpEmail.pending
 
 const fields = [{
   name: 'name',
@@ -52,45 +52,20 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-function getErrorMessage(error: unknown) {
-  if (!error) {
-    return null
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
-    return error.message
-  }
-
-  return 'Please try again.'
-}
-
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  try {
-    await signUpEmail.execute({
-      name: payload.data.name,
-      email: payload.data.email,
-      password: payload.data.password
-    }, {
-      onSuccess: async () => { await navigateTo(guestRedirect) }
-    })
+  await signUpEmail.execute({
+    name: payload.data.name,
+    email: payload.data.email,
+    password: payload.data.password
+  }, {
+    onSuccess: async () => { await navigateTo(guestRedirect) }
+  })
 
-    const resultError = getErrorMessage(signUpEmail.error.value)
-    if (resultError) {
-      toast.add({
-        color: 'error',
-        title: 'Sign up failed',
-        description: resultError
-      })
-    }
-  } catch (error) {
+  if (signUpEmail.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Sign up failed',
-      description: getErrorMessage(error) ?? 'Please try again.'
+      description: signUpEmail.errorMessage.value ?? 'Please try again.'
     })
   }
 }
