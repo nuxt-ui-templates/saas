@@ -12,10 +12,10 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const { signIn } = useUserSession()
+const signInEmail = useUserSignIn().email
 const route = useRoute()
 
-const pending = ref(false)
+const pending = computed(() => signInEmail.pending.value)
 
 const fields = [{
   name: 'email',
@@ -52,30 +52,52 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 const redirectTo = computed(() => {
-  const q = route.query.redirectTo
+  const q = route.query.redirect
   if (typeof q === 'string' && q.startsWith('/')) {
     return q
   }
   return '/app'
 })
 
+function getErrorMessage(error: unknown) {
+  if (!error) {
+    return null
+  }
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+    return error.message
+  }
+
+  return 'Please try again.'
+}
+
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  pending.value = true
   try {
-    await signIn.email({
+    await signInEmail.execute({
       email: payload.data.email,
       password: payload.data.password
     }, {
       onSuccess: async () => { await navigateTo(redirectTo.value) }
     })
+
+    const resultError = getErrorMessage(signInEmail.error.value)
+    if (resultError) {
+      toast.add({
+        color: 'error',
+        title: 'Login failed',
+        description: resultError
+      })
+    }
   } catch (error) {
     toast.add({
       color: 'error',
       title: 'Login failed',
-      description: error instanceof Error ? error.message : 'Please try again.'
+      description: getErrorMessage(error) ?? 'Please try again.'
     })
-  } finally {
-    pending.value = false
   }
 }
 </script>
