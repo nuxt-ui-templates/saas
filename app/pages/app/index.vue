@@ -13,7 +13,7 @@ const { user, signOut } = useUserSession()
       label="Sign out"
       color="neutral"
       variant="outline"
-      @click="signOut({ onSuccess: () => { navigateTo('/') } })"
+      @click="signOut({ onSuccess: async () => { await navigateTo('/') } })"
     />
   </UPageHero>
 </template>

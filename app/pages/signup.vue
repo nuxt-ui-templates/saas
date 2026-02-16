@@ -12,16 +12,8 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const {
-  execute: signUpWithEmail,
-  error: errorSignUpWithEmail,
-  errorMessage: errorMessageSignUpWithEmail,
-  status: statusSignUpWithEmail,
-  pending: pendingSignUpWithEmail
-} = useUserSignUp().email
+const signUpEmail = useUserSignUp().email
 const guestRedirect = '/app'
-
-const pending = pendingSignUpWithEmail
 
 const fields = [{
   name: 'name',
@@ -59,7 +51,7 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  await signUpWithEmail({
+  await signUpEmail.execute({
     name: payload.data.name,
     email: payload.data.email,
     password: payload.data.password
@@ -67,11 +59,11 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     onSuccess: async () => { await navigateTo(guestRedirect) }
   })
 
-  if (statusSignUpWithEmail.value === 'error') {
+  if (signUpEmail.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Sign up failed',
-      description: errorMessageSignUpWithEmail.value ?? errorSignUpWithEmail.value?.message ?? 'Please try again.'
+      description: signUpEmail.errorMessage.value ?? signUpEmail.error.value?.message ?? 'Please try again.'
     })
   }
 }
@@ -84,8 +76,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Create an account"
     :submit="{ label: 'Create account' }"
-    :loading="pending"
-    :disabled="pending"
+    :loading="signUpEmail.pending"
+    :disabled="signUpEmail.pending"
     @submit="onSubmit"
   >
     <template #description>
