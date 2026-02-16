@@ -12,8 +12,8 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signUpEmail = useUserSignUp().email
-const route = useRoute()
+const { email: signUpEmail } = useUserSignUp()
+const guestRedirect = '/app'
 
 const pending = computed(() => signUpEmail.pending.value)
 
@@ -52,14 +52,6 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-const redirectTo = computed(() => {
-  const q = route.query.redirect
-  if (typeof q === 'string' && q.startsWith('/')) {
-    return q
-  }
-  return '/app'
-})
-
 function getErrorMessage(error: unknown) {
   if (!error) {
     return null
@@ -83,7 +75,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       email: payload.data.email,
       password: payload.data.password
     }, {
-      onSuccess: async () => { await navigateTo(redirectTo.value) }
+      onSuccess: async () => { await navigateTo(guestRedirect) }
     })
 
     const resultError = getErrorMessage(signUpEmail.error.value)

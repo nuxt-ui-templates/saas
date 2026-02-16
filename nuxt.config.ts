@@ -19,9 +19,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/login': { auth: 'guest' },
-    '/signup': { auth: 'guest' },
-    '/app/**': { auth: 'user' }
+    '/login': { auth: { only: 'guest', redirectTo: '/app' } },
+    '/signup': { auth: { only: 'guest', redirectTo: '/app' } },
+    '/app/**': { auth: { only: 'user', redirectTo: '/login' } }
   },
 
   compatibilityDate: '2024-07-11',
@@ -40,10 +40,6 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    redirects: {
-      login: '/login',
-      guest: '/app'
-    },
     secondaryStorage: true
   },
 
