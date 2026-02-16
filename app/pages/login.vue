@@ -12,10 +12,16 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const { email: signInEmail } = useUserSignIn()
+const {
+  execute: signInWithEmail,
+  error: errorSignInWithEmail,
+  errorMessage: errorMessageSignInWithEmail,
+  status: statusSignInWithEmail,
+  pending: pendingSignInWithEmail
+} = useUserSignIn().email
 const guestRedirect = '/app'
 
-const pending = signInEmail.pending
+const pending = pendingSignInWithEmail
 
 const fields = [{
   name: 'email',
@@ -52,18 +58,18 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  await signInEmail.execute({
+  await signInWithEmail({
     email: payload.data.email,
     password: payload.data.password
   }, {
     onSuccess: async () => { await navigateTo(guestRedirect) }
   })
 
-  if (signInEmail.status.value === 'error') {
+  if (statusSignInWithEmail.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Login failed',
-      description: signInEmail.errorMessage.value ?? 'Please try again.'
+      description: errorMessageSignInWithEmail.value ?? errorSignInWithEmail.value?.message ?? 'Please try again.'
     })
   }
 }
