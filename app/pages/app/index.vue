@@ -5,8 +5,8 @@ const { user, signOut } = useUserSession()
 
 async function handleSignOut() {
   await signOut({
-    onSuccess: () => {
-      void navigateTo('/')
+    onSuccess: async () => {
+      await navigateTo('/')
     }
   })
 }

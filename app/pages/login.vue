@@ -12,8 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signInEmail = useUserSignIn().email
-const isSigningIn = computed(() => signInEmail.pending.value)
+const signInEmail = useUserSignIn('email')
 
 const fields = [{
   name: 'email',
@@ -54,8 +53,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     email: payload.data.email,
     password: payload.data.password
   }, {
-    onSuccess: () => {
-      void navigateTo('/app')
+    onSuccess: async () => {
+      await navigateTo('/app')
     }
   })
 
@@ -76,8 +75,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
-    :loading="isSigningIn"
-    :disabled="isSigningIn"
+    :loading="signInEmail.pending.value"
+    :disabled="signInEmail.pending.value"
     @submit="onSubmit"
   >
     <template #description>
