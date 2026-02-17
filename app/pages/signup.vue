@@ -65,7 +65,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     toast.add({
       color: 'error',
       title: 'Sign up failed',
-      description: signUpEmail.errorMessage.value ?? signUpEmail.error.value?.message ?? 'Please try again.'
+      description: signUpEmail.error.value?.message ?? 'Please try again.'
     })
   }
 }
