@@ -12,7 +12,8 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signInEmail = useUserSignIn().email
+const signInEmail = useUserSignIn('email')
+const isSignInPending = computed(() => signInEmail.status.value === 'pending')
 
 const fields = [{
   name: 'email',
@@ -75,8 +76,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
-    :loading="signInEmail.pending.value"
-    :disabled="signInEmail.pending.value"
+    :loading="isSignInPending"
+    :disabled="isSignInPending"
     @submit="onSubmit"
   >
     <template #description>
