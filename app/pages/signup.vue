@@ -13,6 +13,7 @@ useSeoMeta({
 
 const toast = useToast()
 const signUpEmail = useUserSignUp().email
+const isSigningUp = computed(() => signUpEmail.pending.value)
 
 const fields = [{
   name: 'name',
@@ -55,7 +56,9 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     email: payload.data.email,
     password: payload.data.password
   }, {
-    onSuccess: () => navigateTo('/app')
+    onSuccess: () => {
+      void navigateTo('/app')
+    }
   })
 
   if (signUpEmail.status.value === 'error') {
@@ -75,8 +78,8 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Create an account"
     :submit="{ label: 'Create account' }"
-    :loading="signUpEmail.pending"
-    :disabled="signUpEmail.pending"
+    :loading="isSigningUp"
+    :disabled="isSigningUp"
     @submit="onSubmit"
   >
     <template #description>

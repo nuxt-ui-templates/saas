@@ -4,7 +4,11 @@ useSeoMeta({ title: 'Dashboard' })
 const { user, signOut } = useUserSession()
 
 async function handleSignOut() {
-  await signOut({ onSuccess: () => navigateTo('/') })
+  await signOut({
+    onSuccess: () => {
+      void navigateTo('/')
+    }
+  })
 }
 </script>
 

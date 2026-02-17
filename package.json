@@ -18,7 +18,7 @@
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "^0.10.6",
-    "@onmax/nuxt-better-auth": "file:/Users/maxi/nuxt/better-auth/onmax-nuxt-better-auth-0.0.2-alpha.24.tgz",
+    "@onmax/nuxt-better-auth": "0.0.2-alpha.26",
     "@standard-schema/spec": "^1.1.0",
     "@vueuse/nuxt": "^14.2.0",
     "better-auth": "1.5.0-beta.13",
