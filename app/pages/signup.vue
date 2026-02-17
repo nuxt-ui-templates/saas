@@ -12,7 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signUpEmail = useUserSignUp('email')
+const signUpEmail = useUserSignUp().email
 
 const fields = [{
   name: 'name',
