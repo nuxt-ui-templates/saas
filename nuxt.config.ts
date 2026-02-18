@@ -40,7 +40,8 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    secondaryStorage: true
+    secondaryStorage: true,
+    redirects: { logout: '/' }
   },
 
   eslint: {

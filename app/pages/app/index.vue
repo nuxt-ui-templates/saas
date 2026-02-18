@@ -2,14 +2,6 @@
 useSeoMeta({ title: 'Dashboard' })
 
 const { user, signOut } = useUserSession()
-
-async function handleSignOut() {
-  await signOut({
-    onSuccess: async () => {
-      await navigateTo('/')
-    }
-  })
-}
 </script>
 
 <template>
@@ -21,7 +13,7 @@ async function handleSignOut() {
       label="Sign out"
       color="neutral"
       variant="outline"
-      @click="handleSignOut"
+      @click="signOut"
     />
   </UPageHero>
 </template>
