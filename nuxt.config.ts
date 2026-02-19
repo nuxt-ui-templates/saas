@@ -17,11 +17,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    githubClientId: process.env.GITHUB_CLIENT_ID,
+    githubClientSecret: process.env.GITHUB_CLIENT_SECRET
+  },
+
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/login': { auth: { only: 'guest' } },
-    '/signup': { auth: { only: 'guest' } },
-    '/app/**': { auth: 'user' }
+    '/login': { auth: { only: 'guest' }, prerender: false },
+    '/signup': { auth: { only: 'guest' }, prerender: false },
+    '/app/**': { auth: 'user', prerender: false }
   },
 
   compatibilityDate: '2026-02-19',

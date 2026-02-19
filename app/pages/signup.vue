@@ -13,7 +13,10 @@ useSeoMeta({
 
 const toast = useToast()
 const signUpEmail = useUserSignUp('email')
+const signInSocial = useUserSignIn('social')
 const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
+const isSignInSocialPending = computed(() => signInSocial.status.value === 'pending')
+const isAnySignUpPending = computed(() => isSignUpPending.value || isSignInSocialPending.value)
 
 const fields = [{
   name: 'name',
@@ -32,15 +35,13 @@ const fields = [{
   placeholder: 'Enter your password'
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  disabled: true
-}, {
+const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  disabled: true
-}]
+  loading: isSignInSocialPending.value,
+  disabled: isAnySignUpPending.value,
+  onClick: onSignInWithGitHub
+}])
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -65,6 +66,24 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     })
   }
 }
+
+async function onSignInWithGitHub() {
+  if (isAnySignUpPending.value)
+    return
+
+  await signInSocial.execute({
+    provider: 'github',
+    callbackURL: '/app'
+  })
+
+  if (signInSocial.status.value === 'error') {
+    toast.add({
+      color: 'error',
+      title: 'GitHub sign up failed',
+      description: signInSocial.error.value?.message ?? 'Please try again.'
+    })
+  }
+}
 </script>
 
 <template>
@@ -75,7 +94,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     title="Create an account"
     :submit="{ label: 'Create account' }"
     :loading="isSignUpPending"
-    :disabled="isSignUpPending"
+    :disabled="isAnySignUpPending"
     @submit="onSubmit"
   >
     <template #description>
