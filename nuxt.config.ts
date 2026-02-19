@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     '/docs': { redirect: '/docs/getting-started', prerender: false },
     '/login': { auth: { only: 'guest' }, prerender: false },
     '/signup': { auth: { only: 'guest' }, prerender: false },
+    '/app': { auth: 'user', prerender: false },
     '/app/**': { auth: 'user', prerender: false }
   },
 
@@ -36,6 +37,12 @@ export default defineNuxtConfig({
     prerender: {
       routes: [
         '/'
+      ],
+      ignore: [
+        '/login',
+        '/signup',
+        '/app',
+        '/app/**'
       ],
       crawlLinks: true
     }
