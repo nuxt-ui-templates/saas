@@ -13,9 +13,9 @@ useSeoMeta({
 
 const toast = useToast()
 const signInEmail = useUserSignIn('email')
-const { client } = useUserSession()
+const signInSocial = useUserSignIn('social')
 const isSignInPending = computed(() => signInEmail.status.value === 'pending')
-const isSocialSignInPending = ref(false)
+const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'email',
@@ -65,39 +65,18 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 }
 
 async function onGitHubSignIn() {
-  if (!client) {
+  await signInSocial.execute({
+    provider: 'github',
+    callbackURL: '/app',
+    newUserCallbackURL: '/app'
+  })
+
+  if (signInSocial.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'GitHub login failed',
-      description: 'Auth client is not available. Please refresh and try again.'
+      description: signInSocial.error.value?.message ?? 'Please try again.'
     })
-    return
-  }
-
-  isSocialSignInPending.value = true
-  try {
-    const result = await client.signIn.social({
-      provider: 'github',
-      callbackURL: '/app',
-      newUserCallbackURL: '/app'
-    })
-
-    if (result?.error) {
-      toast.add({
-        color: 'error',
-        title: 'GitHub login failed',
-        description: result.error.message ?? 'Please try again.'
-      })
-      isSocialSignInPending.value = false
-      return
-    }
-  } catch (error: unknown) {
-    toast.add({
-      color: 'error',
-      title: 'GitHub login failed',
-      description: error instanceof Error ? error.message : 'Please try again.'
-    })
-    isSocialSignInPending.value = false
   }
 }
 </script>
