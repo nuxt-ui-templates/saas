@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import type { AppAuthClient } from '#nuxt-better-auth'
 
 definePageMeta({
   layout: 'auth'
@@ -39,7 +40,7 @@ const providers = computed(() => [{
   icon: 'i-simple-icons-github',
   loading: isSocialSignInPending.value,
   disabled: isSocialSignInPending.value,
-  onClick: () => onGitHubSignIn()
+  onClick: () => onSignIn('github')
 }])
 
 const schema = z.object({
@@ -48,6 +49,7 @@ const schema = z.object({
 })
 
 type Schema = z.output<typeof schema>
+type SocialProvider = Parameters<NonNullable<AppAuthClient>['signIn']['social']>[0]['provider']
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
   await signInEmail.execute({
@@ -64,9 +66,13 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   }
 }
 
-async function onGitHubSignIn() {
+function formatProvider(provider: SocialProvider) {
+  return provider.charAt(0).toUpperCase() + provider.slice(1)
+}
+
+async function onSignIn(provider: SocialProvider) {
   await signInSocial.execute({
-    provider: 'github',
+    provider,
     callbackURL: '/app',
     newUserCallbackURL: '/app'
   })
@@ -74,7 +80,7 @@ async function onGitHubSignIn() {
   if (signInSocial.status.value === 'error') {
     toast.add({
       color: 'error',
-      title: 'GitHub login failed',
+      title: `${formatProvider(provider)} login failed`,
       description: signInSocial.error.value?.message ?? 'Please try again.'
     })
   }
