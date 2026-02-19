@@ -24,9 +24,10 @@ export default defineNuxtConfig({
     '/app/**': { auth: { only: 'user', redirectTo: '/login' } }
   },
 
-  compatibilityDate: '2024-07-11',
+  compatibilityDate: '2026-02-19',
 
   nitro: {
+    preset: 'cloudflare-module',
     prerender: {
       routes: [
         '/'
