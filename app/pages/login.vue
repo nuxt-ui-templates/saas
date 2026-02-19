@@ -52,10 +52,7 @@ type Schema = z.output<typeof schema>
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
   await signInEmail.execute({
     email: payload.data.email,
-    password: payload.data.password,
-    fetchOptions: {
-      onError: () => showError()
-    }
+    password: payload.data.password
   })
 
   if (signInEmail.status.value === 'error') {
