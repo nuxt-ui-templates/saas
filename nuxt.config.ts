@@ -41,7 +41,7 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    secondaryStorage: true,
+    hubSecondaryStorage: true,
     redirects: { logout: '/' }
   },
 

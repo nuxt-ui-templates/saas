@@ -13,7 +13,7 @@ const { user, signOut } = useUserSession()
       label="Sign out"
       color="neutral"
       variant="outline"
-      @click="signOut"
+      @click="() => signOut()"
     />
   </UPageHero>
 </template>
