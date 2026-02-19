@@ -19,9 +19,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/login': { auth: { only: 'guest', redirectTo: '/app' } },
-    '/signup': { auth: { only: 'guest', redirectTo: '/app' } },
-    '/app/**': { auth: { only: 'user', redirectTo: '/login' } }
+    '/login': { auth: { only: 'guest' } },
+    '/signup': { auth: { only: 'guest' } },
+    '/app/**': { auth: 'user' }
   },
 
   compatibilityDate: '2026-02-19',
@@ -37,12 +37,18 @@ export default defineNuxtConfig({
   },
 
   hub: {
-    db: 'sqlite'
+    db: 'sqlite',
+    kv: true
   },
 
   auth: {
     hubSecondaryStorage: true,
-    redirects: { logout: '/' }
+    redirects: {
+      login: '/login',
+      guest: '/app',
+      authenticated: '/app',
+      logout: '/'
+    }
   },
 
   eslint: {

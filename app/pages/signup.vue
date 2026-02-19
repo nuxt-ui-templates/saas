@@ -55,10 +55,6 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     name: payload.data.name,
     email: payload.data.email,
     password: payload.data.password
-  }, {
-    onSuccess: async () => {
-      await navigateTo('/app')
-    }
   })
 
   if (signUpEmail.status.value === 'error') {
