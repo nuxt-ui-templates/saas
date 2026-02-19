@@ -54,7 +54,10 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   await signUpEmail.execute({
     name: payload.data.name,
     email: payload.data.email,
-    password: payload.data.password
+    password: payload.data.password,
+    fetchOptions: {
+      onError: () => showError()
+    }
   })
 
   if (signUpEmail.status.value === 'error') {
