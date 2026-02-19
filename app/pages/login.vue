@@ -37,6 +37,7 @@ const fields = [{
 const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
+  loading: isSocialSignInPending.value,
   disabled: isSocialSignInPending.value,
   onClick: () => onGitHubSignIn()
 }])
@@ -65,7 +66,9 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
 async function onGitHubSignIn() {
   await signInSocial.execute({
-    provider: 'github'
+    provider: 'github',
+    callbackURL: '/app',
+    newUserCallbackURL: '/app'
   })
 
   if (signInSocial.status.value === 'error') {
