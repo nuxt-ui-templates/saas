@@ -24,10 +24,10 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/login': { auth: { only: 'guest' }, prerender: false },
-    '/signup': { auth: { only: 'guest' }, prerender: false },
-    '/app': { auth: 'user', prerender: false },
-    '/app/**': { auth: 'user', prerender: false }
+    '/login': { auth: { only: 'guest' }, prerender: false, headers: { 'cache-control': 'no-store' } },
+    '/signup': { auth: { only: 'guest' }, prerender: false, headers: { 'cache-control': 'no-store' } },
+    '/app': { auth: 'user', prerender: false, headers: { 'cache-control': 'no-store' } },
+    '/app/**': { auth: 'user', prerender: false, headers: { 'cache-control': 'no-store' } }
   },
 
   compatibilityDate: '2026-02-19',
