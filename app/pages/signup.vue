@@ -71,9 +71,13 @@ async function onSignInWithGitHub() {
   if (isAnySignUpPending.value)
     return
 
+  const callbackURL = import.meta.client
+    ? `${window.location.origin}/app`
+    : '/app'
+
   await signInSocial.execute({
     provider: 'github',
-    callbackURL: '/app'
+    callbackURL
   })
 
   if (signInSocial.status.value === 'error') {
