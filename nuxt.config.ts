@@ -18,8 +18,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
-    githubClientId: process.env.NUXT_GITHUB_CLIENT_ID,
-    githubClientSecret: process.env.NUXT_GITHUB_CLIENT_SECRET
+    githubClientId: '',
+    githubClientSecret: ''
   },
 
   routeRules: {
