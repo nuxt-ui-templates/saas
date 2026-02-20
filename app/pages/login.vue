@@ -13,7 +13,7 @@ useSeoMeta({
 
 const toast = useToast()
 const signInEmail = useSignIn('email')
-const signInGitHub = useSignIn('github')
+const signInGitHub = useSignIn('social')
 const isSignInPending = computed(() => signInEmail.status.value === 'pending')
 const isGitHubSignInPending = computed(() => signInGitHub.status.value === 'pending')
 
@@ -66,6 +66,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 
 async function onGitHubSignIn() {
   await signInGitHub.execute({
+    provider: 'github',
     callbackURL: '/app',
     newUserCallbackURL: '/app'
   })
