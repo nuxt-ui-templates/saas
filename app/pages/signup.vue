@@ -13,9 +13,9 @@ useSeoMeta({
 
 const toast = useToast()
 const signUpEmail = useSignUp('email')
-const signInSocial = useSignIn('github')
+const signInGitHub = useSignIn('github')
 const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
-const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
+const isGitHubSignInPending = computed(() => signInGitHub.status.value === 'pending')
 
 const fields = [{
   name: 'name',
@@ -37,8 +37,8 @@ const fields = [{
 const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  loading: isSocialSignInPending.value,
-  disabled: isSocialSignInPending.value,
+  loading: isGitHubSignInPending.value,
+  disabled: isGitHubSignInPending.value,
   onClick: () => onGitHubSignIn()
 }])
 
@@ -67,16 +67,16 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 }
 
 async function onGitHubSignIn() {
-  await signInSocial.execute({
+  await signInGitHub.execute({
     callbackURL: '/app',
     newUserCallbackURL: '/app'
   })
 
-  if (signInSocial.status.value === 'error') {
+  if (signInGitHub.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'GitHub signup failed',
-      description: signInSocial.error.value?.message ?? 'Please try again.'
+      description: signInGitHub.error.value?.message ?? 'Please try again.'
     })
   }
 }
