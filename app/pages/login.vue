@@ -39,7 +39,7 @@ const providers = computed(() => [{
   icon: 'i-simple-icons-github',
   loading: isSocialSignInPending.value,
   disabled: isSocialSignInPending.value,
-  onClick: () => onSignIn()
+  onClick: () => onGitHubSignIn()
 }])
 
 const schema = z.object({
@@ -64,7 +64,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   }
 }
 
-async function onSignIn() {
+async function onGitHubSignIn() {
   await signInSocial.execute({
     callbackURL: '/app',
     newUserCallbackURL: '/app'
