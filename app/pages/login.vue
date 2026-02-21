@@ -13,9 +13,9 @@ useSeoMeta({
 
 const toast = useToast()
 const signInEmail = useSignIn('email')
-const signInGitHub = useSignIn('social')
+const signInSocial = useSignIn('social')
 const isSignInPending = computed(() => signInEmail.status.value === 'pending')
-const isGitHubSignInPending = computed(() => signInGitHub.status.value === 'pending')
+const isGitHubSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'email',
@@ -65,17 +65,17 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 }
 
 async function onGitHubSignIn() {
-  await signInGitHub.execute({
+  await signInSocial.execute({
     provider: 'github',
     callbackURL: '/app',
     newUserCallbackURL: '/app'
   })
 
-  if (signInGitHub.status.value === 'error') {
+  if (signInSocial.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'GitHub login failed',
-      description: signInGitHub.error.value?.message ?? 'Please try again.'
+      description: signInSocial.error.value?.message ?? 'Please try again.'
     })
   }
 }

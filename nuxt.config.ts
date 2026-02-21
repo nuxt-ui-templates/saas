@@ -26,8 +26,7 @@ export default defineNuxtConfig({
     '/docs': { redirect: '/docs/getting-started', prerender: false },
     '/login': { auth: { only: 'guest' } },
     '/signup': { auth: { only: 'guest' } },
-    '/app': { auth: 'user', prerender: false },
-    '/app/**': { auth: 'user', prerender: false }
+    '/app': { auth: 'user', prerender: false }
   },
 
   compatibilityDate: '2026-02-19',
