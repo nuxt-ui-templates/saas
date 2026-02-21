@@ -15,7 +15,7 @@ const toast = useToast()
 const signUpEmail = useSignUp('email')
 const signInSocial = useSignIn('social')
 const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
-const isGitHubSignInPending = computed(() => signInSocial.status.value === 'pending')
+const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'name',
@@ -37,8 +37,8 @@ const fields = [{
 const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  loading: isGitHubSignInPending.value,
-  disabled: isGitHubSignInPending.value,
+  loading: isSocialSignInPending.value,
+  disabled: isSocialSignInPending.value,
   onClick: () => onGitHubSignIn()
 }])
 
