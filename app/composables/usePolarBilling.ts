@@ -17,6 +17,8 @@ interface PolarClientMethods {
   }
 }
 
+let configRequest: Promise<void> | null = null
+
 function toArray(value: unknown) {
   return Array.isArray(value) ? value : []
 }
@@ -42,16 +44,30 @@ export function usePolarBilling() {
       return
     }
 
-    try {
-      const config = await $fetch<PolarBillingConfig>('/api/billing/polar-config')
-      checkoutAvailable.value = Boolean(config.checkoutEnabled)
-      portalAvailable.value = Boolean(config.portalEnabled)
-    } catch {
-      checkoutAvailable.value = false
-      portalAvailable.value = false
-    } finally {
-      configReady.value = true
+    if (!configRequest) {
+      configRequest = (async () => {
+        try {
+          const config = await $fetch<PolarBillingConfig>('/api/billing/polar-config')
+          checkoutAvailable.value = Boolean(config.checkoutEnabled)
+          portalAvailable.value = Boolean(config.portalEnabled)
+          configReady.value = true
+        } catch {
+          checkoutAvailable.value = false
+          portalAvailable.value = false
+          configReady.value = false
+        }
+      })()
     }
+
+    try {
+      await configRequest
+    } finally {
+      configRequest = null
+    }
+  }
+
+  function clearBillingState() {
+    customerState.value = null
   }
 
   async function fetchCustomerState() {
@@ -128,6 +144,7 @@ export function usePolarBilling() {
     startCheckout,
     openPortal,
     fetchCustomerState,
+    clearBillingState,
     isPro,
     ensureBillingConfig
   }

@@ -8,6 +8,7 @@ const {
   startCheckout,
   openPortal,
   fetchCustomerState,
+  clearBillingState,
   ensureBillingConfig,
   isPro
 } = usePolarBilling()
@@ -48,7 +49,10 @@ onMounted(async () => {
 watch(loggedIn, async (value) => {
   if (value) {
     await fetchCustomerState()
+    return
   }
+
+  clearBillingState()
 })
 
 const plans = computed(() => {
