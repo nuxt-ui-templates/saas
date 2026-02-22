@@ -5,36 +5,63 @@ type DashboardCustomerState = {
   activeSubscriptions?: unknown[]
 }
 
-function useSubscriptionState(loggedIn: { value: boolean }) {
-  const requestFetch = useRequestFetch()
-  const { data: customerState } = useAsyncData<DashboardCustomerState | null>('dashboard-customer-state', async () => {
-    if (!loggedIn.value) {
-      return null
-    }
+type UseBillingStateOptions = {
+  loggedIn: { value: boolean }
+  productSlug: string
+}
 
-    try {
-      return await requestFetch<DashboardCustomerState>('/api/auth/customer/state')
-    } catch {
-      return null
-    }
-  }, {
+function useBillingState({ loggedIn, productSlug }: UseBillingStateOptions) {
+  const toast = useToast()
+  const checkout = useAuthClientAction(client => client.checkout)
+  const portal = useAuthClientAction(client => client.customer.portal)
+  const { data: customerState, error } = useFetch<DashboardCustomerState | null>('/api/auth/customer/state', {
+    key: 'dashboard-customer-state',
+    immediate: loggedIn.value,
     default: () => null
   })
 
-  const isSubscribed = computed(() => (customerState.value?.activeSubscriptions?.length || 0) > 0)
+  const isSubscribed = computed(() => !error.value && (customerState.value?.activeSubscriptions?.length || 0) > 0)
+
+  async function onManageSubscription() {
+    await portal.execute()
+
+    if (portal.status.value === 'error') {
+      toast.add({
+        color: 'error',
+        title: 'Unable to open portal',
+        description: resolveAuthErrorMessage(portal.error.value)
+      })
+    }
+  }
+
+  async function onUpgradeToPro() {
+    if (isSubscribed.value) {
+      await onManageSubscription()
+      return
+    }
+
+    await checkout.execute({ slug: productSlug })
+
+    if (checkout.status.value === 'error') {
+      toast.add({
+        color: 'error',
+        title: 'Unable to start checkout',
+        description: resolveAuthErrorMessage(checkout.error.value)
+      })
+    }
+  }
 
   return {
-    isSubscribed
+    isSubscribed,
+    onUpgradeToPro,
+    onManageSubscription
   }
 }
 
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
-const toast = useToast()
 const { user, loggedIn, signOut } = useUserSession()
-const checkout = useAuthClientAction(client => client.checkout)
-const portal = useAuthClientAction(client => client.customer.portal)
-const { isSubscribed } = useSubscriptionState(loggedIn)
+const { isSubscribed, onUpgradeToPro, onManageSubscription } = useBillingState({ loggedIn, productSlug })
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -54,35 +81,6 @@ const dashboardItems = computed(() => [[{
   icon: 'i-lucide-credit-card',
   to: '/pricing'
 }]])
-
-async function onUpgradeToPro() {
-  if (isSubscribed.value) {
-    await onManageSubscription()
-    return
-  }
-
-  await checkout.execute({ slug: productSlug })
-
-  if (checkout.status.value === 'error') {
-    toast.add({
-      color: 'error',
-      title: 'Unable to start checkout',
-      description: resolveAuthErrorMessage(checkout.error.value)
-    })
-  }
-}
-
-async function onManageSubscription() {
-  await portal.execute()
-
-  if (portal.status.value === 'error') {
-    toast.add({
-      color: 'error',
-      title: 'Unable to open portal',
-      description: resolveAuthErrorMessage(portal.error.value)
-    })
-  }
-}
 </script>
 
 <template>

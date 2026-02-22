@@ -1,9 +1,89 @@
 <script setup lang="ts">
+type PricingCustomerState = {
+  activeSubscriptions?: unknown[]
+}
+
+type UsePricingBillingStateOptions = {
+  loggedIn: { value: boolean }
+  productSlug: string
+}
+
+type PricingPlanView = {
+  title: string
+  description: string
+  price: {
+    month: string
+  }
+  button: {
+    label: string
+    color?: 'primary' | 'secondary' | 'neutral' | 'error' | 'warning' | 'success' | 'info'
+    variant?: 'solid' | 'outline' | 'subtle' | 'soft' | 'ghost' | 'link'
+    disabled?: boolean
+    onClick?: () => void | Promise<void>
+  }
+  features: string[]
+  highlight?: boolean
+}
+
+function usePricingBillingState({ loggedIn, productSlug }: UsePricingBillingStateOptions) {
+  const toast = useToast()
+  const checkout = useAuthClientAction(client => client.checkout)
+  const portal = useAuthClientAction(client => client.customer.portal)
+  const { data: customerState, error } = useFetch<PricingCustomerState | null>('/api/auth/customer/state', {
+    key: 'pricing-customer-state',
+    immediate: loggedIn.value,
+    default: () => null
+  })
+
+  const isSubscribed = computed(() => !error.value && (customerState.value?.activeSubscriptions?.length || 0) > 0)
+
+  async function onManageSubscription() {
+    await portal.execute()
+
+    if (portal.status.value === 'error') {
+      toast.add({
+        color: 'error',
+        title: 'Unable to open portal',
+        description: resolveAuthErrorMessage(portal.error.value)
+      })
+    }
+  }
+
+  async function onPaidPlanAction() {
+    if (!loggedIn.value) {
+      await navigateTo({
+        path: '/login',
+        query: { redirect: '/pricing' }
+      })
+      return
+    }
+
+    if (isSubscribed.value) {
+      await onManageSubscription()
+      return
+    }
+
+    await checkout.execute({ slug: productSlug })
+
+    if (checkout.status.value === 'error') {
+      toast.add({
+        color: 'error',
+        title: 'Unable to start checkout',
+        description: resolveAuthErrorMessage(checkout.error.value)
+      })
+    }
+  }
+
+  return {
+    isSubscribed,
+    onPaidPlanAction
+  }
+}
+
 const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
 const { productSlug } = useRuntimeConfig().public.polar
-const toast = useToast()
 const { loggedIn } = useUserSession()
-const checkout = useAuthClientAction((client) => client.checkout)
+const { isSubscribed, onPaidPlanAction } = usePricingBillingState({ loggedIn, productSlug })
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -17,59 +97,63 @@ useSeoMeta({
 
 defineOgImageComponent('Saas')
 
-const isYearly = ref('0')
+const billingCycle = ref('0')
 
-const items = ref([
+const items = [
   {
     label: 'Monthly',
     value: '0'
   },
   {
     label: 'Yearly',
-    value: '1'
+    value: '1',
+    disabled: true
   }
-])
+]
 
 const plans = computed(() => {
-  if (!page.value?.plans) {
+  if (!page.value?.plans?.length) {
     return []
   }
 
-  return page.value.plans.map((plan) => {
-    if (!plan.highlight) {
-      return plan
-    }
+  const proPlan = page.value.plans.find(plan => plan.highlight) || page.value.plans[0]!
 
-    return {
-      ...plan,
-      button: {
-        ...(plan.button || {}),
-        label: 'Upgrade to Pro',
-        onClick: () => onPaidPlanAction()
-      }
-    }
-  })
+  const freePlan: PricingPlanView = {
+    title: 'Free',
+    description: 'For personal projects and evaluation.',
+    price: {
+      month: '$0'
+    },
+    button: {
+      label: 'Current plan',
+      color: 'neutral',
+      variant: 'subtle',
+      disabled: true
+    },
+    features: [
+      'Basic dashboard access',
+      'Community support',
+      'No billing required'
+    ]
+  }
+
+  const normalizedProPlan: PricingPlanView = {
+    title: 'Pro',
+    description: proPlan.description || 'For teams that need paid billing features.',
+    price: {
+      month: proPlan.price?.month || '$19.9'
+    },
+    button: {
+      ...(proPlan.button || {}),
+      label: isSubscribed.value ? 'Manage subscription' : 'Upgrade to Pro',
+      onClick: () => onPaidPlanAction()
+    },
+    features: proPlan.features || [],
+    highlight: Boolean(proPlan.highlight)
+  }
+
+  return [freePlan, normalizedProPlan]
 })
-
-async function onPaidPlanAction() {
-  if (!loggedIn.value) {
-    await navigateTo({
-      path: '/login',
-      query: { redirect: '/pricing' }
-    })
-    return
-  }
-
-  await checkout.execute({ slug: productSlug })
-
-  if (checkout.status.value === 'error') {
-    toast.add({
-      color: 'error',
-      title: 'Unable to start checkout',
-      description: resolveAuthErrorMessage(checkout.error.value)
-    })
-  }
-}
 </script>
 
 <template>
@@ -80,7 +164,7 @@ async function onPaidPlanAction() {
     >
       <template #links>
         <UTabs
-          v-model="isYearly"
+          v-model="billingCycle"
           :items="items"
           color="neutral"
           size="xs"
@@ -100,8 +184,8 @@ async function onPaidPlanAction() {
           v-for="(plan, index) in plans"
           :key="index"
           v-bind="plan"
-          :price="isYearly === '1' ? plan.price.year : plan.price.month"
-          :billing-cycle="isYearly === '1' ? '/year' : '/month'"
+          :price="plan.price.month"
+          billing-cycle="/month"
         />
       </UPricingPlans>
     </UContainer>
