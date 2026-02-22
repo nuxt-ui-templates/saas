@@ -48,7 +48,7 @@ openssl rand -base64 32
 NUXT_BETTER_AUTH_SECRET=<your-generated-secret>
 ```
 
-### Polar Sandbox Billing (Optional)
+### Polar Sandbox Billing
 
 This template supports subscription checkout and customer portal flows via [Polar](https://polar.sh) using the Better Auth plugin: [@polar-sh/better-auth](https://www.npmjs.com/package/@polar-sh/better-auth).
 
@@ -59,8 +59,6 @@ NUXT_POLAR_PRODUCT_ID=<polar-sandbox-product-id>
 NUXT_POLAR_RETURN_URL=<app-base-url>
 NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
 ```
-
-Webhook endpoint: `/api/auth/polar/webhooks`
 
 ## Development Server
 

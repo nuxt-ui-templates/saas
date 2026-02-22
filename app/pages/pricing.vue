@@ -1,35 +1,16 @@
 <script setup lang="ts">
-type PricingCustomerState = {
-  activeSubscriptions?: unknown[]
-}
+import type { PricingPlanProps } from '#ui/types'
 
-type UsePricingBillingStateOptions = {
+interface UsePricingBillingStateOptions {
   loggedIn: { value: boolean }
   productSlug: string
-}
-
-type PricingPlanView = {
-  title: string
-  description: string
-  price: {
-    month: string
-  }
-  button: {
-    label: string
-    color?: 'primary' | 'secondary' | 'neutral' | 'error' | 'warning' | 'success' | 'info'
-    variant?: 'solid' | 'outline' | 'subtle' | 'soft' | 'ghost' | 'link'
-    disabled?: boolean
-    onClick?: () => void | Promise<void>
-  }
-  features: string[]
-  highlight?: boolean
 }
 
 function usePricingBillingState({ loggedIn, productSlug }: UsePricingBillingStateOptions) {
   const toast = useToast()
   const checkout = useAuthClientAction(client => client.checkout)
   const portal = useAuthClientAction(client => client.customer.portal)
-  const { data: customerState, error } = useFetch<PricingCustomerState | null>('/api/auth/customer/state', {
+  const { data: customerState, error } = useFetch<{ activeSubscriptions?: unknown[] } | null>('/api/auth/customer/state', {
     key: 'pricing-customer-state',
     immediate: loggedIn.value,
     default: () => null
@@ -111,19 +92,17 @@ const items = [
   }
 ]
 
-const plans = computed(() => {
+const plans = computed<PricingPlanProps[]>(() => {
   if (!page.value?.plans?.length) {
     return []
   }
 
   const proPlan = page.value.plans.find(plan => plan.highlight) || page.value.plans[0]!
 
-  const freePlan: PricingPlanView = {
+  const freePlan: PricingPlanProps = {
     title: 'Free',
     description: 'For personal projects and evaluation.',
-    price: {
-      month: '$0'
-    },
+    price: '$0',
     button: {
       label: 'Current plan',
       color: 'neutral',
@@ -137,12 +116,10 @@ const plans = computed(() => {
     ]
   }
 
-  const normalizedProPlan: PricingPlanView = {
+  const normalizedProPlan: PricingPlanProps = {
     title: 'Pro',
     description: proPlan.description || 'For teams that need paid billing features.',
-    price: {
-      month: proPlan.price?.month || '$19.9'
-    },
+    price: proPlan.price?.month || '$19.9',
     button: {
       ...(proPlan.button || {}),
       label: isSubscribed.value ? 'Manage subscription' : 'Upgrade to Pro',
@@ -184,7 +161,7 @@ const plans = computed(() => {
           v-for="(plan, index) in plans"
           :key="index"
           v-bind="plan"
-          :price="plan.price.month"
+          :price="plan.price"
           billing-cycle="/month"
         />
       </UPricingPlans>

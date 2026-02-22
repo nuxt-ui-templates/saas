@@ -1,11 +1,7 @@
 <script setup lang="ts">
 useSeoMeta({ title: 'Dashboard' })
 
-type DashboardCustomerState = {
-  activeSubscriptions?: unknown[]
-}
-
-type UseBillingStateOptions = {
+interface UseBillingStateOptions {
   loggedIn: { value: boolean }
   productSlug: string
 }
@@ -14,13 +10,13 @@ function useBillingState({ loggedIn, productSlug }: UseBillingStateOptions) {
   const toast = useToast()
   const checkout = useAuthClientAction(client => client.checkout)
   const portal = useAuthClientAction(client => client.customer.portal)
-  const { data: customerState, error } = useFetch<DashboardCustomerState | null>('/api/auth/customer/state', {
+  const { data: customerState, error } = useFetch('/api/auth/customer/state', {
     key: 'dashboard-customer-state',
     immediate: loggedIn.value,
     default: () => null
   })
 
-  const isSubscribed = computed(() => !error.value && (customerState.value?.activeSubscriptions?.length || 0) > 0)
+  const isSubscribed = computed(() => !error.value && (((customerState.value as { activeSubscriptions?: unknown[] } | null)?.activeSubscriptions?.length || 0) > 0))
 
   async function onManageSubscription() {
     await portal.execute()
