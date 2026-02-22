@@ -21,6 +21,17 @@ export default defineNuxtConfig({
     githubClient: {
       id: '',
       secret: ''
+    },
+    polar: {
+      accessToken: '',
+      webhookSecret: '',
+      productId: '',
+      returnUrl: ''
+    },
+    public: {
+      polar: {
+        productSlug: 'pro'
+      }
     }
   },
 

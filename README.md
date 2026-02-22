@@ -48,6 +48,28 @@ openssl rand -base64 32
 NUXT_BETTER_AUTH_SECRET=<your-generated-secret>
 ```
 
+### Polar Sandbox Billing (Optional)
+
+This template supports subscription checkout and customer portal flows via [Polar](https://polar.sh) using the Better Auth plugin: [@polar-sh/better-auth](https://www.npmjs.com/package/@polar-sh/better-auth).
+
+Use Polar Sandbox credentials so template users can test upgrades with fake payment data.
+
+```bash
+NUXT_POLAR_ACCESS_TOKEN=<polar-sandbox-access-token>
+NUXT_POLAR_WEBHOOK_SECRET=<polar-sandbox-webhook-secret>
+NUXT_POLAR_PRODUCT_ID=<polar-sandbox-product-id>
+NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
+```
+
+Behavior:
+
+- without Polar env vars: app stays free-only and continues to work normally
+- with Polar sandbox env vars: users can start checkout, see Free/Pro status, and manage subscriptions/invoices in the Polar portal
+
+Webhook endpoint for Polar:
+
+`/api/auth/polar/webhooks`
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:

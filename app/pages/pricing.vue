@@ -1,5 +1,16 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
+const toast = useToast()
+const { loggedIn } = useUserSession()
+const {
+  checkoutEnabled,
+  portalEnabled,
+  startCheckout,
+  openPortal,
+  fetchCustomerState,
+  ensureBillingConfig,
+  isPro
+} = usePolarBilling()
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -25,6 +36,93 @@ const items = ref([
     value: '1'
   }
 ])
+
+onMounted(async () => {
+  await ensureBillingConfig()
+
+  if (loggedIn.value) {
+    await fetchCustomerState()
+  }
+})
+
+watch(loggedIn, async (value) => {
+  if (value) {
+    await fetchCustomerState()
+  }
+})
+
+const plans = computed(() => {
+  if (!page.value?.plans) {
+    return []
+  }
+
+  return page.value.plans.map((plan) => {
+    if (!plan.highlight) {
+      return plan
+    }
+
+    return {
+      ...plan,
+      button: {
+        ...(plan.button || {}),
+        label: isPro.value && portalEnabled.value ? 'Manage subscription' : 'Upgrade to Pro',
+        onClick: () => onPaidPlanAction()
+      }
+    }
+  })
+})
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error && error.message) {
+    return error.message
+  }
+
+  return 'Please try again.'
+}
+
+async function onPaidPlanAction() {
+  if (!loggedIn.value) {
+    await navigateTo({
+      path: '/login',
+      query: { redirect: '/pricing' }
+    })
+    return
+  }
+
+  try {
+    await ensureBillingConfig()
+
+    if (isPro.value && portalEnabled.value) {
+      const opened = await openPortal()
+
+      if (!opened) {
+        toast.add({
+          color: 'warning',
+          title: 'Portal unavailable',
+          description: 'Polar sandbox is not configured on this environment.'
+        })
+      }
+      return
+    }
+
+    if (!checkoutEnabled.value) {
+      toast.add({
+        color: 'warning',
+        title: 'Billing unavailable',
+        description: 'Polar sandbox is not configured on this environment.'
+      })
+      return
+    }
+
+    await startCheckout()
+  } catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'Unable to start checkout',
+      description: getErrorMessage(error)
+    })
+  }
+}
 </script>
 
 <template>
@@ -52,7 +150,7 @@ const items = ref([
     <UContainer>
       <UPricingPlans scale>
         <UPricingPlan
-          v-for="(plan, index) in page.plans"
+          v-for="(plan, index) in plans"
           :key="index"
           v-bind="plan"
           :price="isYearly === '1' ? plan.price.year : plan.price.month"

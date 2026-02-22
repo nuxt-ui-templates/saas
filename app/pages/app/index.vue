@@ -2,7 +2,22 @@
 useSeoMeta({ title: 'Dashboard' })
 
 const route = useRoute()
+const toast = useToast()
 const { user, signOut } = useUserSession()
+const {
+  checkoutEnabled,
+  portalEnabled,
+  startCheckout,
+  openPortal,
+  fetchCustomerState,
+  isPro,
+  ensureBillingConfig
+} = usePolarBilling()
+
+onMounted(async () => {
+  await ensureBillingConfig()
+  await fetchCustomerState()
+})
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -20,8 +35,56 @@ const dashboardItems = computed(() => [[{
 }, {
   label: 'Billing',
   icon: 'i-lucide-credit-card',
-  disabled: true
+  disabled: !portalEnabled.value
 }]])
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error && error.message) {
+    return error.message
+  }
+
+  return 'Please try again.'
+}
+
+async function onUpgradeToPro() {
+  try {
+    const started = await startCheckout()
+
+    if (!started) {
+      toast.add({
+        color: 'warning',
+        title: 'Billing unavailable',
+        description: 'Polar sandbox is not configured on this environment.'
+      })
+    }
+  } catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'Unable to start checkout',
+      description: getErrorMessage(error)
+    })
+  }
+}
+
+async function onManageSubscription() {
+  try {
+    const opened = await openPortal()
+
+    if (!opened) {
+      toast.add({
+        color: 'warning',
+        title: 'Portal unavailable',
+        description: 'Polar sandbox is not configured on this environment.'
+      })
+    }
+  } catch (error) {
+    toast.add({
+      color: 'error',
+      title: 'Unable to open portal',
+      description: getErrorMessage(error)
+    })
+  }
+}
 </script>
 
 <template>
@@ -31,9 +94,17 @@ const dashboardItems = computed(() => [[{
         <UPageAside>
           <template #top>
             <UPageCard variant="subtle">
-              <p class="text-sm font-medium text-highlighted">
-                {{ user?.name || 'User' }}
-              </p>
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-sm font-medium text-highlighted">
+                  {{ user?.name || 'User' }}
+                </p>
+                <UBadge
+                  :label="isPro ? 'Pro' : 'Free'"
+                  :color="isPro ? 'primary' : 'neutral'"
+                  variant="subtle"
+                  size="xs"
+                />
+              </div>
               <p class="text-xs text-muted mt-1 break-all">
                 {{ user?.email }}
               </p>
@@ -46,6 +117,34 @@ const dashboardItems = computed(() => [[{
           />
 
           <USeparator class="my-4" />
+
+          <div
+            v-if="checkoutEnabled || portalEnabled"
+            class="space-y-2"
+          >
+            <UButton
+              v-if="checkoutEnabled && !isPro"
+              label="Upgrade to Pro"
+              icon="i-lucide-sparkles"
+              color="primary"
+              block
+              @click="onUpgradeToPro"
+            />
+            <UButton
+              v-if="portalEnabled"
+              label="Manage subscription"
+              icon="i-lucide-receipt-text"
+              color="neutral"
+              variant="soft"
+              block
+              @click="onManageSubscription"
+            />
+          </div>
+
+          <USeparator
+            v-if="checkoutEnabled || portalEnabled"
+            class="my-4"
+          />
 
           <UButton
             label="Sign out"
