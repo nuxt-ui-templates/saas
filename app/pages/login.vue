@@ -12,6 +12,10 @@ useSeoMeta({
 })
 
 const toast = useToast()
+const signInEmail = useSignIn('email')
+const signInSocial = useSignIn('social')
+const isSignInPending = computed(() => signInEmail.status.value === 'pending')
+const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'email',
@@ -30,19 +34,13 @@ const fields = [{
   type: 'checkbox' as const
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
-  }
-}, {
+const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  onClick: () => {
-    toast.add({ title: 'GitHub', description: 'Login with GitHub' })
-  }
-}]
+  loading: isSocialSignInPending.value,
+  disabled: isSocialSignInPending.value,
+  onClick: () => onGitHubSignIn()
+}])
 
 const schema = z.object({
   email: z.email('Invalid email'),
@@ -51,8 +49,35 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-function onSubmit(payload: FormSubmitEvent<Schema>) {
-  console.log('Submitted', payload)
+async function onSubmit(payload: FormSubmitEvent<Schema>) {
+  await signInEmail.execute({
+    email: payload.data.email,
+    password: payload.data.password
+  })
+
+  if (signInEmail.status.value === 'error') {
+    toast.add({
+      color: 'error',
+      title: 'Login failed',
+      description: signInEmail.error.value?.message ?? 'Please try again.'
+    })
+  }
+}
+
+async function onGitHubSignIn() {
+  await signInSocial.execute({
+    provider: 'github',
+    callbackURL: '/app',
+    newUserCallbackURL: '/app'
+  })
+
+  if (signInSocial.status.value === 'error') {
+    toast.add({
+      color: 'error',
+      title: 'GitHub login failed',
+      description: signInSocial.error.value?.message ?? 'Please try again.'
+    })
+  }
 }
 </script>
 
@@ -63,6 +88,8 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"
+    :loading="isSignInPending"
+    :disabled="isSignInPending"
     @submit="onSubmit"
   >
     <template #description>

@@ -23,7 +23,7 @@ npm create nuxt@latest -- -t github:nuxt-ui-templates/saas
 
 ## Deploy your own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=saas&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fsaas&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fsaas-dark.png&demo-url=https%3A%2F%2Fsaas-template.nuxt.dev%2F&demo-title=Nuxt%20SaaS%20Template&demo-description=A%20SaaS%20template%20with%20landing%2C%20pricing%2C%20docs%20and%20blog%20powered%20by%20Nuxt%20Content.)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=saas&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fsaas&env=NUXT_BETTER_AUTH_SECRET&envDescription=Better%20Auth%20secret%20key%20(min%2032%20chars).%20Generate%20with%20%60openssl%20rand%20-base64%2032%60&envLink=https%3A%2F%2Fbetter-auth.nuxt.dev%2Fgetting-started%2Finstallation&products=%5B%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22productSlug%22%3A%22database%22%2C%22integrationSlug%22%3A%22tursocloud%22%7D%5D&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fsaas-dark.png&demo-url=https%3A%2F%2Fsaas-template.nuxt.dev%2F&demo-title=Nuxt%20SaaS%20Template&demo-description=A%20SaaS%20template%20with%20landing%2C%20pricing%2C%20docs%20and%20blog%20powered%20by%20Nuxt%20Content.)
 
 ## Setup
 
@@ -31,6 +31,33 @@ Make sure to install the dependencies:
 
 ```bash
 pnpm install
+```
+
+### Authentication
+
+This template uses [Better Auth](https://www.better-auth.com/) via [`@onmax/nuxt-better-auth`](https://better-auth.nuxt.dev) for authentication with email and password enabled by default.
+
+Generate a secret key and set it in your `.env`:
+
+```bash
+# Generate a secret (min 32 characters)
+openssl rand -base64 32
+```
+
+```bash
+NUXT_BETTER_AUTH_SECRET=<your-generated-secret>
+```
+
+### Polar Sandbox Billing
+
+This template supports subscription checkout and customer portal flows via [Polar](https://polar.sh) using the Better Auth plugin: [@polar-sh/better-auth](https://www.npmjs.com/package/@polar-sh/better-auth).
+
+```bash
+NUXT_POLAR_ACCESS_TOKEN=<polar-sandbox-access-token>
+NUXT_POLAR_WEBHOOK_SECRET=<polar-sandbox-webhook-secret>
+NUXT_POLAR_PRODUCT_ID=<polar-sandbox-product-id>
+NUXT_POLAR_RETURN_URL=<app-base-url>
+NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
 ```
 
 ## Development Server

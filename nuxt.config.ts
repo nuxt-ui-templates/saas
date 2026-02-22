@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
+    '@nuxthub/core',
+    '@onmax/nuxt-better-auth',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
@@ -15,18 +17,55 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  routeRules: {
-    '/docs': { redirect: '/docs/getting-started', prerender: false }
+  runtimeConfig: {
+    githubClient: {
+      id: '',
+      secret: ''
+    },
+    polar: {
+      accessToken: '',
+      webhookSecret: '',
+      productId: '',
+      returnUrl: ''
+    },
+    public: {
+      polar: {
+        productSlug: 'pro'
+      }
+    }
   },
 
-  compatibilityDate: '2024-07-11',
+  routeRules: {
+    '/docs': { redirect: '/docs/getting-started', prerender: false },
+    '/login': { auth: { only: 'guest' } },
+    '/signup': { auth: { only: 'guest' } },
+    '/app': { auth: 'user', prerender: false }
+  },
+
+  compatibilityDate: '2026-02-19',
 
   nitro: {
+    preset: 'cloudflare-module',
     prerender: {
       routes: [
         '/'
       ],
       crawlLinks: true
+    }
+  },
+
+  hub: {
+    db: 'sqlite',
+    kv: true
+  },
+
+  auth: {
+    hubSecondaryStorage: true,
+    redirects: {
+      login: '/login',
+      guest: '/app',
+      authenticated: '/app',
+      logout: '/'
     }
   },
 

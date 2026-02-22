@@ -12,6 +12,10 @@ useSeoMeta({
 })
 
 const toast = useToast()
+const signUpEmail = useSignUp('email')
+const signInSocial = useSignIn('social')
+const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
+const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'name',
@@ -30,19 +34,13 @@ const fields = [{
   placeholder: 'Enter your password'
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
-  }
-}, {
+const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  onClick: () => {
-    toast.add({ title: 'GitHub', description: 'Login with GitHub' })
-  }
-}]
+  loading: isSocialSignInPending.value,
+  disabled: isSocialSignInPending.value,
+  onClick: () => onGitHubSignIn()
+}])
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -52,8 +50,36 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>
 
-function onSubmit(payload: FormSubmitEvent<Schema>) {
-  console.log('Submitted', payload)
+async function onSubmit(payload: FormSubmitEvent<Schema>) {
+  await signUpEmail.execute({
+    name: payload.data.name,
+    email: payload.data.email,
+    password: payload.data.password
+  })
+
+  if (signUpEmail.status.value === 'error') {
+    toast.add({
+      color: 'error',
+      title: 'Sign up failed',
+      description: signUpEmail.error.value?.message ?? 'Please try again.'
+    })
+  }
+}
+
+async function onGitHubSignIn() {
+  await signInSocial.execute({
+    provider: 'github',
+    callbackURL: '/app',
+    newUserCallbackURL: '/app'
+  })
+
+  if (signInSocial.status.value === 'error') {
+    toast.add({
+      color: 'error',
+      title: 'GitHub signup failed',
+      description: signInSocial.error.value?.message ?? 'Please try again.'
+    })
+  }
 }
 </script>
 
@@ -64,6 +90,8 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Create an account"
     :submit="{ label: 'Create account' }"
+    :loading="isSignUpPending"
+    :disabled="isSignUpPending"
     @submit="onSubmit"
   >
     <template #description>

@@ -11,24 +11,32 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.90",
+    "@iconify-json/lucide": "^1.2.89",
     "@iconify-json/simple-icons": "^1.2.70",
+    "@libsql/client": "^0.17.0",
     "@nuxt/content": "^3.11.2",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
+    "@nuxthub/core": "https://pkg.pr.new/@nuxthub/core@831",
+    "@onmax/nuxt-better-auth": "https://pkg.pr.new/nuxt-modules/better-auth/@onmax/nuxt-better-auth@185",
+    "@polar-sh/better-auth": "^1.8.1",
+    "@polar-sh/sdk": "^0.42.5",
     "@standard-schema/spec": "^1.1.0",
-    "@vueuse/nuxt": "^14.2.1",
+    "@vueuse/nuxt": "^14.2.0",
+    "better-auth": "1.5.0-beta.13",
     "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
     "nuxt": "^4.3.1",
     "nuxt-og-image": "^5.1.13",
     "tailwindcss": "^4.1.18",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.15.1",
+    "@nuxt/eslint": "^1.14.0",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^10.0.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.4"
   },
-  "packageManager": "pnpm@10.29.3"
+  "packageManager": "pnpm@10.29.2"
 }
