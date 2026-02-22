@@ -1,11 +1,4 @@
 <script setup lang="ts">
-interface PolarAuthClient {
-  checkout: (payload: { slug: string }) => Promise<unknown>
-  customer: {
-    portal: () => Promise<unknown>
-  }
-}
-
 useSeoMeta({ title: 'Dashboard' })
 
 const route = useRoute()
@@ -13,8 +6,7 @@ const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
 const { user, signOut, client } = useUserSession()
 
-const polarProductSlug = computed(() => (runtimeConfig.public.polarProductSlug || '').trim())
-const billingEnabled = computed(() => polarProductSlug.value.length > 0)
+const polarProductSlug = runtimeConfig.public.polar.productSlug
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -32,7 +24,7 @@ const dashboardItems = computed(() => [[{
 }, {
   label: 'Billing',
   icon: 'i-lucide-credit-card',
-  disabled: !billingEnabled.value
+  to: '/pricing'
 }]])
 
 function getErrorMessage(error: unknown) {
@@ -43,23 +35,13 @@ function getErrorMessage(error: unknown) {
   return 'Please try again.'
 }
 
-function getPolarClient() {
-  return client as PolarAuthClient | null
-}
-
 async function onUpgradeToPro() {
-  if (!billingEnabled.value) {
-    return
-  }
-
-  const polarClient = getPolarClient()
-
-  if (!polarClient) {
+  if (!client) {
     return
   }
 
   try {
-    await polarClient.checkout({ slug: polarProductSlug.value })
+    await client.checkout({ slug: polarProductSlug })
   } catch (error) {
     toast.add({
       color: 'error',
@@ -70,18 +52,12 @@ async function onUpgradeToPro() {
 }
 
 async function onManageSubscription() {
-  if (!billingEnabled.value) {
-    return
-  }
-
-  const polarClient = getPolarClient()
-
-  if (!polarClient) {
+  if (!client) {
     return
   }
 
   try {
-    await polarClient.customer.portal()
+    await client.customer.portal()
   } catch (error) {
     toast.add({
       color: 'error',
@@ -115,10 +91,7 @@ async function onManageSubscription() {
 
           <USeparator class="my-4" />
 
-          <div
-            v-if="billingEnabled"
-            class="space-y-2"
-          >
+          <div class="space-y-2">
             <UButton
               label="Upgrade to Pro"
               icon="i-lucide-sparkles"
@@ -136,10 +109,7 @@ async function onManageSubscription() {
             />
           </div>
 
-          <USeparator
-            v-if="billingEnabled"
-            class="my-4"
-          />
+          <USeparator class="my-4" />
 
           <UButton
             label="Sign out"

@@ -52,8 +52,6 @@ NUXT_BETTER_AUTH_SECRET=<your-generated-secret>
 
 This template supports subscription checkout and customer portal flows via [Polar](https://polar.sh) using the Better Auth plugin: [@polar-sh/better-auth](https://www.npmjs.com/package/@polar-sh/better-auth).
 
-Use Polar Sandbox credentials so template users can test upgrades with fake payment data.
-
 ```bash
 NUXT_POLAR_ACCESS_TOKEN=<polar-sandbox-access-token>
 NUXT_POLAR_WEBHOOK_SECRET=<polar-sandbox-webhook-secret>
@@ -61,14 +59,7 @@ NUXT_POLAR_PRODUCT_ID=<polar-sandbox-product-id>
 NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
 ```
 
-Behavior:
-
-- free mode by default: leave Polar env vars (or `NUXT_PUBLIC_POLAR_PRODUCT_SLUG`) empty to hide billing actions
-- enabled billing: set `NUXT_POLAR_ACCESS_TOKEN`, `NUXT_POLAR_PRODUCT_ID`, and `NUXT_PUBLIC_POLAR_PRODUCT_SLUG` to enable checkout and portal actions (`NUXT_POLAR_WEBHOOK_SECRET` is optional for webhooks)
-
-Webhook endpoint for Polar:
-
-`/api/auth/polar/webhooks`
+Webhook endpoint: `/api/auth/polar/webhooks`
 
 ## Development Server
 
@@ -90,12 +81,6 @@ Locally preview production build:
 
 ```bash
 pnpm preview
-```
-
-Deploy to Cloudflare Worker (uses bindings from `wrangler.jsonc`):
-
-```bash
-pnpm deploy
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
