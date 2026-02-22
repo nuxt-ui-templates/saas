@@ -2,11 +2,9 @@
 useSeoMeta({ title: 'Dashboard' })
 
 const route = useRoute()
-const runtimeConfig = useRuntimeConfig()
+const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
 const { user, signOut, client } = useUserSession()
-
-const polarProductSlug = runtimeConfig.public.polar.productSlug
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -41,7 +39,7 @@ async function onUpgradeToPro() {
   }
 
   try {
-    await client.checkout({ slug: polarProductSlug })
+    await client.checkout({ slug: productSlug })
   } catch (error) {
     toast.add({
       color: 'error',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
-const runtimeConfig = useRuntimeConfig()
+const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
 const { loggedIn, client } = useUserSession()
 
@@ -28,8 +28,6 @@ const items = ref([
     value: '1'
   }
 ])
-
-const polarProductSlug = runtimeConfig.public.polar.productSlug
 
 const plans = computed(() => {
   if (!page.value?.plans) {
@@ -74,7 +72,7 @@ async function onPaidPlanAction() {
   }
 
   try {
-    await client.checkout({ slug: polarProductSlug })
+    await client.checkout({ slug: productSlug })
   } catch (error) {
     toast.add({
       color: 'error',

@@ -56,6 +56,7 @@ This template supports subscription checkout and customer portal flows via [Pola
 NUXT_POLAR_ACCESS_TOKEN=<polar-sandbox-access-token>
 NUXT_POLAR_WEBHOOK_SECRET=<polar-sandbox-webhook-secret>
 NUXT_POLAR_PRODUCT_ID=<polar-sandbox-product-id>
+NUXT_POLAR_RETURN_URL=<app-base-url>
 NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
 ```
 
