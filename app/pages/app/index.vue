@@ -4,7 +4,9 @@ useSeoMeta({ title: 'Dashboard' })
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
-const { user, signOut, client } = useUserSession()
+const { user, signOut } = useUserSession()
+const checkout = useAuthClientAction((client) => client.checkout)
+const portal = useAuthClientAction((client) => client.customer.portal)
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -25,42 +27,26 @@ const dashboardItems = computed(() => [[{
   to: '/pricing'
 }]])
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error && error.message) {
-    return error.message
-  }
-
-  return 'Please try again.'
-}
-
 async function onUpgradeToPro() {
-  if (!client) {
-    return
-  }
+  await checkout.execute({ slug: productSlug })
 
-  try {
-    await client.checkout({ slug: productSlug })
-  } catch (error) {
+  if (checkout.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Unable to start checkout',
-      description: getErrorMessage(error)
+      description: resolveAuthErrorMessage(checkout.error.value)
     })
   }
 }
 
 async function onManageSubscription() {
-  if (!client) {
-    return
-  }
+  await portal.execute()
 
-  try {
-    await client.customer.portal()
-  } catch (error) {
+  if (portal.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Unable to open portal',
-      description: getErrorMessage(error)
+      description: resolveAuthErrorMessage(portal.error.value)
     })
   }
 }

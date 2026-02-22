@@ -18,7 +18,7 @@
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
     "@nuxthub/core": "https://pkg.pr.new/@nuxthub/core@831",
-    "@onmax/nuxt-better-auth": "https://pkg.pr.new/nuxt-modules/better-auth/@onmax/nuxt-better-auth@183",
+    "@onmax/nuxt-better-auth": "https://pkg.pr.new/nuxt-modules/better-auth/@onmax/nuxt-better-auth@184",
     "@polar-sh/better-auth": "^1.8.1",
     "@polar-sh/sdk": "^0.42.5",
     "@standard-schema/spec": "^1.1.0",

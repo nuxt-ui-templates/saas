@@ -2,7 +2,8 @@
 const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
 const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
-const { loggedIn, client } = useUserSession()
+const { loggedIn } = useUserSession()
+const checkout = useAuthClientAction((client) => client.checkout)
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -50,14 +51,6 @@ const plans = computed(() => {
   })
 })
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error && error.message) {
-    return error.message
-  }
-
-  return 'Please try again.'
-}
-
 async function onPaidPlanAction() {
   if (!loggedIn.value) {
     await navigateTo({
@@ -67,17 +60,13 @@ async function onPaidPlanAction() {
     return
   }
 
-  if (!client) {
-    return
-  }
+  await checkout.execute({ slug: productSlug })
 
-  try {
-    await client.checkout({ slug: productSlug })
-  } catch (error) {
+  if (checkout.status.value === 'error') {
     toast.add({
       color: 'error',
       title: 'Unable to start checkout',
-      description: getErrorMessage(error)
+      description: resolveAuthErrorMessage(checkout.error.value)
     })
   }
 }
