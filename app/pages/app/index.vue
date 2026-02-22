@@ -1,23 +1,20 @@
 <script setup lang="ts">
+interface PolarAuthClient {
+  checkout: (payload: { slug: string }) => Promise<unknown>
+  customer: {
+    portal: () => Promise<unknown>
+  }
+}
+
 useSeoMeta({ title: 'Dashboard' })
 
 const route = useRoute()
+const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
-const { user, signOut } = useUserSession()
-const {
-  checkoutEnabled,
-  portalEnabled,
-  startCheckout,
-  openPortal,
-  fetchCustomerState,
-  isPro,
-  ensureBillingConfig
-} = usePolarBilling()
+const { user, signOut, client } = useUserSession()
 
-onMounted(async () => {
-  await ensureBillingConfig()
-  await fetchCustomerState()
-})
+const polarProductSlug = computed(() => (runtimeConfig.public.polarProductSlug || '').trim())
+const billingEnabled = computed(() => polarProductSlug.value.length > 0)
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -35,7 +32,7 @@ const dashboardItems = computed(() => [[{
 }, {
   label: 'Billing',
   icon: 'i-lucide-credit-card',
-  disabled: !portalEnabled.value
+  disabled: !billingEnabled.value
 }]])
 
 function getErrorMessage(error: unknown) {
@@ -46,17 +43,23 @@ function getErrorMessage(error: unknown) {
   return 'Please try again.'
 }
 
-async function onUpgradeToPro() {
-  try {
-    const started = await startCheckout()
+function getPolarClient() {
+  return client as PolarAuthClient | null
+}
 
-    if (!started) {
-      toast.add({
-        color: 'warning',
-        title: 'Billing unavailable',
-        description: 'Polar sandbox is not configured on this environment.'
-      })
-    }
+async function onUpgradeToPro() {
+  if (!billingEnabled.value) {
+    return
+  }
+
+  const polarClient = getPolarClient()
+
+  if (!polarClient) {
+    return
+  }
+
+  try {
+    await polarClient.checkout({ slug: polarProductSlug.value })
   } catch (error) {
     toast.add({
       color: 'error',
@@ -67,16 +70,18 @@ async function onUpgradeToPro() {
 }
 
 async function onManageSubscription() {
-  try {
-    const opened = await openPortal()
+  if (!billingEnabled.value) {
+    return
+  }
 
-    if (!opened) {
-      toast.add({
-        color: 'warning',
-        title: 'Portal unavailable',
-        description: 'Polar sandbox is not configured on this environment.'
-      })
-    }
+  const polarClient = getPolarClient()
+
+  if (!polarClient) {
+    return
+  }
+
+  try {
+    await polarClient.customer.portal()
   } catch (error) {
     toast.add({
       color: 'error',
@@ -94,17 +99,9 @@ async function onManageSubscription() {
         <UPageAside>
           <template #top>
             <UPageCard variant="subtle">
-              <div class="flex items-center justify-between gap-3">
-                <p class="text-sm font-medium text-highlighted">
-                  {{ user?.name || 'User' }}
-                </p>
-                <UBadge
-                  :label="isPro ? 'Pro' : 'Free'"
-                  :color="isPro ? 'primary' : 'neutral'"
-                  variant="subtle"
-                  size="xs"
-                />
-              </div>
+              <p class="text-sm font-medium text-highlighted">
+                {{ user?.name || 'User' }}
+              </p>
               <p class="text-xs text-muted mt-1 break-all">
                 {{ user?.email }}
               </p>
@@ -119,11 +116,10 @@ async function onManageSubscription() {
           <USeparator class="my-4" />
 
           <div
-            v-if="checkoutEnabled || portalEnabled"
+            v-if="billingEnabled"
             class="space-y-2"
           >
             <UButton
-              v-if="checkoutEnabled && !isPro"
               label="Upgrade to Pro"
               icon="i-lucide-sparkles"
               color="primary"
@@ -131,7 +127,6 @@ async function onManageSubscription() {
               @click="onUpgradeToPro"
             />
             <UButton
-              v-if="portalEnabled"
               label="Manage subscription"
               icon="i-lucide-receipt-text"
               color="neutral"
@@ -142,7 +137,7 @@ async function onManageSubscription() {
           </div>
 
           <USeparator
-            v-if="checkoutEnabled || portalEnabled"
+            v-if="billingEnabled"
             class="my-4"
           />
 

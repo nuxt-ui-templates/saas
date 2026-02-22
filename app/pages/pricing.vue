@@ -1,17 +1,12 @@
 <script setup lang="ts">
+interface PolarAuthClient {
+  checkout: (payload: { slug: string }) => Promise<unknown>
+}
+
 const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
+const runtimeConfig = useRuntimeConfig()
 const toast = useToast()
-const { loggedIn } = useUserSession()
-const {
-  checkoutEnabled,
-  portalEnabled,
-  startCheckout,
-  openPortal,
-  fetchCustomerState,
-  clearBillingState,
-  ensureBillingConfig,
-  isPro
-} = usePolarBilling()
+const { loggedIn, client } = useUserSession()
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -38,26 +33,16 @@ const items = ref([
   }
 ])
 
-onMounted(async () => {
-  await ensureBillingConfig()
-
-  if (loggedIn.value) {
-    await fetchCustomerState()
-  }
-})
-
-watch(loggedIn, async (value) => {
-  if (value) {
-    await fetchCustomerState()
-    return
-  }
-
-  clearBillingState()
-})
+const polarProductSlug = computed(() => (runtimeConfig.public.polarProductSlug || '').trim())
+const billingEnabled = computed(() => polarProductSlug.value.length > 0)
 
 const plans = computed(() => {
   if (!page.value?.plans) {
     return []
+  }
+
+  if (!billingEnabled.value) {
+    return page.value.plans
   }
 
   return page.value.plans.map((plan) => {
@@ -69,7 +54,7 @@ const plans = computed(() => {
       ...plan,
       button: {
         ...(plan.button || {}),
-        label: isPro.value && portalEnabled.value ? 'Manage subscription' : 'Upgrade to Pro',
+        label: 'Upgrade to Pro',
         onClick: () => onPaidPlanAction()
       }
     }
@@ -84,7 +69,15 @@ function getErrorMessage(error: unknown) {
   return 'Please try again.'
 }
 
+function getPolarClient() {
+  return client as PolarAuthClient | null
+}
+
 async function onPaidPlanAction() {
+  if (!billingEnabled.value) {
+    return
+  }
+
   if (!loggedIn.value) {
     await navigateTo({
       path: '/login',
@@ -93,32 +86,14 @@ async function onPaidPlanAction() {
     return
   }
 
+  const polarClient = getPolarClient()
+
+  if (!polarClient) {
+    return
+  }
+
   try {
-    await ensureBillingConfig()
-
-    if (isPro.value && portalEnabled.value) {
-      const opened = await openPortal()
-
-      if (!opened) {
-        toast.add({
-          color: 'warning',
-          title: 'Portal unavailable',
-          description: 'Polar sandbox is not configured on this environment.'
-        })
-      }
-      return
-    }
-
-    if (!checkoutEnabled.value) {
-      toast.add({
-        color: 'warning',
-        title: 'Billing unavailable',
-        description: 'Polar sandbox is not configured on this environment.'
-      })
-      return
-    }
-
-    await startCheckout()
+    await polarClient.checkout({ slug: polarProductSlug.value })
   } catch (error) {
     toast.add({
       color: 'error',

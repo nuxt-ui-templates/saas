@@ -63,8 +63,8 @@ NUXT_PUBLIC_POLAR_PRODUCT_SLUG=pro
 
 Behavior:
 
-- without Polar env vars: app stays free-only and continues to work normally
-- with Polar sandbox env vars: users can start checkout, see Free/Pro status, and manage subscriptions/invoices in the Polar portal
+- free mode by default: leave Polar env vars (or `NUXT_PUBLIC_POLAR_PRODUCT_SLUG`) empty to hide billing actions
+- enabled billing: set `NUXT_POLAR_ACCESS_TOKEN`, `NUXT_POLAR_PRODUCT_ID`, and `NUXT_PUBLIC_POLAR_PRODUCT_SLUG` to enable checkout and portal actions (`NUXT_POLAR_WEBHOOK_SECRET` is optional for webhooks)
 
 Webhook endpoint for Polar:
 
@@ -90,6 +90,12 @@ Locally preview production build:
 
 ```bash
 pnpm preview
+```
+
+Deploy to Cloudflare Worker (uses bindings from `wrangler.jsonc`):
+
+```bash
+pnpm deploy
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
