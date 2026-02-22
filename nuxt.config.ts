@@ -18,8 +18,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
-    githubClientId: '',
-    githubClientSecret: ''
+    githubClient: {
+      id: '',
+      secret: ''
+    }
   },
 
   routeRules: {

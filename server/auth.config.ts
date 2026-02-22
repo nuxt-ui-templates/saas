@@ -6,8 +6,8 @@ export default defineServerAuth(({ runtimeConfig }) => ({
   },
   socialProviders: {
     github: {
-      clientId: runtimeConfig.githubClientId,
-      clientSecret: runtimeConfig.githubClientSecret
+      clientId: runtimeConfig.githubClient?.id ?? '',
+      clientSecret: runtimeConfig.githubClient?.secret ?? ''
     }
   }
 }))
