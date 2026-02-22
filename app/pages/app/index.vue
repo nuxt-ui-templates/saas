@@ -1,31 +1,40 @@
 <script setup lang="ts">
 useSeoMeta({ title: 'Dashboard' })
 
+type DashboardCustomerState = {
+  activeSubscriptions?: unknown[]
+}
+
+function useSubscriptionState(loggedIn: { value: boolean }) {
+  const requestFetch = useRequestFetch()
+  const { data: customerState } = useAsyncData<DashboardCustomerState | null>('dashboard-customer-state', async () => {
+    if (!loggedIn.value) {
+      return null
+    }
+
+    try {
+      return await requestFetch<DashboardCustomerState>('/api/auth/customer/state')
+    } catch {
+      return null
+    }
+  }, {
+    default: () => null
+  })
+
+  const isSubscribed = computed(() => (customerState.value?.activeSubscriptions?.length || 0) > 0)
+
+  return {
+    isSubscribed
+  }
+}
+
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
 const { user, loggedIn, signOut } = useUserSession()
 const checkout = useAuthClientAction(client => client.checkout)
 const portal = useAuthClientAction(client => client.customer.portal)
-const requestFetch = useRequestFetch()
-
-const { data: customerState } = await useAsyncData('dashboard-customer-state', async () => {
-  if (!loggedIn.value) {
-    return null
-  }
-
-  try {
-    return await requestFetch<{ activeSubscriptions?: unknown[] }>('/api/auth/customer/state')
-  } catch {
-    return null
-  }
-}, {
-  default: () => null
-})
-
-const isSubscribed = computed(() => {
-  return (customerState.value?.activeSubscriptions?.length || 0) > 0
-})
+const { isSubscribed } = useSubscriptionState(loggedIn)
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
