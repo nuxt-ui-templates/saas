@@ -4,9 +4,28 @@ useSeoMeta({ title: 'Dashboard' })
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
 const toast = useToast()
-const { user, signOut } = useUserSession()
-const checkout = useAuthClientAction((client) => client.checkout)
-const portal = useAuthClientAction((client) => client.customer.portal)
+const { user, loggedIn, signOut } = useUserSession()
+const checkout = useAuthClientAction(client => client.checkout)
+const portal = useAuthClientAction(client => client.customer.portal)
+const requestFetch = useRequestFetch()
+
+const { data: customerState } = await useAsyncData('dashboard-customer-state', async () => {
+  if (!loggedIn.value) {
+    return null
+  }
+
+  try {
+    return await requestFetch<{ activeSubscriptions?: unknown[] }>('/api/auth/customer/state')
+  } catch {
+    return null
+  }
+}, {
+  default: () => null
+})
+
+const isSubscribed = computed(() => {
+  return (customerState.value?.activeSubscriptions?.length || 0) > 0
+})
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -28,6 +47,11 @@ const dashboardItems = computed(() => [[{
 }]])
 
 async function onUpgradeToPro() {
+  if (isSubscribed.value) {
+    await onManageSubscription()
+    return
+  }
+
   await checkout.execute({ slug: productSlug })
 
   if (checkout.status.value === 'error') {
@@ -75,23 +99,35 @@ async function onManageSubscription() {
 
           <USeparator class="my-4" />
 
-          <div class="space-y-2">
-            <UButton
-              label="Upgrade to Pro"
-              icon="i-lucide-sparkles"
-              color="primary"
-              block
-              @click="onUpgradeToPro"
-            />
-            <UButton
-              label="Manage subscription"
-              icon="i-lucide-receipt-text"
-              color="neutral"
-              variant="soft"
-              block
-              @click="onManageSubscription"
-            />
-          </div>
+          <BetterAuthState>
+            <template #default>
+              <div class="space-y-2">
+                <UButton
+                  v-if="!isSubscribed"
+                  label="Upgrade to Pro"
+                  icon="i-lucide-sparkles"
+                  color="primary"
+                  block
+                  @click="onUpgradeToPro"
+                />
+                <UButton
+                  :label="isSubscribed ? 'Manage subscription' : 'Billing portal'"
+                  icon="i-lucide-receipt-text"
+                  color="neutral"
+                  variant="soft"
+                  block
+                  @click="onManageSubscription"
+                />
+              </div>
+            </template>
+
+            <template #placeholder>
+              <div class="space-y-2">
+                <div class="h-10 rounded-md bg-elevated animate-pulse" />
+                <div class="h-10 rounded-md bg-elevated animate-pulse" />
+              </div>
+            </template>
+          </BetterAuthState>
 
           <USeparator class="my-4" />
 
