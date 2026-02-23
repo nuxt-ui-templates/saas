@@ -7,7 +7,7 @@ const { user, signOut } = useUserSession()
 <template>
   <UPageHero
     title="Dashboard"
-    :description="`Welcome back, ${user?.name || user?.email}`"
+    :description="user ? `Welcome back, ${user.name || user.email}` : undefined"
   >
     <UButton
       label="Sign out"
