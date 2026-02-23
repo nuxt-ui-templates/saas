@@ -18,12 +18,16 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   routeRules: {
-    '/docs': { redirect: '/docs/getting-started', prerender: false }
+    '/docs': { redirect: '/docs/getting-started', prerender: false },
+    '/login': { auth: { only: 'guest' } },
+    '/signup': { auth: { only: 'guest' } },
+    '/app/**': { auth: 'user' }
   },
 
-  compatibilityDate: '2024-07-11',
+  compatibilityDate: '2026-02-19',
 
   nitro: {
+    preset: 'cloudflare-module',
     prerender: {
       routes: [
         '/'
@@ -33,7 +37,18 @@ export default defineNuxtConfig({
   },
 
   hub: {
-    db: 'sqlite'
+    db: 'sqlite',
+    kv: true
+  },
+
+  auth: {
+    hubSecondaryStorage: true,
+    redirects: {
+      login: '/login',
+      guest: '/app',
+      authenticated: '/app',
+      logout: '/'
+    }
   },
 
   eslint: {
