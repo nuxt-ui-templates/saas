@@ -61,7 +61,7 @@ const dashboardItems = computed(() => [[{
       <UPageBody>
         <UPageHeader
           title="Dashboard"
-          :description="`Welcome back, ${user?.name || user?.email}`"
+          :description="user ? `Welcome back, ${user.name || user.email}` : undefined"
         />
 
         <UPageGrid>

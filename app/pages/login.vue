@@ -44,7 +44,8 @@ const providers = [{
 
 const schema = z.object({
   email: z.email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
+  password: z.string().min(8, 'Must be at least 8 characters'),
+  remember: z.boolean().optional()
 })
 
 type Schema = z.output<typeof schema>
@@ -52,7 +53,8 @@ type Schema = z.output<typeof schema>
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
   await signInEmail.execute({
     email: payload.data.email,
-    password: payload.data.password
+    password: payload.data.password,
+    rememberMe: payload.data.remember ?? false
   })
 
   if (signInEmail.status.value === 'error') {
