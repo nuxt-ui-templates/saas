@@ -27,6 +27,7 @@
     "nuxt": "^4.3.1",
     "nuxt-og-image": "^5.1.13",
     "tailwindcss": "^4.1.18",
+    "unstorage": "^1.17.4",
     "zod": "^4.3.6"
   },
   "devDependencies": {
