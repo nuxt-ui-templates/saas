@@ -1,4 +1,5 @@
 import type { Ref } from 'vue'
+import { resolveAppAuthErrorMessage } from '~/app/utils/resolve-auth-error-message'
 
 interface UseBillingStateOptions {
   loggedIn: Ref<boolean>
@@ -37,7 +38,7 @@ export function useBillingState({ loggedIn, productSlug }: UseBillingStateOption
     toast.add({
       color: 'error',
       title,
-      description: resolveAuthErrorMessage(error)
+      description: resolveAppAuthErrorMessage(error)
     })
   }
 
