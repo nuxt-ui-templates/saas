@@ -2,7 +2,73 @@
 useSeoMeta({ title: 'Dashboard' })
 
 const route = useRoute()
-const { user, signOut } = useUserSession()
+const { productSlug } = useRuntimeConfig().public.polar
+const { user, loggedIn, signOut } = useUserSession()
+
+function useBillingState() {
+  const toast = useToast()
+  const checkout = useAuthClientAction(client => client.checkout)
+  const portal = useAuthClientAction(client => client.customer.portal)
+  const customerState = useAuthClientAction(client => client.customer.state)
+
+  watchEffect(() => {
+    if (!loggedIn.value || customerState.status.value !== 'idle') {
+      return
+    }
+
+    customerState.execute()
+  })
+
+  const isSubscribed = computed(() => {
+    const data = customerState.data.value as { activeSubscriptions?: unknown } | undefined
+    const activeSubscriptions = data?.activeSubscriptions
+    if (!Array.isArray(activeSubscriptions) || customerState.error.value) {
+      return false
+    }
+
+    return activeSubscriptions.length > 0
+  })
+
+  const isSubscriptionResolving = computed(() => customerState.status.value === 'idle' || customerState.status.value === 'pending')
+
+  function showError(title: string, error: unknown) {
+    toast.add({
+      color: 'error',
+      title,
+      description: resolveAuthErrorMessage(error)
+    })
+  }
+
+  async function onManageSubscription() {
+    await portal.execute()
+
+    if (portal.status.value === 'error') {
+      showError('Unable to open portal', portal.error.value)
+    }
+  }
+
+  async function onUpgradeToPro() {
+    if (isSubscribed.value) {
+      await onManageSubscription()
+      return
+    }
+
+    await checkout.execute({ slug: productSlug })
+
+    if (checkout.status.value === 'error') {
+      showError('Unable to start checkout', checkout.error.value)
+    }
+  }
+
+  return {
+    isSubscribed,
+    isSubscriptionResolving,
+    onManageSubscription,
+    onUpgradeToPro
+  }
+}
+
+const { isSubscribed, isSubscriptionResolving, onUpgradeToPro, onManageSubscription } = useBillingState()
 
 const dashboardItems = computed(() => [[{
   label: 'Overview',
@@ -20,7 +86,7 @@ const dashboardItems = computed(() => [[{
 }, {
   label: 'Billing',
   icon: 'i-lucide-credit-card',
-  disabled: true
+  to: '/pricing'
 }]])
 </script>
 
@@ -44,6 +110,54 @@ const dashboardItems = computed(() => [[{
             orientation="vertical"
             :items="dashboardItems"
           />
+
+          <USeparator class="my-4" />
+
+          <BetterAuthState>
+            <template #default>
+              <div class="space-y-2">
+                <template v-if="isSubscriptionResolving">
+                  <div class="h-10 rounded-md bg-elevated animate-pulse" />
+                  <div class="h-10 rounded-md bg-elevated animate-pulse" />
+                </template>
+
+                <template v-else>
+                  <UButton
+                    v-if="isSubscribed"
+                    label="Pro plan active"
+                    icon="i-lucide-badge-check"
+                    color="success"
+                    variant="soft"
+                    disabled
+                    block
+                  />
+                  <UButton
+                    v-else
+                    label="Upgrade to Pro"
+                    icon="i-lucide-sparkles"
+                    color="primary"
+                    block
+                    @click="onUpgradeToPro"
+                  />
+                  <UButton
+                    :label="isSubscribed ? 'Manage subscription' : 'Billing portal'"
+                    icon="i-lucide-receipt-text"
+                    color="neutral"
+                    variant="soft"
+                    block
+                    @click="onManageSubscription"
+                  />
+                </template>
+              </div>
+            </template>
+
+            <template #placeholder>
+              <div class="space-y-2">
+                <div class="h-10 rounded-md bg-elevated animate-pulse" />
+                <div class="h-10 rounded-md bg-elevated animate-pulse" />
+              </div>
+            </template>
+          </BetterAuthState>
 
           <USeparator class="my-4" />
 
