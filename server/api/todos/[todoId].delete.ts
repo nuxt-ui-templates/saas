@@ -1,8 +1,8 @@
 import { and, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const todoId = getRouterParam(event, 'id')
+  const userId = (await getUserSession(event))!.user.id
+  const todoId = getRouterParam(event, 'todoId')
 
   if (!todoId) {
     throw createError({
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     .delete(schema.todoItem)
     .where(and(
       eq(schema.todoItem.id, todoId),
-      eq(schema.todoItem.userId, user.id)
+      eq(schema.todoItem.userId, userId)
     ))
     .returning({ id: schema.todoItem.id })
 

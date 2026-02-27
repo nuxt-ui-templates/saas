@@ -1,9 +1,7 @@
 import type { FetchError } from 'ofetch'
+import type { TodoItemModel } from '#shared/types/todo-item'
 
-interface TodoItem {
-  id: string
-  title: string
-  completed: boolean
+type TodoItem = Omit<TodoItemModel, 'userId' | 'createdAt' | 'updatedAt'> & {
   createdAt: string | number
   updatedAt: string | number
 }
@@ -99,16 +97,6 @@ export function useTodos() {
     )
   }
 
-  async function toggleTodo(todoId: string, completed: boolean) {
-    return handleMutation(
-      () => $fetch(`/api/todos/${todoId}`, {
-        method: 'PATCH',
-        body: { completed }
-      }),
-      'Unable to update todo'
-    )
-  }
-
   async function deleteTodo(todoId: string) {
     return handleMutation(
       () => $fetch(`/api/todos/${todoId}`, {
@@ -127,7 +115,6 @@ export function useTodos() {
     isMutating,
     refresh,
     createTodo,
-    toggleTodo,
     deleteTodo
   }
 }

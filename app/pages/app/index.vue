@@ -4,11 +4,73 @@ useSeoMeta({ title: 'Dashboard' })
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
 const { user, loggedIn, signOut } = useUserSession()
-const { isSubscribed, isSubscriptionResolving, onUpgradeToPro, onManageSubscription } = useBillingState({
-  loggedIn,
-  productSlug,
-  customerStateKey: 'dashboard-customer-state'
+const toast = useToast()
+const checkout = useAuthClientAction(client => client.checkout)
+const portal = useAuthClientAction(client => client.customer.portal)
+const customerState = useAuthClientAction(client => client.customer.state)
+
+watchEffect(() => {
+  if (!loggedIn.value || customerState.status.value !== 'idle') {
+    return
+  }
+
+  customerState.execute()
 })
+
+const isSubscribed = computed(() => {
+  if (customerState.error.value) {
+    return false
+  }
+
+  const payload = customerState.data.value
+  const state = payload && typeof payload === 'object' && 'data' in payload
+    ? (payload as { data?: unknown }).data
+    : payload
+
+  if (!state || typeof state !== 'object') {
+    return false
+  }
+
+  const activeSubscriptions = 'activeSubscriptions' in state
+    ? (state as { activeSubscriptions?: unknown }).activeSubscriptions
+    : undefined
+
+  return Array.isArray(activeSubscriptions) && activeSubscriptions.length > 0
+})
+
+const isSubscriptionResolving = computed(() => loggedIn.value && (
+  customerState.status.value === 'idle' || customerState.status.value === 'pending'
+))
+
+function showBillingError(title: string, error: unknown) {
+  toast.add({
+    color: 'error',
+    title,
+    description: resolveAuthErrorMessage(error)
+  })
+}
+
+async function onManageSubscription() {
+  await portal.execute()
+
+  if (portal.status.value === 'error') {
+    showBillingError('Unable to open portal', portal.error.value)
+  }
+}
+
+async function onUpgradeToPro() {
+  if (isSubscribed.value) {
+    await onManageSubscription()
+    return
+  }
+
+  await checkout.execute({ slug: productSlug })
+
+  if (checkout.status.value === 'error') {
+    showBillingError('Unable to start checkout', checkout.error.value)
+  }
+}
+
 const {
   items: todoItems,
   limits: todoLimits,
@@ -18,7 +80,6 @@ const {
   isMutating: isTodoMutating,
   refresh: refreshTodos,
   createTodo,
-  toggleTodo,
   deleteTodo
 } = useTodos()
 
@@ -27,7 +88,7 @@ const newTodoTitle = ref('')
 const isTodoLoading = computed(() => todoStatus.value === 'pending')
 const isFreeTodoPlan = computed(() => todoLimits.value.plan === 'free')
 const isTodoLimitReached = computed(() => isFreeTodoPlan.value && !canCreateTodo.value)
-const pendingTodoCount = computed(() => todoItems.value.filter(todo => !todo.completed).length)
+const pendingTodoCount = computed(() => todoItems.value.length)
 const todoCountLabel = computed(() => `${pendingTodoCount.value} pending task${pendingTodoCount.value === 1 ? '' : 's'}`)
 
 watch(
@@ -65,10 +126,6 @@ async function onCreateTodo() {
   if (result.success) {
     newTodoTitle.value = ''
   }
-}
-
-async function onToggleTodo(todoId: string, completed: boolean) {
-  await toggleTodo(todoId, completed)
 }
 
 async function onDeleteTodo(todoId: string) {
@@ -238,14 +295,9 @@ async function onDeleteTodo(todoId: string) {
                 :key="todo.id"
                 class="flex items-center gap-3 rounded-md border border-default px-3 py-2"
               >
-                <UCheckbox
-                  :model-value="todo.completed"
-                  :disabled="isTodoMutating"
-                  @update:model-value="value => onToggleTodo(todo.id, Boolean(value))"
-                />
                 <span
                   class="flex-1 text-sm"
-                  :class="todo.completed ? 'text-muted line-through' : 'text-highlighted'"
+                  class="text-highlighted"
                 >
                   {{ todo.title }}
                 </span>
