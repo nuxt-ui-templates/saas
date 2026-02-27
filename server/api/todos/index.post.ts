@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
   const payload = await readValidatedBody(event, createTodoSchema.parse)
   const limits = await resolveTodoPlan(event)
+  const freeTodoLimit = getFreeTodoLimit(event)
   const todoSelection = {
     id: schema.todoItem.id,
     title: schema.todoItem.title,
@@ -42,7 +43,7 @@ export default defineEventHandler(async (event) => {
           select count(*)
           from todo_item
           where "userId" = ${userId}
-        ) < ${FREE_TODO_LIMIT}
+        ) < ${freeTodoLimit}
         returning "id", "title", "completed", "createdAt", "updatedAt"
       `)
 
@@ -52,7 +53,7 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Free todo limit reached',
         data: {
           code: 'FREE_TODO_LIMIT_REACHED',
-          maxItems: FREE_TODO_LIMIT
+          maxItems: freeTodoLimit
         }
       })
     }

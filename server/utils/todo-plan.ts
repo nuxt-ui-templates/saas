@@ -1,7 +1,5 @@
 import type { H3Event } from 'h3'
 
-export const FREE_TODO_LIMIT = 3
-
 export type TodoPlan = 'free' | 'pro'
 
 export interface TodoPlanLimits {
@@ -9,26 +7,20 @@ export interface TodoPlanLimits {
   maxItems: number | null
 }
 
-function toFreePlan(): TodoPlanLimits {
-  return {
-    plan: 'free',
-    maxItems: FREE_TODO_LIMIT
-  }
+export function getFreeTodoLimit(event: H3Event): number {
+  const value = Number(useRuntimeConfig(event).todo?.freeLimit ?? 3)
+  return Number.isFinite(value) && value > 0 ? Math.floor(value) : 3
 }
 
 export async function resolveTodoPlan(event: H3Event): Promise<TodoPlanLimits> {
+  const freePlan: TodoPlanLimits = {
+    plan: 'free',
+    maxItems: getFreeTodoLimit(event)
+  }
+
   try {
-    const auth = serverAuth(event)
-    const stateAction = (auth.api as { state?: (input: { headers: Headers }) => Promise<unknown> }).state
-    const customerState = stateAction
-      ? await stateAction({ headers: event.headers })
-      : await fetchWithEvent(event, '/api/auth/customer/state')
-
-    const activeSubscriptions = customerState && typeof customerState === 'object' && 'activeSubscriptions' in customerState
-      ? (customerState as { activeSubscriptions?: unknown }).activeSubscriptions
-      : null
-
-    if (Array.isArray(activeSubscriptions) && activeSubscriptions.length > 0) {
+    const customerState = await fetchWithEvent<{ activeSubscriptions?: unknown[] }>(event, '/api/auth/customer/state')
+    if (Array.isArray(customerState.activeSubscriptions) && customerState.activeSubscriptions.length > 0) {
       return {
         plan: 'pro',
         maxItems: null
@@ -36,8 +28,7 @@ export async function resolveTodoPlan(event: H3Event): Promise<TodoPlanLimits> {
     }
   } catch (error) {
     console.warn('[todos] Failed to resolve customer plan, defaulting to free', error)
-    return toFreePlan()
   }
 
-  return toFreePlan()
+  return freePlan
 }

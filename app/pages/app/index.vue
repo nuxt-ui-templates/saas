@@ -17,25 +17,14 @@ watchEffect(() => {
   customerState.execute()
 })
 
+const polarCustomerState = computed(() => customerState.data.value?.data)
+
 const isSubscribed = computed(() => {
   if (customerState.error.value) {
     return false
   }
 
-  const payload = customerState.data.value
-  const state = payload && typeof payload === 'object' && 'data' in payload
-    ? (payload as { data?: unknown }).data
-    : payload
-
-  if (!state || typeof state !== 'object') {
-    return false
-  }
-
-  const activeSubscriptions = 'activeSubscriptions' in state
-    ? (state as { activeSubscriptions?: unknown }).activeSubscriptions
-    : undefined
-
-  return Array.isArray(activeSubscriptions) && activeSubscriptions.length > 0
+  return (polarCustomerState.value?.activeSubscriptions?.length ?? 0) > 0
 })
 
 const isSubscriptionResolving = computed(() => loggedIn.value && (
