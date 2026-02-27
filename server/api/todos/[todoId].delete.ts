@@ -1,15 +1,13 @@
 import { and, eq } from 'drizzle-orm'
+import { z } from 'zod'
+
+const deleteTodoParamsSchema = z.object({
+  todoId: z.string().uuid('Invalid todo id')
+})
 
 export default defineEventHandler(async (event) => {
-  const userId = (await getUserSession(event))!.user.id
-  const todoId = getRouterParam(event, 'todoId')
-
-  if (!todoId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Todo id is required'
-    })
-  }
+  const userId = await getAuthenticatedUserId(event)
+  const { todoId } = await getValidatedRouterParams(event, deleteTodoParamsSchema.parse)
 
   const [deleted] = await db
     .delete(schema.todoItem)

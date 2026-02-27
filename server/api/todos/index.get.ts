@@ -1,8 +1,7 @@
 import { desc, eq } from 'drizzle-orm'
-import { resolveTodoPlan } from '../../utils/todo-plan'
 
 export default defineEventHandler(async (event) => {
-  const userId = (await getUserSession(event))!.user.id
+  const userId = await getAuthenticatedUserId(event)
   const limits = await resolveTodoPlan(event)
 
   const items = await db

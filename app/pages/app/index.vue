@@ -86,13 +86,15 @@ const {
 const newTodoTitle = ref('')
 
 const isTodoLoading = computed(() => todoStatus.value === 'pending')
-const isFreeTodoPlan = computed(() => todoLimits.value.plan === 'free')
+const todoPlan = computed(() => todoLimits.value?.plan)
+const todoMaxItems = computed(() => todoLimits.value?.maxItems ?? null)
+const isFreeTodoPlan = computed(() => todoPlan.value === 'free')
 const isTodoLimitReached = computed(() => isFreeTodoPlan.value && !canCreateTodo.value)
 const pendingTodoCount = computed(() => todoItems.value.length)
 const todoCountLabel = computed(() => `${pendingTodoCount.value} pending task${pendingTodoCount.value === 1 ? '' : 's'}`)
 
 watch(
-  () => [isSubscribed.value, todoLimits.value.plan] as const,
+  () => [isSubscribed.value, todoPlan.value] as const,
   async ([subscribed, todoPlan]) => {
     if (subscribed && todoPlan === 'free') {
       await refreshTodos()
@@ -266,12 +268,12 @@ async function onDeleteTodo(todoId: string) {
 
             <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
               <UBadge
-                :label="todoLimits.plan === 'pro' ? 'Pro plan' : 'Free plan'"
-                :color="todoLimits.plan === 'pro' ? 'success' : 'neutral'"
+                :label="todoPlan === 'pro' ? 'Pro plan' : 'Free plan'"
+                :color="todoPlan === 'pro' ? 'success' : 'neutral'"
                 variant="soft"
               />
-              <span v-if="todoLimits.maxItems !== null">
-                {{ todoRemaining }} of {{ todoLimits.maxItems }} slots left
+              <span v-if="todoMaxItems !== null">
+                {{ todoRemaining }} of {{ todoMaxItems }} slots left
               </span>
               <span v-else>
                 Unlimited todos
@@ -296,8 +298,7 @@ async function onDeleteTodo(todoId: string) {
                 class="flex items-center gap-3 rounded-md border border-default px-3 py-2"
               >
                 <span
-                  class="flex-1 text-sm"
-                  class="text-highlighted"
+                  class="flex-1 text-sm text-highlighted"
                 >
                   {{ todo.title }}
                 </span>

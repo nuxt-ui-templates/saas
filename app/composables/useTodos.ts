@@ -1,86 +1,84 @@
-import type { FetchError } from 'ofetch'
-import type { TodoItemModel } from '#shared/types/todo-item'
-
-type TodoItem = Omit<TodoItemModel, 'userId' | 'createdAt' | 'updatedAt'> & {
-  createdAt: string | number
-  updatedAt: string | number
-}
-
-interface TodoLimits {
-  plan: 'free' | 'pro'
-  maxItems: number | null
-  remaining: number | null
-}
-
-interface TodosResponse {
-  items: TodoItem[]
-  limits: TodoLimits
-}
-
-interface ApiErrorData {
-  statusCode?: number
-  statusMessage?: string
-  data?: {
-    code?: string
-    maxItems?: number
-  }
-  code?: string
-}
-
-const DEFAULT_LIMITS: TodoLimits = {
-  plan: 'free',
-  maxItems: 3,
-  remaining: 3
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === 'object' ? value as Record<string, unknown> : undefined
 }
 
 export function useTodos() {
   const toast = useToast()
-  const isMutating = ref(false)
+  const createTodoTitle = ref('')
+  const deleteTodoId = ref('')
 
-  const { data, status, refresh } = useFetch<TodosResponse>('/api/todos', {
-    key: 'dashboard-todos',
-    default: () => ({
-      items: [],
-      limits: DEFAULT_LIMITS
-    })
+  const { data, status, refresh } = useFetch('/api/todos', {
+    key: 'dashboard-todos'
   })
 
-  const items = computed(() => data.value?.items || [])
-  const limits = computed(() => data.value?.limits || DEFAULT_LIMITS)
-  const remaining = computed(() => limits.value.remaining)
-  const canCreate = computed(() => limits.value.maxItems === null || items.value.length < limits.value.maxItems)
+  function showTodoError(errorTitle: string, payload: unknown, fallbackMessage?: string) {
+    const errorData = asRecord(payload)
+    const nestedData = asRecord(errorData?.data)
+    const limitCode = (nestedData?.code ?? errorData?.code) as string | undefined
+    const maxItems = typeof nestedData?.maxItems === 'number' ? nestedData.maxItems : 3
+    const statusMessage = typeof errorData?.statusMessage === 'string' ? errorData.statusMessage : undefined
 
-  async function handleMutation<T>(operation: () => Promise<T>, errorTitle: string) {
-    isMutating.value = true
-
-    try {
-      const result = await operation()
-      await refresh()
-      return { success: true, result }
-    } catch (error) {
-      const fetchError = error as FetchError<ApiErrorData>
-      const errorData = fetchError.data
-      const limitCode = errorData?.data?.code || errorData?.code
-
-      if (limitCode === 'FREE_TODO_LIMIT_REACHED') {
-        toast.add({
-          color: 'warning',
-          title: 'Free plan limit reached',
-          description: `Free users can keep up to ${errorData?.data?.maxItems || 3} todos. Upgrade to Pro for unlimited todos.`
-        })
-      } else {
-        toast.add({
-          color: 'error',
-          title: errorTitle,
-          description: errorData?.statusMessage || fetchError.message || 'Please try again.'
-        })
-      }
-
-      return { success: false }
-    } finally {
-      isMutating.value = false
+    if (limitCode === 'FREE_TODO_LIMIT_REACHED') {
+      toast.add({
+        color: 'warning',
+        title: 'Free plan limit reached',
+        description: `Free users can keep up to ${maxItems} todos. Upgrade to Pro for unlimited todos.`
+      })
+      return
     }
+
+    toast.add({
+      color: 'error',
+      title: errorTitle,
+      description: statusMessage || fallbackMessage || 'Please try again.'
+    })
   }
+
+  const {
+    status: createTodoStatus,
+    execute: executeCreateTodo
+  } = useFetch('/api/todos', {
+    method: 'POST',
+    immediate: false,
+    watch: false,
+    body: () => ({ title: createTodoTitle.value }),
+    onResponse: async () => {
+      await refresh()
+    },
+    onResponseError: ({ response }) => {
+      showTodoError('Unable to create todo', response._data)
+    },
+    onRequestError: ({ error }) => {
+      showTodoError('Unable to create todo', null, error.message)
+    }
+  })
+
+  const {
+    status: deleteTodoStatus,
+    execute: executeDeleteTodo
+  } = useFetch(() => `/api/todos/${deleteTodoId.value}`, {
+    method: 'DELETE',
+    immediate: false,
+    watch: false,
+    onResponse: async () => {
+      await refresh()
+    },
+    onResponseError: ({ response }) => {
+      showTodoError('Unable to delete todo', response._data)
+    },
+    onRequestError: ({ error }) => {
+      showTodoError('Unable to delete todo', null, error.message)
+    }
+  })
+
+  const items = computed(() => data.value?.items ?? [])
+  const limits = computed(() => data.value?.limits)
+  const remaining = computed(() => limits.value?.remaining ?? null)
+  const canCreate = computed(() => {
+    const maxItems = limits.value?.maxItems
+    return maxItems === undefined || maxItems === null || items.value.length < maxItems
+  })
+  const isMutating = computed(() => createTodoStatus.value === 'pending' || deleteTodoStatus.value === 'pending')
 
   async function createTodo(title: string) {
     const trimmedTitle = title.trim()
@@ -88,22 +86,19 @@ export function useTodos() {
       return { success: false as const }
     }
 
-    return handleMutation(
-      () => $fetch('/api/todos', {
-        method: 'POST',
-        body: { title: trimmedTitle }
-      }),
-      'Unable to create todo'
-    )
+    createTodoTitle.value = trimmedTitle
+    await executeCreateTodo()
+    return { success: createTodoStatus.value === 'success' }
   }
 
   async function deleteTodo(todoId: string) {
-    return handleMutation(
-      () => $fetch(`/api/todos/${todoId}`, {
-        method: 'DELETE'
-      }),
-      'Unable to delete todo'
-    )
+    if (!todoId) {
+      return { success: false as const }
+    }
+
+    deleteTodoId.value = todoId
+    await executeDeleteTodo()
+    return { success: deleteTodoStatus.value === 'success' }
   }
 
   return {

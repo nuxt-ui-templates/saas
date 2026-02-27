@@ -1,6 +1,5 @@
 import { sql } from 'drizzle-orm'
 import { z } from 'zod'
-import { FREE_TODO_LIMIT, resolveTodoPlan } from '../../utils/todo-plan'
 
 const createTodoSchema = z.object({
   title: z
@@ -11,9 +10,16 @@ const createTodoSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const userId = (await getUserSession(event))!.user.id
+  const userId = await getAuthenticatedUserId(event)
   const payload = await readValidatedBody(event, createTodoSchema.parse)
   const limits = await resolveTodoPlan(event)
+  const todoSelection = {
+    id: schema.todoItem.id,
+    title: schema.todoItem.title,
+    completed: schema.todoItem.completed,
+    createdAt: schema.todoItem.createdAt,
+    updatedAt: schema.todoItem.updatedAt
+  }
 
   const values = {
     id: crypto.randomUUID(),
@@ -22,14 +28,14 @@ export default defineEventHandler(async (event) => {
     completed: false
   }
 
-  const todo = limits.plan === 'free'
-    ? (await db.all<{
-        id: string
-        title: string
-        completed: boolean
-        createdAt: Date | number
-        updatedAt: Date | number
-      }>(sql`
+  if (limits.plan === 'free') {
+    const [todo] = await db.all<{
+      id: string
+      title: string
+      completed: boolean
+      createdAt: Date | number
+      updatedAt: Date | number
+    }>(sql`
         insert into todo_item ("id", "userId", "title", "completed")
         select ${values.id}, ${values.userId}, ${values.title}, ${values.completed}
         where (
@@ -38,23 +44,30 @@ export default defineEventHandler(async (event) => {
           where "userId" = ${userId}
         ) < ${FREE_TODO_LIMIT}
         returning "id", "title", "completed", "createdAt", "updatedAt"
-      `))[0]
-    : (await db.insert(schema.todoItem).values(values).returning({
-        id: schema.todoItem.id,
-        title: schema.todoItem.title,
-        completed: schema.todoItem.completed,
-        createdAt: schema.todoItem.createdAt,
-        updatedAt: schema.todoItem.updatedAt
-      }))[0]
+      `)
+
+    if (!todo) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Free todo limit reached',
+        data: {
+          code: 'FREE_TODO_LIMIT_REACHED',
+          maxItems: FREE_TODO_LIMIT
+        }
+      })
+    }
+
+    return {
+      item: todo
+    }
+  }
+
+  const [todo] = await db.insert(schema.todoItem).values(values).returning(todoSelection)
 
   if (!todo) {
     throw createError({
-      statusCode: 403,
-      statusMessage: 'Free todo limit reached',
-      data: {
-        code: 'FREE_TODO_LIMIT_REACHED',
-        maxItems: FREE_TODO_LIMIT
-      }
+      statusCode: 500,
+      statusMessage: 'Failed to create todo'
     })
   }
 
