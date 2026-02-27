@@ -1,9 +1,8 @@
 import { desc, eq } from 'drizzle-orm'
-import type { TodosResponse } from '~~/shared/types/todos'
 
 export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
-  const limits = await resolveTodoPlan(event)
+  const limits = await resolveTodoPlan(event, userId)
 
   const items = await db
     .select({

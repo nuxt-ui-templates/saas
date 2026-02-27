@@ -62,7 +62,7 @@ async function onUpgradeToPro() {
 
 const {
   items: todoItems,
-  limits: todoLimits,
+  maxItems: todoMaxItems,
   remaining: todoRemaining,
   canCreate: canCreateTodo,
   status: todoStatus,
@@ -75,16 +75,15 @@ const {
 const newTodoTitle = ref('')
 
 const isTodoLoading = computed(() => todoStatus.value === 'pending')
-const todoPlan = computed(() => todoLimits.value?.plan)
-const todoMaxItems = computed(() => todoLimits.value?.maxItems ?? null)
-const isTodoLimitReached = computed(() => todoPlan.value === 'free' && !canCreateTodo.value)
+const isTodoProPlan = computed(() => todoMaxItems.value === null)
+const isTodoLimitReached = computed(() => !isTodoProPlan.value && !canCreateTodo.value)
 const pendingTodoCount = computed(() => todoItems.value.length)
 const todoCountLabel = computed(() => `${pendingTodoCount.value} pending task${pendingTodoCount.value === 1 ? '' : 's'}`)
 
 watch(
-  () => [isSubscribed.value, todoPlan.value] as const,
-  async ([subscribed, todoPlan]) => {
-    if (subscribed && todoPlan === 'free') {
+  () => [isSubscribed.value, todoMaxItems.value] as const,
+  async ([subscribed, maxItems]) => {
+    if (subscribed && maxItems !== null) {
       await refreshTodos()
     }
   },
@@ -252,8 +251,8 @@ async function onCreateTodo() {
 
             <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
               <UBadge
-                :label="todoPlan === 'pro' ? 'Pro plan' : 'Free plan'"
-                :color="todoPlan === 'pro' ? 'success' : 'neutral'"
+                :label="isTodoProPlan ? 'Pro plan' : 'Free plan'"
+                :color="isTodoProPlan ? 'success' : 'neutral'"
                 variant="soft"
               />
               <span v-if="todoMaxItems !== null">

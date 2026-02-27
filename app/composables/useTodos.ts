@@ -1,17 +1,17 @@
-import type { TodosResponse } from '~~/shared/types/todos'
-
-type TodoItem = TodosResponse['items'][number]
-type TodoLimits = TodosResponse['limits']
-
 export function useTodos() {
   const toast = useToast()
-  const items = useState<TodoItem[]>('todos:items', () => [])
-  const limits = useState<TodoLimits | null>('todos:limits', () => null)
-  const status = useState<'idle' | 'pending' | 'success' | 'error'>('todos:status', () => 'idle')
+  const {
+    data,
+    status,
+    error,
+    refresh: refreshTodos
+  } = useFetch('/api/todos')
   const isMutating = useState('todos:is-mutating', () => false)
 
-  const remaining = computed(() => limits.value?.remaining ?? null)
-  const canCreate = computed(() => limits.value?.maxItems == null || items.value.length < limits.value.maxItems)
+  const items = computed(() => data.value?.items ?? [])
+  const maxItems = computed(() => data.value?.limits?.maxItems ?? null)
+  const remaining = computed(() => maxItems.value === null ? null : Math.max(maxItems.value - items.value.length, 0))
+  const canCreate = computed(() => maxItems.value === null || items.value.length < maxItems.value)
 
   function showError(title: string, error: unknown) {
     const payload = error as { data?: { statusMessage?: string } }
@@ -25,17 +25,14 @@ export function useTodos() {
   }
 
   async function refresh() {
-    status.value = 'pending'
+    await refreshTodos()
 
-    try {
-      const response = await $fetch('/api/todos')
-      items.value = response.items ?? []
-      limits.value = response.limits ?? null
-      status.value = 'success'
-    } catch (error) {
-      status.value = 'error'
-      showError('Unable to load todos', error)
+    if (error.value) {
+      showError('Unable to load todos', error.value)
+      return { success: false as const }
     }
+
+    return { success: true as const }
   }
 
   async function createTodo(title: string) {
@@ -52,8 +49,7 @@ export function useTodos() {
         body: { title: trimmedTitle }
       })
 
-      await refresh()
-      return { success: true as const }
+      return await refresh()
     } catch (error) {
       showError('Unable to create todo', error)
       return { success: false as const }
@@ -74,8 +70,7 @@ export function useTodos() {
         method: 'DELETE'
       })
 
-      await refresh()
-      return { success: true as const }
+      return await refresh()
     } catch (error) {
       showError('Unable to delete todo', error)
       return { success: false as const }
@@ -84,13 +79,9 @@ export function useTodos() {
     }
   }
 
-  if (status.value === 'idle') {
-    refresh()
-  }
-
   return {
     items,
-    limits,
+    maxItems,
     remaining,
     canCreate,
     status,

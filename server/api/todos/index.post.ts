@@ -12,7 +12,7 @@ const createTodoSchema = z.object({
 export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
   const payload = await readValidatedBody(event, createTodoSchema.parse)
-  const limits = await resolveTodoPlan(event)
+  const limits = await resolveTodoPlan(event, userId)
   const freeTodoLimit = getFreeTodoLimit(event)
   const todoSelection = {
     id: schema.todoItem.id,

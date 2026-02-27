@@ -22,9 +22,7 @@ export default defineNuxtConfig({
       id: '',
       secret: ''
     },
-    todo: {
-      freeLimit: 3
-    },
+    freeTodoLimit: 3,
     polar: {
       accessToken: '',
       productId: '',
