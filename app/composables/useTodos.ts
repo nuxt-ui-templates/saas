@@ -1,21 +1,7 @@
-interface TodoItem {
-  id: string
-  title: string
-  completed: boolean
-  createdAt: string | number
-  updatedAt: string | number
-}
+import type { TodosResponse } from '~~/shared/types/todos'
 
-interface TodoLimits {
-  plan: 'free' | 'pro'
-  maxItems: number | null
-  remaining: number | null
-}
-
-interface TodosResponse {
-  items: TodoItem[]
-  limits: TodoLimits
-}
+type TodoItem = TodosResponse['items'][number]
+type TodoLimits = TodosResponse['limits']
 
 export function useTodos() {
   const toast = useToast()
@@ -25,10 +11,7 @@ export function useTodos() {
   const isMutating = useState('todos:is-mutating', () => false)
 
   const remaining = computed(() => limits.value?.remaining ?? null)
-  const canCreate = computed(() => {
-    const maxItems = limits.value?.maxItems
-    return maxItems === undefined || maxItems === null || items.value.length < maxItems
-  })
+  const canCreate = computed(() => limits.value?.maxItems == null || items.value.length < limits.value.maxItems)
 
   function showError(title: string, error: unknown) {
     const payload = error as { data?: { statusMessage?: string } }
@@ -45,7 +28,7 @@ export function useTodos() {
     status.value = 'pending'
 
     try {
-      const response = await $fetch<TodosResponse>('/api/todos')
+      const response = await $fetch('/api/todos')
       items.value = response.items ?? []
       limits.value = response.limits ?? null
       status.value = 'success'

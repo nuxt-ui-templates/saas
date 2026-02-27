@@ -1,4 +1,5 @@
 import { desc, eq } from 'drizzle-orm'
+import type { TodosResponse } from '~~/shared/types/todos'
 
 export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
@@ -18,11 +19,13 @@ export default defineEventHandler(async (event) => {
 
   const remaining = limits.maxItems === null ? null : Math.max(limits.maxItems - items.length, 0)
 
-  return {
+  const response = {
     items,
     limits: {
       ...limits,
       remaining
     }
-  }
+  } satisfies TodosResponse
+
+  return response
 })

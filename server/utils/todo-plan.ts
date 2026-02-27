@@ -1,11 +1,5 @@
 import type { H3Event } from 'h3'
-
-export type TodoPlan = 'free' | 'pro'
-
-export interface TodoPlanLimits {
-  plan: TodoPlan
-  maxItems: number | null
-}
+import type { TodoPlanLimits } from '~~/shared/types/todos'
 
 export function getFreeTodoLimit(event: H3Event): number {
   const value = Number(useRuntimeConfig(event).todo?.freeLimit ?? 3)

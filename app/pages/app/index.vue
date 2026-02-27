@@ -77,8 +77,7 @@ const newTodoTitle = ref('')
 const isTodoLoading = computed(() => todoStatus.value === 'pending')
 const todoPlan = computed(() => todoLimits.value?.plan)
 const todoMaxItems = computed(() => todoLimits.value?.maxItems ?? null)
-const isFreeTodoPlan = computed(() => todoPlan.value === 'free')
-const isTodoLimitReached = computed(() => isFreeTodoPlan.value && !canCreateTodo.value)
+const isTodoLimitReached = computed(() => todoPlan.value === 'free' && !canCreateTodo.value)
 const pendingTodoCount = computed(() => todoItems.value.length)
 const todoCountLabel = computed(() => `${pendingTodoCount.value} pending task${pendingTodoCount.value === 1 ? '' : 's'}`)
 
@@ -117,10 +116,6 @@ async function onCreateTodo() {
   if (result.success) {
     newTodoTitle.value = ''
   }
-}
-
-async function onDeleteTodo(todoId: string) {
-  await deleteTodo(todoId)
 }
 </script>
 
@@ -296,7 +291,7 @@ async function onDeleteTodo(todoId: string) {
                   color="error"
                   variant="ghost"
                   :disabled="isTodoMutating"
-                  @click="onDeleteTodo(todo.id)"
+                  @click="deleteTodo(todo.id)"
                 />
               </li>
             </ul>
