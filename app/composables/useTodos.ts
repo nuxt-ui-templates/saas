@@ -1,15 +1,9 @@
 export function useTodos() {
   const toast = useToast()
-  const {
-    data,
-    status,
-    error,
-    refresh: refreshTodos
-  } = useFetch('/api/todos')
-  const isMutating = useState('todos:is-mutating', () => false)
+  const { data, status, error, refresh: refreshTodos } = useFetch('/api/todos')
 
   const items = computed(() => data.value?.items ?? [])
-  const maxItems = computed(() => data.value?.limits?.maxItems ?? null)
+  const maxItems = computed(() => data.value?.maxItems ?? null)
   const remaining = computed(() => maxItems.value === null ? null : Math.max(maxItems.value - items.value.length, 0))
   const canCreate = computed(() => maxItems.value === null || items.value.length < maxItems.value)
 
@@ -41,8 +35,6 @@ export function useTodos() {
       return { success: false as const }
     }
 
-    isMutating.value = true
-
     try {
       await $fetch('/api/todos', {
         method: 'POST',
@@ -53,8 +45,6 @@ export function useTodos() {
     } catch (error) {
       showError('Unable to create todo', error)
       return { success: false as const }
-    } finally {
-      isMutating.value = false
     }
   }
 
@@ -62,8 +52,6 @@ export function useTodos() {
     if (!todoId) {
       return { success: false as const }
     }
-
-    isMutating.value = true
 
     try {
       await $fetch(`/api/todos/${todoId}`, {
@@ -74,8 +62,6 @@ export function useTodos() {
     } catch (error) {
       showError('Unable to delete todo', error)
       return { success: false as const }
-    } finally {
-      isMutating.value = false
     }
   }
 
@@ -85,7 +71,6 @@ export function useTodos() {
     remaining,
     canCreate,
     status,
-    isMutating,
     refresh,
     createTodo,
     deleteTodo

@@ -6,15 +6,12 @@ export function getFreeTodoLimit(event: H3Event): number {
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : 3
 }
 
-export async function resolveTodoPlan(event: H3Event, userId: string): Promise<TodoPlanLimits> {
-  const freePlan: TodoPlanLimits = {
-    plan: 'free',
-    maxItems: getFreeTodoLimit(event)
-  }
+export async function resolveTodoMaxItems(event: H3Event, userId: string): Promise<number | null> {
+  const freeTodoLimit = getFreeTodoLimit(event)
   const polarAccessToken = useRuntimeConfig(event).polar?.accessToken
 
   if (!polarAccessToken) {
-    return freePlan
+    return freeTodoLimit
   }
 
   try {
@@ -27,14 +24,11 @@ export async function resolveTodoPlan(event: H3Event, userId: string): Promise<T
     })
 
     if ((customerState.activeSubscriptions?.length ?? 0) > 0) {
-      return {
-        plan: 'pro',
-        maxItems: null
-      }
+      return null
     }
   } catch (error) {
     console.warn('[todos] Failed to resolve customer plan, defaulting to free', error)
   }
 
-  return freePlan
+  return freeTodoLimit
 }

@@ -2,29 +2,19 @@ import { desc, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
-  const limits = await resolveTodoPlan(event, userId)
+  const maxItems = await resolveTodoMaxItems(event, userId)
 
   const items = await db
     .select({
       id: schema.todoItem.id,
-      title: schema.todoItem.title,
-      completed: schema.todoItem.completed,
-      createdAt: schema.todoItem.createdAt,
-      updatedAt: schema.todoItem.updatedAt
+      title: schema.todoItem.title
     })
     .from(schema.todoItem)
     .where(eq(schema.todoItem.userId, userId))
     .orderBy(desc(schema.todoItem.createdAt))
 
-  const remaining = limits.maxItems === null ? null : Math.max(limits.maxItems - items.length, 0)
-
-  const response = {
+  return {
     items,
-    limits: {
-      ...limits,
-      remaining
-    }
-  } satisfies TodosResponse
-
-  return response
+    maxItems
+  }
 })

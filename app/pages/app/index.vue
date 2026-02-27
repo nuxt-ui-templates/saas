@@ -4,61 +4,10 @@ useSeoMeta({ title: 'Dashboard' })
 const route = useRoute()
 const { productSlug } = useRuntimeConfig().public.polar
 const { user, loggedIn, signOut } = useUserSession()
-const toast = useToast()
-const checkout = useAuthClientAction(client => client.checkout)
-const portal = useAuthClientAction(client => client.customer.portal)
-const customerState = useAuthClientAction(client => client.customer.state)
-
-watchEffect(() => {
-  if (!loggedIn.value || customerState.status.value !== 'idle') {
-    return
-  }
-
-  customerState.execute()
+const { isSubscribed, isSubscriptionResolving, onUpgradeToPro, onManageSubscription } = useBillingState({
+  loggedIn,
+  productSlug
 })
-
-const polarCustomerState = computed(() => customerState.data.value?.data)
-
-const isSubscribed = computed(() => {
-  if (customerState.error.value) {
-    return false
-  }
-
-  return (polarCustomerState.value?.activeSubscriptions?.length ?? 0) > 0
-})
-
-const isSubscriptionResolving = computed(() => loggedIn.value && (
-  customerState.status.value === 'idle' || customerState.status.value === 'pending'
-))
-
-function showBillingError(title: string, error: unknown) {
-  toast.add({
-    color: 'error',
-    title,
-    description: resolveAuthErrorMessage(error)
-  })
-}
-
-async function onManageSubscription() {
-  await portal.execute()
-
-  if (portal.status.value === 'error') {
-    showBillingError('Unable to open portal', portal.error.value)
-  }
-}
-
-async function onUpgradeToPro() {
-  if (isSubscribed.value) {
-    await onManageSubscription()
-    return
-  }
-
-  await checkout.execute({ slug: productSlug })
-
-  if (checkout.status.value === 'error') {
-    showBillingError('Unable to start checkout', checkout.error.value)
-  }
-}
 
 const {
   items: todoItems,
@@ -66,7 +15,6 @@ const {
   remaining: todoRemaining,
   canCreate: canCreateTodo,
   status: todoStatus,
-  isMutating: isTodoMutating,
   refresh: refreshTodos,
   createTodo,
   deleteTodo
@@ -236,14 +184,13 @@ async function onCreateTodo() {
                 v-model="newTodoTitle"
                 placeholder="Add a todo"
                 class="flex-1"
-                :disabled="isTodoMutating || isTodoLimitReached"
+                :disabled="isTodoLimitReached"
                 @keydown.enter.prevent="onCreateTodo"
               />
               <UButton
                 label="Add"
                 icon="i-lucide-plus"
                 color="primary"
-                :loading="isTodoMutating"
                 :disabled="!newTodoTitle.trim() || isTodoLimitReached"
                 @click="onCreateTodo"
               />
@@ -289,7 +236,6 @@ async function onCreateTodo() {
                   icon="i-lucide-trash-2"
                   color="error"
                   variant="ghost"
-                  :disabled="isTodoMutating"
                   @click="deleteTodo(todo.id)"
                 />
               </li>

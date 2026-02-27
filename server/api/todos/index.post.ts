@@ -12,67 +12,51 @@ const createTodoSchema = z.object({
 export default defineEventHandler(async (event) => {
   const userId = await getAuthenticatedUserId(event)
   const payload = await readValidatedBody(event, createTodoSchema.parse)
-  const limits = await resolveTodoPlan(event, userId)
-  const freeTodoLimit = getFreeTodoLimit(event)
-  const todoSelection = {
-    id: schema.todoItem.id,
-    title: schema.todoItem.title,
-    completed: schema.todoItem.completed,
-    createdAt: schema.todoItem.createdAt,
-    updatedAt: schema.todoItem.updatedAt
-  }
+  const maxItems = await resolveTodoMaxItems(event, userId)
 
   const values = {
     id: crypto.randomUUID(),
     userId,
-    title: payload.title,
-    completed: false
+    title: payload.title
   }
 
-  if (limits.plan === 'free') {
-    const [todo] = await db.all<{
-      id: string
-      title: string
-      completed: boolean
-      createdAt: Date | number
-      updatedAt: Date | number
-    }>(sql`
-        insert into todo_item ("id", "userId", "title", "completed")
-        select ${values.id}, ${values.userId}, ${values.title}, ${values.completed}
+  if (maxItems !== null) {
+    const [inserted] = await db.all<{ id: string }>(sql`
+        insert into todo_item ("id", "userId", "title")
+        select ${values.id}, ${values.userId}, ${values.title}
         where (
           select count(*)
           from todo_item
           where "userId" = ${userId}
-        ) < ${freeTodoLimit}
-        returning "id", "title", "completed", "createdAt", "updatedAt"
+        ) < ${maxItems}
+        returning "id"
       `)
 
-    if (!todo) {
+    if (!inserted) {
       throw createError({
         statusCode: 403,
         statusMessage: 'Free todo limit reached',
         data: {
           code: 'FREE_TODO_LIMIT_REACHED',
-          maxItems: freeTodoLimit
+          maxItems
         }
       })
     }
 
-    return {
-      item: todo
-    }
+    return { success: true as const }
   }
 
-  const [todo] = await db.insert(schema.todoItem).values(values).returning(todoSelection)
+  const [inserted] = await db
+    .insert(schema.todoItem)
+    .values(values)
+    .returning({ id: schema.todoItem.id })
 
-  if (!todo) {
+  if (!inserted) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to create todo'
     })
   }
 
-  return {
-    item: todo
-  }
+  return { success: true as const }
 })
