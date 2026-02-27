@@ -1,6 +1,13 @@
 export function useTodos() {
   const toast = useToast()
   const { data, status, error, refresh: refreshTodos } = useFetch('/api/todos')
+  const createTodoAction = useAction(async (title: string) => await $fetch('/api/todos', {
+    method: 'POST',
+    body: { title }
+  }))
+  const deleteTodoAction = useAction(async (todoId: string) => await $fetch(`/api/todos/${todoId}`, {
+    method: 'DELETE'
+  }))
 
   const items = computed(() => data.value?.items ?? [])
   const maxItems = computed(() => data.value?.maxItems ?? null)
@@ -35,17 +42,14 @@ export function useTodos() {
       return { success: false as const }
     }
 
-    try {
-      await $fetch('/api/todos', {
-        method: 'POST',
-        body: { title: trimmedTitle }
-      })
+    await createTodoAction.execute(trimmedTitle)
 
-      return await refresh()
-    } catch (error) {
-      showError('Unable to create todo', error)
+    if (createTodoAction.status.value === 'error') {
+      showError('Unable to create todo', createTodoAction.error.value)
       return { success: false as const }
     }
+
+    return await refresh()
   }
 
   async function deleteTodo(todoId: string) {
@@ -53,16 +57,14 @@ export function useTodos() {
       return { success: false as const }
     }
 
-    try {
-      await $fetch(`/api/todos/${todoId}`, {
-        method: 'DELETE'
-      })
+    await deleteTodoAction.execute(todoId)
 
-      return await refresh()
-    } catch (error) {
-      showError('Unable to delete todo', error)
+    if (deleteTodoAction.status.value === 'error') {
+      showError('Unable to delete todo', deleteTodoAction.error.value)
       return { success: false as const }
     }
+
+    return await refresh()
   }
 
   return {
