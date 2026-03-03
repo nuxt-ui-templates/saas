@@ -22,6 +22,7 @@ export default defineNuxtConfig({
       id: '',
       secret: ''
     },
+    freeTodoLimit: 3,
     polar: {
       accessToken: '',
       productId: '',
@@ -38,7 +39,9 @@ export default defineNuxtConfig({
     '/docs': { redirect: '/docs/getting-started', prerender: false },
     '/login': { auth: { only: 'guest' }, prerender: false },
     '/signup': { auth: { only: 'guest' }, prerender: false },
-    '/app': { auth: 'user', prerender: false }
+    '/app': { auth: 'user', prerender: false },
+    '/api/todos': { auth: 'user', prerender: false },
+    '/api/todos/**': { auth: 'user', prerender: false }
   },
 
   compatibilityDate: '2026-02-19',
