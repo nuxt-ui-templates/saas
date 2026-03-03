@@ -12,8 +12,10 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signUpEmail = useUserSignUp('email')
+const signUpEmail = useSignUp('email')
+const signInSocial = useSignIn('social')
 const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
+const isSocialSignInPending = computed(() => signInSocial.status.value === 'pending')
 
 const fields = [{
   name: 'name',
@@ -32,15 +34,13 @@ const fields = [{
   placeholder: 'Enter your password'
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  disabled: true
-}, {
+const providers = computed(() => [{
   label: 'GitHub',
   icon: 'i-simple-icons-github',
-  disabled: true
-}]
+  loading: isSocialSignInPending.value,
+  disabled: isSocialSignInPending.value,
+  onClick: () => onGitHubSignIn()
+}])
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -57,11 +57,27 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     password: payload.data.password
   })
 
-  if (signUpEmail.status.value === 'error') {
+  if (signUpEmail.error.value) {
     toast.add({
       color: 'error',
       title: 'Sign up failed',
-      description: signUpEmail.error.value?.message ?? 'Please try again.'
+      description: signUpEmail.error.value.message || 'Please try again.'
+    })
+  }
+}
+
+async function onGitHubSignIn() {
+  await signInSocial.execute({
+    provider: 'github',
+    callbackURL: '/app',
+    newUserCallbackURL: '/app'
+  })
+
+  if (signInSocial.error.value) {
+    toast.add({
+      color: 'error',
+      title: 'GitHub signup failed',
+      description: signInSocial.error.value.message || 'Please try again.'
     })
   }
 }
