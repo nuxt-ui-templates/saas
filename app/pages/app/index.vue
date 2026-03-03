@@ -9,6 +9,35 @@ const { isSubscribed, isSubscriptionResolving, onUpgradeToPro, onManageSubscript
   productSlug
 })
 
+const {
+  items: todoItems,
+  maxItems: todoMaxItems,
+  remaining: todoRemaining,
+  canCreate: canCreateTodo,
+  status: todoStatus,
+  refresh: refreshTodos,
+  createTodo,
+  deleteTodo
+} = useTodos()
+
+const newTodoTitle = ref('')
+
+const isTodoLoading = computed(() => todoStatus.value === 'pending')
+const isTodoProPlan = computed(() => todoMaxItems.value === null)
+const isTodoLimitReached = computed(() => !isTodoProPlan.value && !canCreateTodo.value)
+const pendingTodoCount = computed(() => todoItems.value.length)
+const todoCountLabel = computed(() => `${pendingTodoCount.value} pending task${pendingTodoCount.value === 1 ? '' : 's'}`)
+
+watch(
+  () => [isSubscribed.value, todoMaxItems.value] as const,
+  async ([subscribed, maxItems]) => {
+    if (subscribed && maxItems !== null) {
+      await refreshTodos()
+    }
+  },
+  { immediate: true }
+)
+
 const dashboardItems = computed(() => [[{
   label: 'Overview',
   icon: 'i-lucide-layout-dashboard',
@@ -27,6 +56,14 @@ const dashboardItems = computed(() => [[{
   icon: 'i-lucide-credit-card',
   to: '/pricing'
 }]])
+
+async function onCreateTodo() {
+  const result = await createTodo(newTodoTitle.value)
+
+  if (result.success) {
+    newTodoTitle.value = ''
+  }
+}
 </script>
 
 <template>
@@ -114,7 +151,7 @@ const dashboardItems = computed(() => [[{
       <UPageBody>
         <UPageHeader
           title="Dashboard"
-          :description="user ? `Welcome back, ${user.name || user.email}` : undefined"
+          :description="`Welcome back, ${user?.name || user?.email}`"
         />
 
         <UPageGrid>
@@ -130,10 +167,103 @@ const dashboardItems = computed(() => [[{
           />
           <UPageCard
             title="Tasks"
-            description="0 pending tasks"
+            :description="isTodoLoading ? 'Loading tasks...' : todoCountLabel"
             icon="i-lucide-list-checks"
           />
         </UPageGrid>
+
+        <UPageCard
+          title="Todo list"
+          description="Each user has one list. Free users can create up to 3 todos."
+          icon="i-lucide-list-todo"
+          class="mt-6"
+        >
+          <div class="space-y-4">
+            <div class="flex flex-col gap-2 sm:flex-row">
+              <UInput
+                v-model="newTodoTitle"
+                placeholder="Add a todo"
+                class="flex-1"
+                :disabled="isTodoLimitReached"
+                @keydown.enter.prevent="onCreateTodo"
+              />
+              <UButton
+                label="Add"
+                icon="i-lucide-plus"
+                color="primary"
+                :disabled="!newTodoTitle.trim() || isTodoLimitReached"
+                @click="onCreateTodo"
+              />
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
+              <UBadge
+                :label="isTodoProPlan ? 'Pro plan' : 'Free plan'"
+                :color="isTodoProPlan ? 'success' : 'neutral'"
+                variant="soft"
+              />
+              <span v-if="todoMaxItems !== null">
+                {{ todoRemaining }} of {{ todoMaxItems }} slots left
+              </span>
+              <span v-else>
+                Unlimited todos
+              </span>
+            </div>
+
+            <div
+              v-if="isTodoLoading"
+              class="space-y-2"
+            >
+              <div class="h-9 rounded-md bg-elevated animate-pulse" />
+              <div class="h-9 rounded-md bg-elevated animate-pulse" />
+            </div>
+
+            <ul
+              v-else-if="todoItems.length"
+              class="space-y-2"
+            >
+              <li
+                v-for="todo in todoItems"
+                :key="todo.id"
+                class="flex items-center gap-3 rounded-md border border-default px-3 py-2"
+              >
+                <span
+                  class="flex-1 text-sm text-highlighted"
+                >
+                  {{ todo.title }}
+                </span>
+                <UButton
+                  icon="i-lucide-trash-2"
+                  color="error"
+                  variant="ghost"
+                  @click="deleteTodo(todo.id)"
+                />
+              </li>
+            </ul>
+
+            <p
+              v-else
+              class="text-sm text-muted"
+            >
+              No todos yet. Create your first one.
+            </p>
+
+            <div
+              v-if="isTodoLimitReached"
+              class="flex flex-col gap-2 rounded-md border border-warning/30 bg-warning/10 p-3 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <p class="text-sm text-highlighted">
+                Free plan limit reached. Upgrade to Pro for unlimited todos.
+              </p>
+              <UButton
+                label="Upgrade to Pro"
+                icon="i-lucide-sparkles"
+                color="primary"
+                @click="onUpgradeToPro"
+              />
+            </div>
+          </div>
+        </UPageCard>
       </UPageBody>
     </UPage>
   </UContainer>
