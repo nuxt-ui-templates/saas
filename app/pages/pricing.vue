@@ -67,7 +67,7 @@ const items = ref([
           v-for="icon in page.logos.icons"
           :key="icon"
           :name="icon"
-          class="w-12 h-12 flex-shrink-0 text-muted"
+          class="w-12 h-12 shrink-0 text-muted"
         />
       </UPageLogos>
     </UPageSection>
