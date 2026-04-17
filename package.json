@@ -13,7 +13,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.102",
     "@iconify-json/simple-icons": "^1.2.78",
-    "@nuxt/content": "^3.12.0",
+    "@nuxt/content": "^3.13.0",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.6.1",
     "@standard-schema/spec": "^1.1.0",
@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
-    "eslint": "^10.2.0",
-    "typescript": "^6.0.2",
+    "eslint": "^10.2.1",
+    "typescript": "^6.0.3",
     "vue-tsc": "^3.2.6"
   },
   "packageManager": "pnpm@10.33.0"
