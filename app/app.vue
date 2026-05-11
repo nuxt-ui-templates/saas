@@ -19,7 +19,6 @@ useHead({
 
 useSeoMeta({
   titleTemplate: '%s - Nuxt SaaS template',
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/saas-light.png',
   twitterCard: 'summary_large_image'
 })
 
