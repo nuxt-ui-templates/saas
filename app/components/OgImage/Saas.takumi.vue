@@ -30,13 +30,14 @@ defineProps<{
 
         <h1
           v-if="title"
-          class="text-6xl font-bold text-highlighted max-w-[900px]"
+          class="text-6xl font-bold text-highlighted"
         >
           {{ title }}
         </h1>
+
         <p
           v-if="description"
-          class="text-3xl/11 text-muted max-w-[750px]"
+          class="text-3xl/11 text-muted"
           :style="{ lineClamp: 2, textOverflow: 'ellipsis' }"
         >
           {{ description }}
