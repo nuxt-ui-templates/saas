@@ -19,7 +19,6 @@
     "@standard-schema/spec": "^1.1.0",
     "@takumi-rs/core": "^1.1.2",
     "@vueuse/nuxt": "^14.3.0",
-    "better-sqlite3": "^12.9.0",
     "nuxt": "^4.4.5",
     "nuxt-og-image": "^6.5.0",
     "tailwindcss": "^4.2.4",
