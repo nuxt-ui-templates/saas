@@ -20,7 +20,7 @@
     "@vueuse/nuxt": "^14.3.0",
     "better-sqlite3": "^12.9.0",
     "nuxt": "^4.4.5",
-    "nuxt-og-image": "^5.1.13",
+    "nuxt-og-image": "^6.0.0",
     "tailwindcss": "^4.2.4",
     "zod": "^4.4.3"
   },
