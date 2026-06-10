@@ -19,7 +19,7 @@
     "@standard-schema/spec": "^1.1.0",
     "@takumi-rs/core": "^1.7.0",
     "@vueuse/nuxt": "^14.3.0",
-    "nuxt": "^4.4.6",
+    "nuxt": "^4.4.8",
     "nuxt-og-image": "^6.5.2",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
