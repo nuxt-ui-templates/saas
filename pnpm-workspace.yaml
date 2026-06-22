@@ -5,3 +5,6 @@ allowBuilds:
   esbuild: false
   unrs-resolver: false
   vue-demi: false
+
+overrides:
+  h3: 1.15.11
