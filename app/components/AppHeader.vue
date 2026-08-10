@@ -24,7 +24,7 @@ const items = computed(() => [{
 </script>
 
 <template>
-  <UHeader :ui="{ right: 'gap-0.5' }">
+  <UHeader>
     <template #left>
       <NuxtLink to="/">
         <AppLogo class="w-auto h-6 shrink-0" />
