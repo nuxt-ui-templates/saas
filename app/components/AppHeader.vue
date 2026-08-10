@@ -24,11 +24,12 @@ const items = computed(() => [{
 </script>
 
 <template>
-  <UHeader>
+  <UHeader :ui="{ right: 'gap-0.5' }">
     <template #left>
       <NuxtLink to="/">
         <AppLogo class="w-auto h-6 shrink-0" />
       </NuxtLink>
+
       <TemplateMenu />
     </template>
 
@@ -38,12 +39,9 @@ const items = computed(() => [{
     />
 
     <template #right>
-      <UContentSearchButton
-        v-if="isDocs"
-        class="lg:hidden"
-      />
-
       <UColorModeButton />
+
+      <UContentSearchButton class="lg:hidden" />
 
       <UButton
         icon="i-lucide-log-in"
