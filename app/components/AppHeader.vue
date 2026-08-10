@@ -1,10 +1,16 @@
 <script setup lang="ts">
+import type { ContentNavigationItem } from '@nuxt/content'
+
 const route = useRoute()
+
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+
+const isDocs = computed(() => route.path.startsWith('/docs'))
 
 const items = computed(() => [{
   label: 'Docs',
   to: '/docs',
-  active: route.path.startsWith('/docs')
+  active: isDocs.value
 }, {
   label: 'Pricing',
   to: '/pricing'
@@ -32,6 +38,11 @@ const items = computed(() => [{
     />
 
     <template #right>
+      <UContentSearchButton
+        v-if="isDocs"
+        class="lg:hidden"
+      />
+
       <UColorModeButton />
 
       <UButton
@@ -65,6 +76,15 @@ const items = computed(() => [{
         orientation="vertical"
         class="-mx-2.5"
       />
+
+      <template v-if="isDocs">
+        <USeparator class="my-6" />
+
+        <UContentNavigation
+          :navigation="navigation"
+          highlight
+        />
+      </template>
 
       <USeparator class="my-6" />
 
