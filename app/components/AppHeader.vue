@@ -5,7 +5,7 @@ const route = useRoute()
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
-const isDocs = computed(() => route.path.startsWith('/docs'))
+const isDocs = computed(() => route.path === '/docs' || route.path.startsWith('/docs/'))
 
 const items = computed(() => [{
   label: 'Docs',
