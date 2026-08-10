@@ -5,7 +5,19 @@ const route = useRoute()
 
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
+const { open: searchOpen } = useContentSearch()
+
+const open = ref(false)
+
 const isDocs = computed(() => route.path === '/docs' || route.path.startsWith('/docs/'))
+
+// Both modals portal to `body` with no z-index, so after a client-side layout
+// change the menu can end up painted over the search
+watch(searchOpen, (value) => {
+  if (value) {
+    open.value = false
+  }
+})
 
 const items = computed(() => [{
   label: 'Docs',
@@ -24,7 +36,7 @@ const items = computed(() => [{
 </script>
 
 <template>
-  <UHeader>
+  <UHeader v-model:open="open">
     <template #left>
       <NuxtLink to="/">
         <AppLogo class="w-auto h-6 shrink-0" />
