@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { withoutTrailingSlash } from 'ufo'
-
-const route = useRoute()
-const path = computed(() => withoutTrailingSlash(route.path) || '/')
-
 const { data: page } = await useAsyncData('changelog', () => queryCollection('changelog').first())
-const { data: versions } = await useAsyncData(path.value, () => queryCollection('versions').order('date', 'DESC').all())
+const { data: versions } = await useAsyncData('versions', () => queryCollection('versions').order('date', 'DESC').all())
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
