@@ -6,15 +6,15 @@ definePageMeta({
 })
 
 const route = useRoute()
-const path = computed(() => withoutTrailingSlash(route.path) || '/')
+const routePath = computed(() => withoutTrailingSlash(route.path))
 
-const { data: page } = await useAsyncData(path.value, () => queryCollection('docs').path(path.value).first())
+const { data: page } = await useAsyncData(routePath.value, () => queryCollection('docs').path(routePath.value).first())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${path.value}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', path.value, {
+const { data: surround } = await useAsyncData(`${routePath.value}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', routePath.value, {
     fields: ['description']
   })
 })

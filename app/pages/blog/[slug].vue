@@ -2,15 +2,15 @@
 import { withoutTrailingSlash } from 'ufo'
 
 const route = useRoute()
-const path = computed(() => withoutTrailingSlash(route.path) || '/')
+const routePath = computed(() => withoutTrailingSlash(route.path))
 
-const { data: post } = await useAsyncData(path.value, () => queryCollection('posts').path(path.value).first())
+const { data: post } = await useAsyncData(routePath.value, () => queryCollection('posts').path(routePath.value).first())
 if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: 'Post not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${path.value}-surround`, () => {
-  return queryCollectionItemSurroundings('posts', path.value, {
+const { data: surround } = await useAsyncData(`${routePath.value}-surround`, () => {
+  return queryCollectionItemSurroundings('posts', routePath.value, {
     fields: ['description']
   })
 })
