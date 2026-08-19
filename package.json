@@ -22,6 +22,7 @@
     "nuxt": "^4.5.2",
     "nuxt-og-image": "^6.7.8",
     "tailwindcss": "^4.3.3",
+    "ufo": "^1.6.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
