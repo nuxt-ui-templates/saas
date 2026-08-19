@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { withoutTrailingSlash } from 'ufo'
+
 const route = useRoute()
+const path = computed(() => withoutTrailingSlash(route.path) || '/')
 
 const { data: page } = await useAsyncData('blog', () => queryCollection('blog').first())
-const { data: posts } = await useAsyncData(route.path, () => queryCollection('posts').all())
+const { data: posts } = await useAsyncData(path.value, () => queryCollection('posts').all())
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description

@@ -1,17 +1,20 @@
 <script setup lang="ts">
+import { withoutTrailingSlash } from 'ufo'
+
 definePageMeta({
   layout: 'docs'
 })
 
 const route = useRoute()
+const path = computed(() => withoutTrailingSlash(route.path) || '/')
 
-const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
+const { data: page } = await useAsyncData(path.value, () => queryCollection('docs').path(path.value).first())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', route.path, {
+const { data: surround } = await useAsyncData(`${path.value}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', path.value, {
     fields: ['description']
   })
 })

@@ -1,13 +1,16 @@
 <script setup lang="ts">
-const route = useRoute()
+import { withoutTrailingSlash } from 'ufo'
 
-const { data: post } = await useAsyncData(route.path, () => queryCollection('posts').path(route.path).first())
+const route = useRoute()
+const path = computed(() => withoutTrailingSlash(route.path) || '/')
+
+const { data: post } = await useAsyncData(path.value, () => queryCollection('posts').path(path.value).first())
 if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: 'Post not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('posts', route.path, {
+const { data: surround } = await useAsyncData(`${path.value}-surround`, () => {
+  return queryCollectionItemSurroundings('posts', path.value, {
     fields: ['description']
   })
 })
