@@ -44,6 +44,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
+      ufo:
+        specifier: ^1.6.4
+        version: 1.6.4
       zod:
         specifier: ^4.4.3
         version: 4.4.3
