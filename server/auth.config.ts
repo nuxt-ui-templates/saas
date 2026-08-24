@@ -23,7 +23,7 @@ export default defineServerAuth(({ runtimeConfig }) => ({
         accessToken: runtimeConfig.polar?.accessToken ?? '',
         server: 'sandbox'
       }),
-      createCustomerOnSignUp: true,
+      createCustomerOnSignUp: Boolean(runtimeConfig.polar?.accessToken),
       use: [
         checkout({
           products: [{
