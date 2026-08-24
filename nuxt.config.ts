@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxthub/core',
-    '@onmax/nuxt-better-auth',
+    '@nuxtjs/better-auth',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
@@ -23,11 +23,19 @@ export default defineNuxtConfig({
     }
   },
 
+  runtimeConfig: {
+    githubClient: {
+      id: '',
+      secret: ''
+    }
+  },
+
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false },
     '/login': { auth: { only: 'guest' } },
     '/signup': { auth: { only: 'guest' } },
-    '/app/**': { auth: 'user' }
+    '/app': { auth: 'user', prerender: false },
+    '/app/**': { auth: 'user', prerender: false }
   },
 
   compatibilityDate: '2026-06-30',
@@ -42,12 +50,10 @@ export default defineNuxtConfig({
   },
 
   hub: {
-    db: 'sqlite',
-    kv: true
+    db: 'sqlite'
   },
 
   auth: {
-    hubSecondaryStorage: true,
     redirects: {
       login: '/login',
       guest: '/app',
