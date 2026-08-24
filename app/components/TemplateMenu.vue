@@ -29,6 +29,12 @@
     }, {
       label: 'Changelog',
       to: 'https://changelog-template.nuxt.dev/'
+    }, {
+      label: 'Editor',
+      to: 'https://editor-template.nuxt.dev/'
+    }, {
+      label: 'Calendar',
+      to: 'https://calendar-template.nuxt.dev/'
     }]"
     :content="{ align: 'start' }"
     :ui="{ content: 'min-w-fit' }"

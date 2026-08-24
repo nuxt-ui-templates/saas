@@ -9,7 +9,8 @@ useSeoMeta({
   title,
   ogTitle: title,
   description,
-  ogDescription: description
+  ogDescription: description,
+  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/saas-light.png'
 })
 </script>
 

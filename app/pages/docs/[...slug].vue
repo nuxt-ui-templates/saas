@@ -1,17 +1,20 @@
 <script setup lang="ts">
+import { withoutTrailingSlash } from 'ufo'
+
 definePageMeta({
   layout: 'docs'
 })
 
 const route = useRoute()
+const routePath = computed(() => withoutTrailingSlash(route.path))
 
-const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
+const { data: page } = await useAsyncData(routePath.value, () => queryCollection('docs').path(routePath.value).first())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
-  return queryCollectionItemSurroundings('docs', route.path, {
+const { data: surround } = await useAsyncData(`${routePath.value}-surround`, () => {
+  return queryCollectionItemSurroundings('docs', routePath.value, {
     fields: ['description']
   })
 })
@@ -26,7 +29,7 @@ useSeoMeta({
   ogDescription: description
 })
 
-defineOgImageComponent('Saas')
+defineOgImage('Saas', { title, description, headline: 'Docs' })
 </script>
 
 <template>
