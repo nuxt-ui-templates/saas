@@ -19,6 +19,8 @@
     "@nuxt/ui": "^4.11.0",
     "@nuxthub/core": "^0.10.8",
     "@nuxtjs/better-auth": "^0.1.4",
+    "@polar-sh/better-auth": "^1.8.1",
+    "@polar-sh/sdk": "^0.47.1",
     "@standard-schema/spec": "^1.1.0",
     "@takumi-rs/core": "^1.8.7",
     "@vueuse/nuxt": "^14.4.0",
