@@ -28,6 +28,7 @@ export default defineNuxtConfig({
       id: '',
       secret: ''
     },
+    freeTodoLimit: 3,
     polar: {
       accessToken: '',
       returnUrl: ''

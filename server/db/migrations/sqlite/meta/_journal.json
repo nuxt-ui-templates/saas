@@ -15,6 +15,13 @@
       "when": 1787563679674,
       "tag": "0001_strange_layla_miller",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787563773408,
+      "tag": "0002_stiff_glorian",
+      "breakpoints": true
     }
   ]
 }
