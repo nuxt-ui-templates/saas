@@ -61,7 +61,9 @@ export default defineNuxtConfig({
   },
 
   hub: {
-    db: 'sqlite'
+    db: process.env.POSTGRES_URL
+      ? { dialect: 'postgresql', driver: 'postgres-js' }
+      : 'sqlite'
   },
 
   auth: {

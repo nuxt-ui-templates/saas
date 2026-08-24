@@ -15,14 +15,23 @@ export default defineEventHandler(async (event) => {
   const maxItems = await resolveTodoMaxItems(event, user.id)
   const id = crypto.randomUUID()
 
-  const [inserted] = await db.all<{ id: string }>(sql`
+  const query = sql<{ id: string }>`
     insert into todo_item (id, "userId", title)
     select ${id}, ${user.id}, ${title}
-    where ${maxItems} is null or (
-      select count(*) from todo_item where "userId" = ${user.id}
-    ) < ${maxItems}
+    where ${maxItems === null
+      ? sql`true`
+      : sql`(select count(*) from todo_item where "userId" = ${user.id}) < ${maxItems}`}
     returning id
-  `)
+  `
+  type QueryExecutor = (rawQuery: typeof query) => Promise<Array<{ id: string }>>
+  const rawDb = db as unknown as { all?: QueryExecutor, execute?: QueryExecutor }
+  const executeQuery = rawDb.all ?? rawDb.execute
+
+  if (!executeQuery) {
+    throw new Error('Database does not support raw queries')
+  }
+
+  const [inserted] = await executeQuery.call(db, query)
 
   if (!inserted) {
     throw createError({

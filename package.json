@@ -28,6 +28,7 @@
     "drizzle-orm": "^0.45.2",
     "nuxt": "^4.5.2",
     "nuxt-og-image": "^6.7.8",
+    "postgres": "3.4.7",
     "tailwindcss": "^4.3.3",
     "ufo": "^1.6.4",
     "zod": "^4.4.3"
