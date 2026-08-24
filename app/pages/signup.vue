@@ -12,8 +12,9 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const signUpEmail = useUserSignUp('email')
+const signUpEmail = useSignUp('email')
 const isSignUpPending = computed(() => signUpEmail.status.value === 'pending')
+const providers = useGitHubProvider()
 
 const fields = [{
   name: 'name',
@@ -32,16 +33,6 @@ const fields = [{
   placeholder: 'Enter your password'
 }]
 
-const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  disabled: true
-}, {
-  label: 'GitHub',
-  icon: 'i-simple-icons-github',
-  disabled: true
-}]
-
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.email('Invalid email'),
@@ -57,11 +48,11 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     password: payload.data.password
   })
 
-  if (signUpEmail.status.value === 'error') {
+  if (signUpEmail.error.value) {
     toast.add({
       color: 'error',
       title: 'Sign up failed',
-      description: signUpEmail.error.value?.message ?? 'Please try again.'
+      description: signUpEmail.error.value.message || 'Please try again.'
     })
   }
 }

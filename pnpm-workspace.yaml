@@ -2,13 +2,12 @@ allowBuilds:
   sharp: true
   '@parcel/watcher': false
   '@tailwindcss/oxide': false
-  esbuild: false
-  unrs-resolver: false
-  vue-demi: false
   '@prisma/client': false
   '@prisma/engines': false
-  better-sqlite3: true
+  better-sqlite3: false
+  esbuild: false
   prisma: false
-
+  unrs-resolver: false
+  vue-demi: false
 overrides:
   h3: 1.15.11
