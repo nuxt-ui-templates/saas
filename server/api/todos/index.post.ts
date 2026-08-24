@@ -1,5 +1,21 @@
-import { sql } from 'drizzle-orm'
+import { sql, type SQL } from 'drizzle-orm'
 import { z } from 'zod'
+
+type TodoInsert = { id: string }
+
+async function executeQuery(database: unknown, query: SQL): Promise<TodoInsert[]> {
+  const rawDb = database as {
+    all?: (rawQuery: SQL) => Promise<TodoInsert[]>
+    execute?: (rawQuery: SQL) => Promise<TodoInsert[]>
+  }
+  const execute = rawDb.all ?? rawDb.execute
+
+  if (!execute) {
+    throw new Error('Database does not support raw queries')
+  }
+
+  return execute.call(database, query)
+}
 
 const createTodoSchema = z.object({
   title: z
@@ -23,15 +39,13 @@ export default defineEventHandler(async (event) => {
       : sql`(select count(*) from todo_item where "userId" = ${user.id}) < ${maxItems}`}
     returning id
   `
-  type QueryExecutor = (rawQuery: typeof query) => Promise<Array<{ id: string }>>
-  const rawDb = db as unknown as { all?: QueryExecutor, execute?: QueryExecutor }
-  const executeQuery = rawDb.all ?? rawDb.execute
-
-  if (!executeQuery) {
-    throw new Error('Database does not support raw queries')
-  }
-
-  const [inserted] = await executeQuery.call(db, query)
+  const [inserted] = maxItems !== null && process.env.POSTGRES_URL
+    ? await db.transaction(async (transaction) => {
+        // A separate lock statement gives READ COMMITTED a fresh snapshot before the quota check.
+        await executeQuery(transaction, sql`select id from "user" where id = ${user.id} for update`)
+        return executeQuery(transaction, query)
+      })
+    : await executeQuery(db, query)
 
   if (!inserted) {
     throw createError({
