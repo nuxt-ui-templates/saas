@@ -1,8 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    '@nuxthub/core',
-    '@onmax/nuxt-better-auth',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
@@ -17,14 +15,17 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  routeRules: {
-    '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/login': { auth: { only: 'guest' } },
-    '/signup': { auth: { only: 'guest' } },
-    '/app/**': { auth: 'user' }
+  content: {
+    experimental: {
+      sqliteConnector: 'native'
+    }
   },
 
-  compatibilityDate: '2026-02-19',
+  routeRules: {
+    '/docs': { redirect: '/docs/getting-started', prerender: false }
+  },
+
+  compatibilityDate: '2026-06-30',
 
   nitro: {
     prerender: {
@@ -35,21 +36,6 @@ export default defineNuxtConfig({
     }
   },
 
-  hub: {
-    db: 'sqlite',
-    kv: true
-  },
-
-  auth: {
-    hubSecondaryStorage: true,
-    redirects: {
-      login: '/login',
-      guest: '/app',
-      authenticated: '/app',
-      logout: '/'
-    }
-  },
-
   eslint: {
     config: {
       stylistic: {
@@ -57,5 +43,9 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  ogImage: {
+    zeroRuntime: true
   }
 })
