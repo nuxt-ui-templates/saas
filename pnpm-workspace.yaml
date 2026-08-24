@@ -5,6 +5,10 @@ allowBuilds:
   esbuild: false
   unrs-resolver: false
   vue-demi: false
+  '@prisma/client': false
+  '@prisma/engines': false
+  better-sqlite3: true
+  prisma: false
 
 overrides:
   h3: 1.15.11

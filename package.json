@@ -13,20 +13,28 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.125",
     "@iconify-json/simple-icons": "^1.2.93",
+    "@libsql/client": "^0.17.0",
     "@nuxt/content": "^3.15.2",
     "@nuxt/image": "^2.1.0",
     "@nuxt/ui": "^4.11.0",
+    "@nuxthub/core": "https://pkg.pr.new/@nuxthub/core@831",
+    "@onmax/nuxt-better-auth": "0.0.2-alpha.29",
     "@standard-schema/spec": "^1.1.0",
     "@takumi-rs/core": "^1.8.7",
     "@vueuse/nuxt": "^14.4.0",
+    "better-auth": "1.5.0-beta.13",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.2",
     "nuxt": "^4.5.2",
     "nuxt-og-image": "^6.7.8",
     "tailwindcss": "^4.3.3",
     "ufo": "^1.6.4",
+    "unstorage": "^1.17.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^10.9.0",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.11"
