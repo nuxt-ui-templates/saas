@@ -62,6 +62,9 @@ importers:
       nuxt-og-image:
         specifier: ^6.7.8
         version: 6.7.8(00573b4d4b6f54aab68f2fff1ef9fa9d)
+      postgres:
+        specifier: 3.4.7
+        version: 3.4.7
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -16508,8 +16511,7 @@ snapshots:
       xtend: 4.0.2
     optional: true
 
-  postgres@3.4.7:
-    optional: true
+  postgres@3.4.7: {}
 
   powershell-utils@0.1.0: {}
 

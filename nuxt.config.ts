@@ -28,6 +28,7 @@ export default defineNuxtConfig({
       id: '',
       secret: ''
     },
+    freeTodoLimit: 3,
     polar: {
       accessToken: '',
       returnUrl: ''
@@ -60,7 +61,9 @@ export default defineNuxtConfig({
   },
 
   hub: {
-    db: 'sqlite'
+    db: process.env.POSTGRES_URL
+      ? { dialect: 'postgresql', driver: 'postgres-js' }
+      : 'sqlite'
   },
 
   auth: {
