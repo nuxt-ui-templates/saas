@@ -1,5 +1,5 @@
 title: A plan for every need
-description: Our plans are designed to meet the requirements of both beginners and players. Get the right plan that suits you.
+description: Our plans are designed to meet the requirements of both individuals and teams. Get the right plan that suits you.
 seo:
   title: Pricing
   description: Choose the plan that's right for you.
@@ -59,24 +59,24 @@ plans:
 logos:
   title: Trusted by the world's best
   icons:
-    - i-simple-icons-amazonaws
+    - i-simple-icons-amazonwebservices
     - i-simple-icons-heroku
     - i-simple-icons-netlify
     - i-simple-icons-vercel
     - i-simple-icons-cloudflare
 faq:
   title: Frequently asked questions
-  description: Culpa consectetur dolor pariatur commodo aliqua amet tempor nisi enim deserunt elit cillum.
+  description: Everything you need to know about our plans and billing. Can't find the answer you're looking for? Reach out to our support team.
   items:
     - label: Is this a secure service?
-      content: Qui sunt nostrud aliquip reprehenderit enim proident veniam magna aliquip velit occaecat eiusmod nisi deserunt sunt.
+      content: Yes. All data is encrypted in transit and at rest, and every plan includes SSL certificates. We follow industry best practices to keep your data safe.
     - label: How can I cancel my subscription?
-      content: Consectetur irure Lorem nostrud adipisicing aliqua mollit Lorem sit officia magna eiusmod cupidatat.
+      content: You can cancel anytime from your account settings. Your plan stays active until the end of the current billing period and you won't be charged again.
     - label: How does the free trial work?
-      content: Quis officia commodo magna eu qui aliquip duis.
+      content: Every plan comes with a 14-day free trial, no credit card required. Upgrade whenever you're ready and keep everything you've set up.
     - label: Can I switch plans later?
-      content: Dolore irure ullamco dolore eu occaecat magna eiusmod dolor aliqua culpa labore.
+      content: Yes, you can upgrade or downgrade at any time. Changes take effect immediately and we prorate the difference on your next invoice.
     - label: Do you offer refunds?
-      content: Duis mollit nostrud voluptate mollit Lorem dolore commodo veniam incididunt eiusmod.
+      content: If you're not satisfied within the first 30 days, contact us and we'll issue a full refund, no questions asked.
     - label: Do you offer support?
-      content: Aliqua sit nisi consequat pariatur Lorem minim irure qui.
+      content: All plans include email support. The Standard and Premium plans also come with priority support and faster response times.
