@@ -33,7 +33,7 @@ sections:
         icon: i-lucide-shield
       - name: TypeScript First
         description: Full TypeScript support with auto-completion, type safety, and IntelliSense for every component and composable.
-        icon: i-lucide-code-2
+        icon: i-lucide-code-xml
   - title: Built for Modern SaaS
     description: Everything you need to launch and scale your SaaS. From beautiful marketing pages to complex dashboards, ship faster with production-ready patterns.
     orientation: horizontal
@@ -66,7 +66,7 @@ features:
       icon: i-lucide-search
     - title: Production Ready
       description: Error handling, loading states, form validation, and security best practices built into every component.
-      icon: i-lucide-check-circle
+      icon: i-lucide-circle-check
     - title: Infinitely Customizable
       description: Override any style with the ui prop, customize globally with AppConfig, or use Tailwind classes directly.
       icon: i-lucide-settings
