@@ -18,7 +18,7 @@
     "@nuxt/ui": "^4.11.1",
     "@standard-schema/spec": "^1.1.0",
     "@takumi-rs/core": "^2.14.0",
-    "@vueuse/nuxt": "^14.4.0",
+    "@vueuse/nuxt": "^15.0.0",
     "nuxt": "^4.5.2",
     "nuxt-og-image": "^6.8.0",
     "tailwindcss": "^4.3.3",
