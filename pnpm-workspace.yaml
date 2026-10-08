@@ -7,4 +7,4 @@ allowBuilds:
   vue-demi: false
 
 overrides:
-  h3: 1.15.11
+  h3: 2.0.2
