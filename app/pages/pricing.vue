@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('pricing', () => queryCollection('pricing').first())
+import type { PricingPage } from '~/types'
+
+const { data: page } = await useAsyncData('pricing', () => content.get<PricingPage>('/pricing').then(file => file?.data))
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description

@@ -1,6 +1,13 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('changelog', () => queryCollection('changelog').first())
-const { data: versions } = await useAsyncData('versions', () => queryCollection('versions').order('date', 'DESC').all())
+const { data: page } = await useAsyncData('changelog', () => content.get('/changelog').then(file => file?.data))
+// `list()` returns entries without their body, so each version is loaded with `get()` to render it.
+const { data: versions } = await useAsyncData('versions', async () => {
+  const files = await content.list()
+  const entries = files
+    .filter(file => file.path.startsWith('/changelog/'))
+    .sort((a, b) => String(b.data.date).localeCompare(String(a.data.date)))
+  return Promise.all(entries.map(entry => content.get(entry.path)))
+})
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -27,10 +34,13 @@ defineOgImage('Saas', { title, description })
         <UChangelogVersion
           v-for="(version, index) in versions"
           :key="index"
-          v-bind="version"
+          v-bind="version?.data"
         >
           <template #body>
-            <ContentRenderer :value="version.body" />
+            <ContentRenderer
+              v-if="version"
+              :value="version"
+            />
           </template>
         </UChangelogVersion>
       </UChangelogVersions>

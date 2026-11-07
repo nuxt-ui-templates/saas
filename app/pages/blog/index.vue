@@ -1,6 +1,11 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('blog', () => queryCollection('blog').first())
-const { data: posts } = await useAsyncData('posts', () => queryCollection('posts').all())
+import type { BlogPost } from '~/types'
+
+const { data: page } = await useAsyncData('blog', () => content.get('/blog').then(file => file?.data))
+const { data: posts } = await useAsyncData('posts', async () => {
+  const files = await content.list<BlogPost>()
+  return files.filter(file => file.path.startsWith('/blog/'))
+})
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
@@ -28,12 +33,12 @@ defineOgImage('Saas', { title, description })
           v-for="(post, index) in posts"
           :key="index"
           :to="post.path"
-          :title="post.title"
-          :description="post.description"
-          :image="post.image"
-          :date="new Date(post.date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })"
-          :authors="post.authors"
-          :badge="post.badge"
+          :title="post.data.title"
+          :description="post.data.description"
+          :image="post.data.image"
+          :date="new Date(post.data.date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })"
+          :authors="post.data.authors"
+          :badge="post.data.badge"
           :orientation="index === 0 ? 'horizontal' : 'vertical'"
           :class="[index === 0 && 'col-span-full']"
           variant="naked"

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
+import type { IndexPage } from '~/types'
+
+const { data: page } = await useAsyncData('index', () => content.get<IndexPage>('/').then(file => file?.data))
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description

@@ -22,10 +22,12 @@ useSeoMeta({
   twitterCard: 'summary_large_image'
 })
 
-const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'), {
+const { data: navigation } = await useAsyncData('navigation', () => content.navigation(), {
   transform: data => data.find(item => item.path === '/docs')?.children || []
 })
-const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('docs'), {
+// v4 has no native search-sections API, so this stays on the v3 compatibility layer.
+// Everything lives in one `content` source now, so the search is scoped to the docs.
+const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('content').where('path', 'LIKE', '/docs%'), {
   server: false
 })
 
