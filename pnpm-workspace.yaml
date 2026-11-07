@@ -8,3 +8,11 @@ allowBuilds:
 
 overrides:
   h3: 1.15.11
+  # Temporary: the Nuxt Content v4 preview depends on a preview of comark `main` for its
+  # `heading-links` plugin, while `@comark/vue` still pulls comark 0.8.1. Two copies of comark
+  # break the Nitro server build. Remove once comark releases the plugin.
+  comark: https://pkg.pr.new/comark@d6705ce
+
+# Temporary: lets the `comark` override above apply to subdependencies, so the app has a single
+# comark. Remove together with the override.
+blockExoticSubdeps: false
