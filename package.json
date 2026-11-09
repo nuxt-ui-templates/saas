@@ -11,7 +11,7 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.150",
+    "@iconify-json/lucide": "^1.2.152",
     "@iconify-json/simple-icons": "^1.2.101",
     "@nuxt/content": "^3.16.2",
     "@nuxt/image": "^2.2.1",
@@ -21,7 +21,7 @@
     "@vueuse/nuxt": "^14.4.0",
     "nuxt": "^4.6.4",
     "nuxt-og-image": "^7.0.7",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "ufo": "^1.6.4",
     "zod": "^4.6.7"
   },
@@ -32,5 +32,5 @@
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.14"
   },
-  "packageManager": "pnpm@12.16.1"
+  "packageManager": "pnpm@12.18.0"
 }
