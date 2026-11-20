@@ -7,4 +7,4 @@ allowBuilds:
   vue-demi: false
 
 minimumReleaseAgeExclude:
-  - '@nuxtjs/mdc@0.23.3'
+  - '@nuxt/ui'
