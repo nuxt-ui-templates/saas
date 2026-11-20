@@ -21,6 +21,17 @@ export default defineNuxtConfig({
     }
   },
 
+  ui: {
+    eslint: {
+      ignore: ['^stars$', '^star-layer$', '^star$'],
+      rules: {
+        'no-unknown-classes': 'error',
+        'no-conflicting-classes': 'error',
+        'no-palette-colors': 'error'
+      }
+    }
+  },
+
   routeRules: {
     '/docs': { redirect: '/docs/getting-started', prerender: false }
   },
