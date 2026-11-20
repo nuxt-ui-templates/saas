@@ -6,8 +6,5 @@ allowBuilds:
   unrs-resolver: false
   vue-demi: false
 
-overrides:
-  h3: 1.15.11
-
 minimumReleaseAgeExclude:
   - '@nuxtjs/mdc@0.23.3'
