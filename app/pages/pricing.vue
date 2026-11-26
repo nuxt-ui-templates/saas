@@ -17,7 +17,7 @@ const isYearly = ref('0')
 
 // Only reads plain prices like `$9.90`, anything else hides the badge
 function parsePrice(value: string) {
-  const match = value.match(/^\D*(\d+(?:\.\d+)?)\D*$/)
+  const match = value.match(/^[^\d.,]*(\d+(?:\.\d+)?)[^\d.,]*$/)
 
   return match ? Number(match[1]) : undefined
 }
