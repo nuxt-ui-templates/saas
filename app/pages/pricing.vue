@@ -54,8 +54,9 @@ const items = computed(() => [{
       :description="page.description"
       orientation="horizontal"
       :ui="{
-        container: 'py-16 sm:py-24 lg:py-28 lg:grid-cols-[1fr_auto] lg:items-end',
-        title: 'text-5xl sm:text-6xl lg:text-7xl'
+        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16 lg:grid-cols-[1fr_auto] lg:items-end',
+        title: 'max-w-xl text-5xl sm:text-6xl lg:text-7xl',
+        description: 'max-w-xl'
       }"
     >
       <UTabs
@@ -76,15 +77,30 @@ const items = computed(() => [{
           <UPricingPlan
             v-for="(plan, index) in page.plans"
             :key="index"
-            v-bind="plan"
+            :title="plan.title"
+            :description="plan.description"
+            :badge="plan.badge ? { label: plan.badge, variant: 'solid', class: 'font-mono' } : undefined"
+            :features="plan.features.map(feature => ({ title: feature, icon: 'i-lucide-check' }))"
+            :button="{ ...plan.button, size: 'xl' }"
             :price="isYearly === '1' ? plan.price.year : plan.price.month"
-            :billing-cycle="isYearly === '1' ? '/year' : '/month'"
-            :variant="plan.highlight ? 'solid' : 'outline'"
-            :highlight="false"
+            :billing-cycle="isYearly === '1' ? '/ year' : '/ month'"
+            variant="outline"
+            :class="plan.highlight && 'dark in-[.dark]:bg-muted'"
             :ui="{
-              root: plan.highlight ? 'rounded-none ring-0' : 'rounded-none ring-0 bg-transparent',
-              title: 'text-xl sm:text-2xl tracking-tight',
-              price: 'text-5xl sm:text-6xl tracking-tighter'
+              root: 'flex flex-col gap-0 rounded-none ring-0 bg-default p-8 lg:p-10',
+              body: 'contents',
+              titleWrapper: 'justify-between',
+              title: 'text-xl sm:text-xl tracking-tight',
+              description: 'text-[15px]',
+              priceWrapper: 'mt-8 items-baseline gap-1.5',
+              price: 'text-5xl sm:text-6xl tracking-tighter',
+              billing: 'flex-row',
+              billingPeriod: 'hidden',
+              billingCycle: 'text-[15px] font-normal',
+              footer: 'mt-8',
+              features: 'order-last mt-8 pt-8 border-t border-default gap-3',
+              featureIcon: plan.highlight ? 'size-4 text-primary' : 'size-4 text-highlighted',
+              featureTitle: 'text-sm text-default'
             }"
           />
         </UPricingPlans>
@@ -107,9 +123,11 @@ const items = computed(() => [{
         :unmount-on-hide="false"
         :default-value="'0'"
         class="border-t border-default"
+        trailing-icon="i-lucide-plus"
         :ui="{
           trigger: 'text-base text-highlighted py-5',
-          body: 'text-base text-muted pb-5'
+          trailingIcon: 'size-5 text-highlighted group-data-[state=open]:rotate-45',
+          body: 'text-base text-muted pb-5 pe-12'
         }"
       />
     </UPageSection>

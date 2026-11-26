@@ -3,7 +3,6 @@ defineProps<{
   title: string
   items: {
     label: string
-    icon: string
   }[]
 }>()
 </script>
@@ -19,12 +18,8 @@ defineProps<{
         <li
           v-for="item in items"
           :key="item.label"
-          class="flex items-center gap-2 font-mono text-sm font-medium uppercase tracking-wider text-toned"
+          class="font-mono text-sm font-medium uppercase tracking-wider text-highlighted"
         >
-          <UIcon
-            :name="item.icon"
-            class="size-4.5 shrink-0"
-          />
           {{ item.label }}
         </li>
       </ul>

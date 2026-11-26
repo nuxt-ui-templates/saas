@@ -22,28 +22,30 @@ defineOgImage('Saas', { title, description })
       :title="page.title"
       :description="page.description"
       :ui="{
-        container: 'py-16 sm:py-24 lg:py-28',
-        title: 'text-5xl sm:text-6xl lg:text-7xl'
+        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16',
+        title: 'max-w-xl text-5xl sm:text-6xl lg:text-7xl',
+        description: 'max-w-md'
       }"
     />
 
     <section class="border-b border-default">
       <UContainer class="border-x border-default py-16 sm:py-24">
-        <UChangelogVersions>
+        <UChangelogVersions :ui="{ indicator: 'start-40' }">
           <UChangelogVersion
             v-for="(version, index) in versions"
             :key="index"
             v-bind="version"
-            :badge="index === 0 ? { label: 'Latest', color: 'primary', variant: 'solid' } : undefined"
+            :badge="index === 0 ? { label: 'Latest', color: 'primary', variant: 'solid', class: 'font-mono' } : undefined"
             :ui="{
+              container: 'max-w-none lg:ms-48',
+              indicator: 'w-40',
               date: 'font-mono',
-              title: 'text-2xl tracking-tight'
+              title: 'text-2xl sm:text-[1.625rem] tracking-tight',
+              description: 'text-base max-w-2xl mt-2',
+              imageWrapper: 'aspect-[2/1] mt-6',
+              dotInner: index === 0 ? 'bg-primary' : 'hidden'
             }"
-          >
-            <template #body>
-              <ContentRenderer :value="version.body" />
-            </template>
-          </UChangelogVersion>
+          />
         </UChangelogVersions>
       </UContainer>
     </section>

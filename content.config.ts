@@ -34,8 +34,7 @@ const createImageSchema = () => z.object({
 const createLogosSchema = () => z.object({
   title: z.string().nonempty(),
   items: z.array(z.object({
-    label: z.string().nonempty(),
-    icon: z.string().nonempty().editor({ input: 'icon' })
+    label: z.string().nonempty()
   }))
 })
 
@@ -68,11 +67,6 @@ export const collections = {
         title: z.string().nonempty(),
         description: z.string().optional(),
         features: z.array(createFeatureItemSchema()),
-        code: z.object({
-          filename: z.string().optional(),
-          language: z.string().optional(),
-          value: z.string().nonempty()
-        }),
         caption: z.string().optional()
       }),
       testimonials: z.object({
@@ -96,6 +90,10 @@ export const collections = {
         links: z.array(createLinkSchema())
       })
     })
+  }),
+  snippets: defineCollection({
+    source: '0.snippets/*.md',
+    type: 'page'
   }),
   docs: defineCollection({
     source: '1.docs/**/*',

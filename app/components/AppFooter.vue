@@ -70,7 +70,10 @@ function onSubmit() {
           :columns="columns"
           :ui="{
             root: 'xl:gap-16',
-            label: 'font-mono text-xs font-normal uppercase tracking-wider text-muted'
+            label: 'font-mono text-xs font-normal uppercase tracking-wider text-muted',
+            list: 'mt-5 space-y-3',
+            link: 'text-[15px]',
+            linkLabelExternalIcon: 'hidden'
           }"
         >
           <template #left>
@@ -82,7 +85,7 @@ function onSubmit() {
               <AppLogo class="w-auto h-6 shrink-0" />
             </NuxtLink>
 
-            <p class="mt-4 text-sm text-muted">
+            <p class="mt-4 text-[15px] text-muted">
               A Nuxt UI template for shipping SaaS products.
             </p>
 
@@ -93,6 +96,7 @@ function onSubmit() {
               <UFormField
                 name="email"
                 label="Subscribe to our newsletter"
+                size="xl"
               >
                 <div class="flex gap-2">
                   <UInput
@@ -106,6 +110,7 @@ function onSubmit() {
                   <UButton
                     type="submit"
                     color="neutral"
+                    size="xl"
                     label="Subscribe"
                   />
                 </div>

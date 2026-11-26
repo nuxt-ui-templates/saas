@@ -65,15 +65,10 @@ logos:
   title: Deploys anywhere Nuxt runs
   items:
     - label: Vercel
-      icon: i-simple-icons-vercel
     - label: Netlify
-      icon: i-simple-icons-netlify
     - label: Cloudflare
-      icon: i-simple-icons-cloudflare
     - label: AWS
-      icon: i-simple-icons-amazonwebservices
     - label: Heroku
-      icon: i-simple-icons-heroku
 faq:
   title: Questions, answered.
   description: Everything you need to know about our plans and billing. Can't find the answer you're looking for? Reach out to our support team.

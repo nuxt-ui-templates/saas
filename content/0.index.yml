@@ -29,17 +29,11 @@ logos:
   title: Deploys anywhere Nuxt runs
   items:
     - label: Vercel
-      icon: i-simple-icons-vercel
     - label: Netlify
-      icon: i-simple-icons-netlify
     - label: Cloudflare
-      icon: i-simple-icons-cloudflare
     - label: AWS
-      icon: i-simple-icons-amazonwebservices
     - label: Node.js
-      icon: i-simple-icons-nodedotjs
     - label: Bun
-      icon: i-simple-icons-bun
 features:
   headline: 01 / Components
   title: Every piece of a SaaS, already built.
@@ -76,23 +70,6 @@ foundations:
     - title: SEO built in
       description: Meta tags, sitemap and generated Open Graph images for every page.
       icon: i-lucide-search
-  code:
-    filename: app/app.config.ts
-    language: ts
-    value: |
-      export default defineAppConfig({
-        ui: {
-          colors: {
-            primary: 'green',
-            neutral: 'zinc'
-          },
-          button: {
-            defaultVariants: {
-              size: 'lg'
-            }
-          }
-        }
-      })
   caption: One file to rebrand every page of the template.
 testimonials:
   headline: 03 / Developers

@@ -46,16 +46,18 @@ const items = computed(() => [{
       </NuxtLink>
 
       <TemplateMenu />
+
+      <UNavigationMenu
+        :items="items"
+        variant="pill"
+        color="neutral"
+        class="hidden lg:flex ms-6"
+        :ui="{ link: 'px-3 py-2 text-[15px]' }"
+      />
     </template>
 
-    <UNavigationMenu
-      :items="items"
-      variant="pill"
-      color="neutral"
-    />
-
     <template #right>
-      <UContentSearchButton />
+      <UContentSearchButton class="lg:hidden" />
 
       <UButton
         icon="i-simple-icons-github"
@@ -80,6 +82,7 @@ const items = computed(() => [{
         label="Sign in"
         color="neutral"
         variant="ghost"
+        size="lg"
         to="/login"
         class="hidden lg:inline-flex"
       />
@@ -87,8 +90,9 @@ const items = computed(() => [{
       <UButton
         label="Get started"
         color="neutral"
+        size="lg"
         to="/signup"
-        class="hidden lg:inline-flex"
+        class="hidden lg:inline-flex ms-1.5"
       />
     </template>
 

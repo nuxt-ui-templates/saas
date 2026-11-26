@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
 
+const { data: snippet } = await useAsyncData('index-snippet', () => queryCollection('snippets').first())
+
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
 
@@ -22,7 +24,7 @@ useSeoMeta({
       :ui="{
         root: 'bg-[radial-gradient(var(--ui-border-accented)_1px,transparent_1px)] bg-size-[24px_24px]',
         container: 'pb-0 sm:pb-0 lg:pb-0',
-        title: 'max-w-4xl'
+        title: 'max-w-5xl'
       }"
     >
       <template #headline>
@@ -73,8 +75,8 @@ useSeoMeta({
       :description="page.features.description"
       :ui="{
         container: 'pb-0 sm:pb-0 lg:pb-0',
-        header: 'lg:grid lg:grid-cols-2 lg:gap-x-16 lg:items-end',
-        description: 'lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:mt-0'
+        title: 'max-w-2xl',
+        description: 'max-w-md'
       }"
     >
       <UPageGrid class="-mx-4 sm:-mx-6 lg:-mx-8 gap-px bg-border border-t border-default">
@@ -105,17 +107,18 @@ useSeoMeta({
       :description="page.foundations.description"
       :features="page.foundations.features"
       orientation="horizontal"
-      :ui="{ features: 'gap-6' }"
+      :ui="{
+        title: 'max-w-md',
+        features: 'gap-0 divide-y divide-default border-y border-default *:py-5'
+      }"
     >
       <figure class="min-w-0">
-        <ProsePre
-          :code="page.foundations.code.value"
-          :language="page.foundations.code.language"
-          :filename="page.foundations.code.filename"
-          :ui="{ root: 'my-0' }"
+        <div
+          v-if="snippet"
+          class="dark rounded-xl shadow-2xl shadow-neutral-950/20 *:my-0 [&_pre]:px-6 [&_pre]:py-5 [&_pre]:text-[15px]/7"
         >
-          <code v-text="page.foundations.code.value" />
-        </ProsePre>
+          <ContentRenderer :value="snippet" />
+        </div>
 
         <figcaption
           v-if="page.foundations.caption"
@@ -157,7 +160,7 @@ useSeoMeta({
     </UPageSection>
 
     <section class="dark bg-default text-default">
-      <UContainer>
+      <UContainer class="border-x border-default">
         <UPageCTA
           :title="page.cta.title"
           :description="page.cta.description"
