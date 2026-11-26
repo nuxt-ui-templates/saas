@@ -4,6 +4,22 @@ const { data: page } = await useAsyncData('index', () => queryCollection('index'
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
 
+const heroTitle = computed(() => {
+  const title = page.value?.title || ''
+  const highlight = page.value?.hero.highlight
+  const index = highlight ? title.indexOf(highlight) : -1
+
+  if (!highlight || index === -1) {
+    return
+  }
+
+  return {
+    before: title.slice(0, index),
+    highlight,
+    after: title.slice(index + highlight.length)
+  }
+})
+
 useSeoMeta({
   titleTemplate: '',
   title,
@@ -25,11 +41,11 @@ useSeoMeta({
         <HeroBackground />
       </template>
 
-      <template #title>
-        <MDC
-          :value="page.title"
-          unwrap="p"
-        />
+      <template
+        v-if="heroTitle"
+        #title
+      >
+        {{ heroTitle.before }}<span class="text-primary">{{ heroTitle.highlight }}</span>{{ heroTitle.after }}
       </template>
 
       <PromotionalVideo />

@@ -38,6 +38,7 @@ export const collections = {
     type: 'page',
     schema: z.object({
       hero: z.object(({
+        highlight: z.string().optional(),
         links: z.array(createLinkSchema())
       })),
       sections: z.array(
