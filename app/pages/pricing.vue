@@ -15,15 +15,22 @@ defineOgImage('Saas', { title, description })
 
 const isYearly = ref('0')
 
+// Only reads plain prices like `$9.90`, anything else hides the badge
+function parsePrice(value: string) {
+  const match = value.match(/^\D*(\d+(?:\.\d+)?)\D*$/)
+
+  return match ? Number(match[1]) : undefined
+}
+
 // Yearly savings of the first plan, shown next to the "Yearly" tab
 const discount = computed(() => {
   const plan = page.value?.plans[0]
-  if (!plan) {
+  const month = plan && parsePrice(plan.price.month)
+  const year = plan && parsePrice(plan.price.year)
+  if (!month || !year) {
     return undefined
   }
 
-  const month = Number.parseFloat(plan.price.month.replace(/[^\d.]/g, ''))
-  const year = Number.parseFloat(plan.price.year.replace(/[^\d.]/g, ''))
   const percent = Math.round((1 - year / (month * 12)) * 100)
 
   return percent > 0 ? `-${percent}%` : undefined
