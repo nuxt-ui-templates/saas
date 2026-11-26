@@ -50,36 +50,45 @@ const items = computed(() => [{
 
     <UNavigationMenu
       :items="items"
-      variant="link"
+      variant="pill"
+      color="neutral"
     />
 
     <template #right>
-      <UColorModeButton />
+      <UContentSearchButton />
 
-      <UContentSearchButton class="lg:hidden" />
+      <UButton
+        icon="i-simple-icons-github"
+        color="neutral"
+        variant="ghost"
+        to="https://github.com/nuxt-ui-templates/saas"
+        target="_blank"
+        aria-label="GitHub repository"
+        class="hidden sm:inline-flex"
+      />
 
       <UButton
         icon="i-lucide-log-in"
         color="neutral"
         variant="ghost"
         to="/login"
+        aria-label="Sign in"
         class="lg:hidden"
       />
 
       <UButton
         label="Sign in"
         color="neutral"
-        variant="outline"
+        variant="ghost"
         to="/login"
         class="hidden lg:inline-flex"
       />
 
       <UButton
-        label="Sign up"
+        label="Get started"
         color="neutral"
-        trailing-icon="i-lucide-arrow-right"
-        class="hidden lg:inline-flex"
         to="/signup"
+        class="hidden lg:inline-flex"
       />
     </template>
 
@@ -110,7 +119,7 @@ const items = computed(() => [{
         class="mb-3"
       />
       <UButton
-        label="Sign up"
+        label="Get started"
         color="neutral"
         to="/signup"
         block

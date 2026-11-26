@@ -3,7 +3,6 @@ import { defineCollection, z } from '@nuxt/content'
 const variantEnum = z.enum(['solid', 'outline', 'subtle', 'soft', 'ghost', 'link'])
 const colorEnum = z.enum(['primary', 'secondary', 'neutral', 'error', 'warning', 'success', 'info'])
 const sizeEnum = z.enum(['xs', 'sm', 'md', 'lg', 'xl'])
-const orientationEnum = z.enum(['vertical', 'horizontal'])
 
 const createBaseSchema = () => z.object({
   title: z.string().nonempty(),
@@ -32,35 +31,58 @@ const createImageSchema = () => z.object({
   srcset: z.string().optional()
 })
 
+const createLogosSchema = () => z.object({
+  title: z.string().nonempty(),
+  items: z.array(z.object({
+    label: z.string().nonempty(),
+    icon: z.string().nonempty().editor({ input: 'icon' })
+  }))
+})
+
 export const collections = {
   index: defineCollection({
     source: '0.index.yml',
     type: 'page',
     schema: z.object({
-      hero: z.object(({
-        links: z.array(createLinkSchema())
-      })),
-      sections: z.array(
-        createBaseSchema().extend({
-          id: z.string().nonempty(),
-          orientation: orientationEnum.optional(),
-          reverse: z.boolean().optional(),
-          features: z.array(createFeatureItemSchema())
-        })
-      ),
-      features: createBaseSchema().extend({
-        items: z.array(createFeatureItemSchema())
+      hero: z.object({
+        headline: z.object({
+          badge: z.string().optional(),
+          label: z.string().nonempty(),
+          to: z.string().nonempty(),
+          target: z.string().optional()
+        }),
+        links: z.array(createLinkSchema()),
+        command: z.string().optional()
       }),
-      testimonials: createBaseSchema().extend({
+      logos: createLogosSchema(),
+      features: createBaseSchema().extend({
         headline: z.string().optional(),
+        items: z.array(
+          createBaseSchema().extend({
+            preview: z.enum(['components', 'auth', 'typescript', 'tokens', 'accessibility', 'color-mode'])
+          })
+        )
+      }),
+      foundations: z.object({
+        headline: z.string().optional(),
+        title: z.string().nonempty(),
+        description: z.string().optional(),
+        features: z.array(createFeatureItemSchema()),
+        code: z.string().nonempty(),
+        caption: z.string().optional()
+      }),
+      testimonials: z.object({
+        headline: z.string().optional(),
+        title: z.string().nonempty(),
+        description: z.string().optional(),
         items: z.array(
           z.object({
             quote: z.string().nonempty(),
             user: z.object({
               name: z.string().nonempty(),
               description: z.string().nonempty(),
-              to: z.string().nonempty(),
-              target: z.string().nonempty(),
+              to: z.string().optional(),
+              target: z.string().optional(),
               avatar: createImageSchema()
             })
           })
@@ -79,6 +101,7 @@ export const collections = {
     source: '2.pricing.yml',
     type: 'page',
     schema: z.object({
+      headline: z.string().optional(),
       plans: z.array(
         z.object({
           title: z.string().nonempty(),
@@ -87,17 +110,13 @@ export const collections = {
             month: z.string().nonempty(),
             year: z.string().nonempty()
           }),
-          billing_period: z.string().nonempty(),
-          billing_cycle: z.string().nonempty(),
+          badge: z.string().optional(),
           button: createLinkSchema(),
           features: z.array(z.string().nonempty()),
           highlight: z.boolean().optional()
         })
       ),
-      logos: z.object({
-        title: z.string().nonempty(),
-        icons: z.array(z.string())
-      }),
+      logos: createLogosSchema(),
       faq: createBaseSchema().extend({
         items: z.array(
           z.object({
@@ -110,7 +129,10 @@ export const collections = {
   }),
   blog: defineCollection({
     source: '3.blog.yml',
-    type: 'page'
+    type: 'page',
+    schema: z.object({
+      headline: z.string().optional()
+    })
   }),
   posts: defineCollection({
     source: '3.blog/**/*',
@@ -130,7 +152,10 @@ export const collections = {
   }),
   changelog: defineCollection({
     source: '4.changelog.yml',
-    type: 'page'
+    type: 'page',
+    schema: z.object({
+      headline: z.string().optional()
+    })
   }),
   versions: defineCollection({
     source: '4.changelog/**/*',

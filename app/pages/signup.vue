@@ -22,7 +22,7 @@ const fields = [{
   name: 'email',
   type: 'text' as const,
   label: 'Email',
-  placeholder: 'Enter your email'
+  placeholder: 'you@company.com'
 }, {
   name: 'password',
   label: 'Password',
@@ -62,21 +62,21 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :fields="fields"
     :schema="schema"
     :providers="providers"
-    title="Create an account"
-    :submit="{ label: 'Create account' }"
+    title="Create an account."
+    :submit="{ label: 'Create account', color: 'neutral' }"
     @submit="onSubmit"
   >
     <template #description>
       Already have an account? <ULink
         to="/login"
-        class="text-primary font-medium"
-      >Login</ULink>.
+        class="text-highlighted font-medium underline underline-offset-4"
+      >Sign in</ULink>.
     </template>
 
     <template #footer>
       By signing up, you agree to our <ULink
         to="/"
-        class="text-primary font-medium"
+        class="text-highlighted font-medium underline underline-offset-4"
       >Terms of Service</ULink>.
     </template>
   </UAuthForm>

@@ -23,7 +23,8 @@ export default defineNuxtConfig({
 
   ui: {
     eslint: {
-      ignore: ['^stars$', '^star-layer$', '^star$'],
+      // `dark` scopes a section to the dark theme tokens
+      ignore: ['^dark$'],
       rules: {
         'no-unknown-classes': 'error',
         'no-conflicting-classes': 'error',

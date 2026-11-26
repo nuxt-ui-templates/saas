@@ -9,7 +9,7 @@ const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
     <AppHeader />
 
     <UMain>
-      <UContainer>
+      <UContainer class="border-x border-default">
         <UPage>
           <template #left>
             <UPageAside>

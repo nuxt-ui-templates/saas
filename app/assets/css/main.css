@@ -4,7 +4,8 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
 
   --color-green-50: #EFFDF5;
   --color-green-100: #D9FBE8;
@@ -17,6 +18,10 @@
   --color-green-800: #016538;
   --color-green-900: #0A5331;
   --color-green-950: #052E16;
+}
+
+:root {
+  --ui-container: 75rem;
 }
 
 .dark {

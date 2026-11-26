@@ -19,46 +19,107 @@ useSeoMeta({
     <UPageHero
       :title="page.title"
       :description="page.description"
-      :links="page.hero.links"
+      :ui="{
+        root: 'bg-[radial-gradient(var(--ui-border-accented)_1px,transparent_1px)] bg-size-[24px_24px]',
+        container: 'pb-0 sm:pb-0 lg:pb-0',
+        title: 'max-w-4xl'
+      }"
     >
-      <template #top>
-        <HeroBackground />
+      <template #headline>
+        <UButton
+          :to="page.hero.headline.to"
+          :target="page.hero.headline.target"
+          color="neutral"
+          variant="outline"
+          trailing-icon="i-lucide-arrow-right"
+          class="rounded-full bg-default ps-1"
+        >
+          <UBadge
+            v-if="page.hero.headline.badge"
+            :label="page.hero.headline.badge"
+            class="rounded-full font-mono"
+          />
+          {{ page.hero.headline.label }}
+        </UButton>
       </template>
 
-      <template #title>
-        <MDC
-          :value="page.title"
-          unwrap="p"
-        />
+      <template #links>
+        <div class="flex flex-wrap items-center gap-3 min-w-0">
+          <UButton
+            v-for="(link, index) in page.hero.links"
+            :key="index"
+            v-bind="link"
+          />
+
+          <CopyCommand
+            v-if="page.hero.command"
+            :command="page.hero.command"
+          />
+        </div>
       </template>
 
-      <PromotionalVideo />
+      <HeroPreview />
     </UPageHero>
 
-    <UPageSection
-      v-for="(section, index) in page.sections"
-      :key="index"
-      :title="section.title"
-      :description="section.description"
-      :orientation="section.orientation"
-      :reverse="section.reverse"
-      :features="section.features"
-    >
-      <ImagePlaceholder />
-    </UPageSection>
+    <LogoStrip
+      :title="page.logos.title"
+      :items="page.logos.items"
+    />
 
     <UPageSection
+      id="features"
+      :headline="page.features.headline"
       :title="page.features.title"
       :description="page.features.description"
+      :ui="{
+        container: 'pb-0 sm:pb-0 lg:pb-0',
+        header: 'lg:grid lg:grid-cols-2 lg:gap-x-16 lg:items-end',
+        description: 'lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:mt-0'
+      }"
     >
-      <UPageGrid>
+      <UPageGrid class="-mx-4 sm:-mx-6 lg:-mx-8 gap-px bg-border border-t border-default">
         <UPageCard
           v-for="(item, index) in page.features.items"
           :key="index"
-          v-bind="item"
-          spotlight
-        />
+          :title="item.title"
+          :description="item.description"
+          variant="naked"
+          :ui="{
+            root: 'bg-default rounded-none',
+            container: 'p-6 sm:p-8',
+            header: 'mb-6 w-full',
+            title: 'text-lg tracking-tight',
+            description: 'mt-2'
+          }"
+        >
+          <template #header>
+            <FeaturePreview :name="item.preview" />
+          </template>
+        </UPageCard>
       </UPageGrid>
+    </UPageSection>
+
+    <UPageSection
+      :headline="page.foundations.headline"
+      :title="page.foundations.title"
+      :description="page.foundations.description"
+      :features="page.foundations.features"
+      orientation="horizontal"
+      :ui="{ features: 'gap-6' }"
+    >
+      <figure class="min-w-0">
+        <MDC
+          :value="page.foundations.code"
+          class="*:my-0"
+        />
+
+        <figcaption
+          v-if="page.foundations.caption"
+          class="mt-4 text-sm text-muted"
+        >
+          {{ page.foundations.caption }}
+        </figcaption>
+      </figure>
     </UPageSection>
 
     <UPageSection
@@ -66,14 +127,20 @@ useSeoMeta({
       :headline="page.testimonials.headline"
       :title="page.testimonials.title"
       :description="page.testimonials.description"
+      :ui="{ container: 'pb-0 sm:pb-0 lg:pb-0' }"
     >
-      <UPageColumns class="xl:columns-4">
+      <UPageGrid class="-mx-4 sm:-mx-6 lg:-mx-8 gap-px bg-border border-t border-default">
         <UPageCard
           v-for="(testimonial, index) in page.testimonials.items"
           :key="index"
-          variant="subtle"
+          variant="naked"
           :description="testimonial.quote"
-          :ui="{ description: 'before:content-[open-quote] after:content-[close-quote]' }"
+          :ui="{
+            root: 'bg-default rounded-none',
+            container: 'p-6 sm:p-8',
+            description: 'text-base text-default before:content-[open-quote] after:content-[close-quote]',
+            footer: 'pt-8'
+          }"
         >
           <template #footer>
             <UUser
@@ -82,17 +149,32 @@ useSeoMeta({
             />
           </template>
         </UPageCard>
-      </UPageColumns>
+      </UPageGrid>
     </UPageSection>
 
-    <USeparator />
-
-    <UPageCTA
-      v-bind="page.cta"
-      variant="naked"
-      class="overflow-hidden"
-    >
-      <LazyStarsBg />
-    </UPageCTA>
+    <section class="dark bg-default text-default">
+      <UContainer>
+        <UPageCTA
+          :title="page.cta.title"
+          :description="page.cta.description"
+          orientation="horizontal"
+          variant="naked"
+          :ui="{
+            root: 'rounded-none',
+            container: 'px-0 sm:px-0 lg:px-0 py-20 sm:py-28 lg:py-32 lg:items-end',
+            title: 'text-4xl sm:text-5xl lg:text-7xl tracking-tighter font-semibold leading-[0.95]',
+            description: 'text-lg'
+          }"
+        >
+          <div class="flex flex-wrap gap-3 lg:justify-end">
+            <UButton
+              v-for="(link, index) in page.cta.links"
+              :key="index"
+              v-bind="link"
+            />
+          </div>
+        </UPageCTA>
+      </UContainer>
+    </section>
   </div>
 </template>

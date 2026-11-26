@@ -17,7 +17,7 @@ const fields = [{
   name: 'email',
   type: 'text' as const,
   label: 'Email',
-  placeholder: 'Enter your email',
+  placeholder: 'you@company.com',
   required: true
 }, {
   name: 'password',
@@ -61,21 +61,21 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :fields="fields"
     :schema="schema"
     :providers="providers"
-    title="Welcome back"
-    icon="i-lucide-lock"
+    title="Welcome back."
+    :submit="{ label: 'Sign in', color: 'neutral' }"
     @submit="onSubmit"
   >
     <template #description>
       Don't have an account? <ULink
         to="/signup"
-        class="text-primary font-medium"
+        class="text-highlighted font-medium underline underline-offset-4"
       >Sign up</ULink>.
     </template>
 
     <template #password-hint>
       <ULink
         to="/"
-        class="text-primary font-medium"
+        class="text-highlighted font-medium underline underline-offset-4"
         tabindex="-1"
       >Forgot password?</ULink>
     </template>
@@ -83,7 +83,7 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     <template #footer>
       By signing in, you agree to our <ULink
         to="/"
-        class="text-primary font-medium"
+        class="text-highlighted font-medium underline underline-offset-4"
       >Terms of Service</ULink>.
     </template>
   </UAuthForm>
