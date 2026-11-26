@@ -83,8 +83,10 @@ export default defineAppConfig({
     authForm: {
       slots: {
         header: 'text-left',
-        title: 'text-3xl tracking-tight',
-        footer: 'text-left'
+        title: 'text-4xl tracking-tighter',
+        description: 'mt-3',
+        body: 'gap-y-7',
+        footer: 'text-left text-dimmed leading-relaxed mt-0'
       }
     }
   }
