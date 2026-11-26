@@ -76,22 +76,23 @@ foundations:
     - title: SEO built in
       description: Meta tags, sitemap and generated Open Graph images for every page.
       icon: i-lucide-search
-  code: |
-    ```ts [app/app.config.ts]
-    export default defineAppConfig({
-      ui: {
-        colors: {
-          primary: 'green',
-          neutral: 'zinc'
-        },
-        button: {
-          defaultVariants: {
-            size: 'lg'
+  code:
+    filename: app/app.config.ts
+    language: ts
+    value: |
+      export default defineAppConfig({
+        ui: {
+          colors: {
+            primary: 'green',
+            neutral: 'zinc'
+          },
+          button: {
+            defaultVariants: {
+              size: 'lg'
+            }
           }
         }
-      }
-    })
-    ```
+      })
   caption: One file to rebrand every page of the template.
 testimonials:
   headline: 03 / Developers

@@ -108,10 +108,14 @@ useSeoMeta({
       :ui="{ features: 'gap-6' }"
     >
       <figure class="min-w-0">
-        <MDC
-          :value="page.foundations.code"
-          class="*:my-0"
-        />
+        <ProsePre
+          :code="page.foundations.code.value"
+          :language="page.foundations.code.language"
+          :filename="page.foundations.code.filename"
+          :ui="{ root: 'my-0' }"
+        >
+          <code v-text="page.foundations.code.value" />
+        </ProsePre>
 
         <figcaption
           v-if="page.foundations.caption"

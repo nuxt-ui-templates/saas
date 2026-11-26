@@ -68,7 +68,11 @@ export const collections = {
         title: z.string().nonempty(),
         description: z.string().optional(),
         features: z.array(createFeatureItemSchema()),
-        code: z.string().nonempty(),
+        code: z.object({
+          filename: z.string().optional(),
+          language: z.string().optional(),
+          value: z.string().nonempty()
+        }),
         caption: z.string().optional()
       }),
       testimonials: z.object({
