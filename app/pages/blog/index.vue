@@ -25,7 +25,7 @@ function getCategory(post: { badge?: { label?: string } }) {
 }
 
 function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })
+  return new Date(date).toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })
 }
 
 const categories = computed(() => [...new Set((posts.value || []).map(getCategory).filter(Boolean))] as string[])

@@ -43,7 +43,7 @@ features:
       description: From buttons to modals, data tables to forms. Styled with Tailwind CSS and accessible out of the box.
       preview: components
     - title: Authentication ready
-      description: Login, signup and password reset flows with validation. Connect your backend and start onboarding users.
+      description: Login and signup flows with validation. Connect your backend and start onboarding users.
       preview: auth
     - title: TypeScript first
       description: Auto-completion and type safety for every prop, slot and composable, right in your editor.

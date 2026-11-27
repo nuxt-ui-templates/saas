@@ -3,7 +3,7 @@ defineProps<{
   command: string
 }>()
 
-const { copy, copied } = useClipboard()
+const { copy, copied } = useClipboard({ legacy: true })
 </script>
 
 <template>
