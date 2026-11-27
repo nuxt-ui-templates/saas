@@ -4,7 +4,8 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
 
   --color-green-50: #EFFDF5;
   --color-green-100: #D9FBE8;
@@ -19,9 +20,38 @@
   --color-green-950: #052E16;
 }
 
+:root {
+  --ui-container: 75rem;
+  --ui-radius: 0.3125rem;
+  --ui-header-height: 4.25rem;
+}
+
+@theme inline {
+  /* White cards, inputs and outline buttons sitting on the warm page background */
+  --color-surface: var(--ui-bg-surface);
+}
+
+/* Unlayered, so the light overrides must not match `html.dark` */
+:root:not(.dark),
+.light {
+  --ui-text-dimmed: var(--ui-color-neutral-500);
+  --ui-text-muted: var(--ui-color-neutral-600);
+  --ui-text-toned: var(--ui-color-neutral-700);
+  --ui-text: var(--ui-color-neutral-950);
+  --ui-text-highlighted: var(--ui-color-neutral-950);
+  --ui-bg: #FAFAF9;
+  --ui-bg-surface: #FFFFFF;
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-bg-elevated: var(--ui-color-neutral-100);
+  --ui-bg-inverted: var(--ui-color-neutral-950);
+  --ui-border-muted: var(--ui-color-neutral-100);
+}
+
 .dark {
   --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-surface: var(--ui-color-neutral-900);
   --ui-bg-muted: var(--ui-color-neutral-900);
-  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-800);
   --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-border-muted: var(--ui-color-neutral-900);
 }

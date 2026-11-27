@@ -1,151 +1,117 @@
-title: Ship Your SaaS at light speed
-description: Build production-ready SaaS applications with Nuxt UI's powerful components, authentication flows, and enterprise features. The same component library trusted by the entire Nuxt ecosystem.
+title: Ship your SaaS at light speed.
+description: A production-ready Nuxt starter with a landing page, pricing, docs, blog, changelog and auth flows. Built on Nuxt UI, so every piece is accessible, typed and themeable from one config file.
 seo:
   title: Nuxt SaaS Template
-  description: Create stunning, fast and production-ready SaaS applications with Nuxt UI. 100+ Vue components, authentication, dark mode, and enterprise features built on Tailwind CSS.
+  description: Create stunning, fast and production-ready SaaS applications with Nuxt UI. 125+ Vue components, authentication, dark mode, and enterprise features built on Tailwind CSS.
 navigation: false
 hero:
-  highlight: SaaS
+  headline:
+    badge: New
+    label: Rebuilt on Nuxt UI v4
+    to: /changelog
   links:
     - label: Get started
       icon: i-lucide-arrow-right
       trailing: true
-      to: https://ui.nuxt.com/docs/getting-started/installation/nuxt
-      target: _blank
+      color: neutral
       size: xl
+      to: /docs
     - label: Use this template
       icon: i-simple-icons-github
-      size: xl
       color: neutral
-      variant: subtle
+      variant: outline
+      size: xl
       to: https://github.com/nuxt-ui-templates/saas
       target: _blank
-sections:
-  - title: Powered by Nuxt UI Components
-    description: Access the complete Nuxt UI component library with 100+ beautifully styled, accessible, and customizable Vue components. Everything you need to build professional SaaS applications.
-    id: features
-    orientation: horizontal
-    features:
-      - name: 100+ UI Components
-        description: From buttons to modals, data tables to forms - all styled with Tailwind CSS and accessible out of the box.
-        icon: i-lucide-package
-      - name: Authentication Ready
-        description: Pre-built login, signup, and password reset flows. Just connect your backend and start onboarding users.
-        icon: i-lucide-shield
-      - name: TypeScript First
-        description: Full TypeScript support with auto-completion, type safety, and IntelliSense for every component and composable.
-        icon: i-lucide-code-xml
-  - title: Built for Modern SaaS
-    description: Everything you need to launch and scale your SaaS. From beautiful marketing pages to complex dashboards, ship faster with production-ready patterns.
-    orientation: horizontal
-    reverse: true
-    features:
-      - name: Edge Performance
-        description: Optimized for Core Web Vitals with automatic code splitting, lazy loading, and SSR/SSG support.
-        icon: i-lucide-zap
-      - name: Dark Mode Ready
-        description: Automatic theme switching with smooth transitions. Respects system preferences and remembers user choice.
-        icon: i-lucide-moon
-      - name: Global Ready
-        description: Built-in i18n support for 50+ languages with RTL/LTR layouts and @nuxt/fonts integration.
-        icon: i-lucide-globe
+  command: npm create nuxt@latest -- -t ui/saas
+logos:
+  title: Deploys anywhere Nuxt runs
+  items:
+    - label: Vercel
+    - label: Netlify
+    - label: Cloudflare
+    - label: AWS
+    - label: Node.js
+    - label: Bun
 features:
-  title: Everything You Need to Ship
-  description: Stop building from scratch. Focus on your unique features while Nuxt UI handles the foundations with battle-tested components and patterns.
+  headline: 01 / Components
+  title: Every piece of a SaaS, already built.
+  description: Stop building from scratch. Nuxt UI handles the foundations with tested components and patterns, so your time goes into the features only you can build.
   items:
-    - title: Beautiful Design System
-      description: Semantic color aliases, comprehensive design tokens, and Tailwind Variants for consistent, customizable styling.
-      icon: i-lucide-palette
-    - title: Accessible by Default
-      description: Built on Reka UI for robust accessibility. WCAG compliant components that work for everyone, everywhere.
-      icon: i-lucide-accessibility
-    - title: Developer Experience
-      description: Auto-imports, hot module replacement, and comprehensive documentation. Build faster with less friction.
-      icon: i-lucide-terminal
-    - title: SEO Optimized
-      description: Server-side rendering, automatic meta tags, sitemap generation, and Open Graph images out of the box.
+    - title: 125+ components
+      description: From buttons to modals, data tables to forms. Styled with Tailwind CSS and accessible out of the box.
+      preview: components
+    - title: Authentication ready
+      description: Login and signup flows with validation. Connect your backend and start onboarding users.
+      preview: auth
+    - title: TypeScript first
+      description: Auto-completion and type safety for every prop, slot and composable, right in your editor.
+      preview: typescript
+    - title: A real design system
+      description: Semantic color aliases and design tokens. Rebrand everything from one config file.
+      preview: tokens
+    - title: Accessible by default
+      description: Built on Reka UI. Focus management, keyboard navigation and ARIA handled for you.
+      preview: accessibility
+    - title: Dark mode ready
+      description: Respects system preferences, remembers the user's choice and switches without a flash.
+      preview: color-mode
+foundations:
+  headline: 02 / Foundations
+  title: Fast, global and yours to theme.
+  features:
+    - title: Edge performance
+      description: Code splitting, lazy loading and SSR or SSG per route, tuned for Core Web Vitals.
+      icon: i-lucide-zap
+    - title: Global ready
+      description: i18n for 50+ languages with RTL layouts, plus self-hosted fonts through @nuxt/fonts.
+      icon: i-lucide-globe
+    - title: SEO built in
+      description: Meta tags, sitemap and generated Open Graph images for every page.
       icon: i-lucide-search
-    - title: Production Ready
-      description: Error handling, loading states, form validation, and security best practices built into every component.
-      icon: i-lucide-circle-check
-    - title: Infinitely Customizable
-      description: Override any style with the ui prop, customize globally with AppConfig, or use Tailwind classes directly.
-      icon: i-lucide-settings
+  caption: One file to rebrand every page of the template.
 testimonials:
-  headline: Trusted by Developers
-  title: Join Thousands Building with Nuxt UI
-  description: See why developers choose Nuxt UI to ship their SaaS applications faster and with more confidence.
+  headline: 03 / Developers
+  title: Teams ship faster with it.
   items:
-    - quote: Nuxt UI transformed how we build. The component quality is exceptional - everything just works with perfect TypeScript support, accessibility, and dark mode built in.
-      user:
-        name: Sarah Chen
-        description: CTO at TechScale Solutions
-        avatar:
-          src: https://i.pravatar.cc/120?img=1
-    - quote: We shipped our MVP in 2 weeks instead of 2 months. The authentication flows and form components saved us countless hours of development time.
+    - quote: We shipped our MVP in 2 weeks instead of 2 months. The authentication flows and form components saved us countless hours.
       user:
         name: Marcus Rodriguez
-        description: VP of Engineering at DataFlow
-        avatar:
-          src: https://i.pravatar.cc/120?img=7
-    - quote: The design system with AppConfig is brilliant. We maintain brand consistency across all our products while leveraging the full component library.
+        description: VP of Engineering, DataFlow
+    - quote: The design system with AppConfig is brilliant. We keep brand consistency across all our products with the full component library.
       user:
         name: David Kumar
-        description: Security Director at SecureStack
-        avatar:
-          src: https://i.pravatar.cc/120?img=3
-    - quote: Perfect Lighthouse scores out of the box. Our Core Web Vitals improved dramatically just by switching to Nuxt UI components.
-      user:
-        name: Emily Zhang
-        description: Lead Architect at ScaleForce
-        avatar:
-          src: https://i.pravatar.cc/120?img=5
-    - quote: The Tailwind Variants system makes customization so intuitive. We can override any component style while keeping the functionality intact.
-      user:
-        name: James Wilson
-        description: DevOps Lead at CloudPro
-        avatar:
-          src: https://i.pravatar.cc/120?img=8
-    - quote: From the SaaS template to production in days. The pre-built layouts, navigation, and content structure accelerated our launch.
-      user:
-        name: Lisa Patel
-        description: CEO at AutoScale
-        avatar:
-          src: https://i.pravatar.cc/120?img=9
-    - quote: Reka UI foundation means accessibility is never an afterthought. We achieved WCAG compliance without any custom work.
+        description: Security Director, SecureStack
+    - quote: Reka UI underneath means accessibility is never an afterthought. We reached WCAG compliance without any custom work.
       user:
         name: Michael Torres
-        description: Frontend Lead at AccessFirst
-        avatar:
-          src: https://i.pravatar.cc/120?img=11
-    - quote: The documentation is outstanding. Every component has clear examples, and the community on Discord is incredibly helpful.
+        description: Frontend Lead, AccessFirst
+    - quote: From the SaaS template to production in days. The prebuilt layouts, navigation and content structure sped up our launch.
       user:
-        name: Rachel Kim
-        description: Performance Engineer at APIHub
-        avatar:
-          src: https://i.pravatar.cc/120?img=10
-    - quote: We replaced three different UI libraries with Nuxt UI. The consistency and quality across all components is unmatched.
+        name: Lisa Patel
+        description: CEO, AutoScale
+    - quote: We replaced three different UI libraries with Nuxt UI. The consistency across all components is unmatched.
       user:
         name: Thomas Weber
-        description: UI Architecture Lead at DesignScale
-        avatar:
-          src: https://i.pravatar.cc/120?img=12
-    - quote: The integration with Nuxt modules is seamless. Color mode, fonts, icons - everything works together perfectly.
+        description: UI Architecture Lead, DesignScale
+    - quote: Color mode, fonts, icons. The integration with Nuxt modules is seamless and everything works together.
       user:
         name: Sophia Martinez
-        description: Integration Specialist at TechFlow
-        avatar:
-          src: https://i.pravatar.cc/120?img=14
+        description: Integration Specialist, TechFlow
 cta:
-  title: Ready to build an amazing SaaS?
-  description: Join thousands of developers building with Nuxt and Nuxt UI. Get this template and start shipping today.
+  title: Start shipping today.
+  description: Get the template, connect your backend and launch. Every page you see here is in the repo.
   links:
     - label: Start building
-      to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt'
-      target: _blank
-      trailingIcon: i-lucide-arrow-right
+      color: primary
+      size: xl
+      icon: i-lucide-arrow-right
+      trailing: true
+      to: /docs
     - label: View on GitHub
-      to: 'https://github.com/nuxt-ui-templates/saas'
-      target: _blank
-      variant: subtle
+      color: neutral
+      variant: outline
+      size: xl
       icon: i-simple-icons-github
+      to: https://github.com/nuxt-ui-templates/saas
+      target: _blank

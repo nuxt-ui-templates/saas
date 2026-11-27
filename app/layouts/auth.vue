@@ -1,19 +1,81 @@
-<template>
-  <div class="h-screen flex items-center justify-center px-4">
-    <UButton
-      icon="i-lucide-chevron-left"
-      to="/"
-      size="xl"
-      color="neutral"
-      variant="subtle"
-      class="absolute left-8 top-8 rounded-full z-10"
-    />
+<script setup lang="ts">
+const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
 
-    <UPageCard
-      variant="subtle"
-      class="max-w-sm w-full"
-    >
-      <slot />
-    </UPageCard>
+const testimonial = computed(() => page.value?.testimonials.items[0])
+</script>
+
+<template>
+  <div class="min-h-svh grid lg:grid-cols-2">
+    <div class="flex flex-col px-4 sm:px-6 lg:px-12 xl:px-16 py-8">
+      <NuxtLink
+        to="/"
+        aria-label="Home"
+        class="self-start focus-visible:outline-3 outline-primary/25 rounded-md p-1 -ms-1"
+      >
+        <AppLogo class="w-auto h-6 shrink-0" />
+      </NuxtLink>
+
+      <div class="flex-1 flex items-center justify-center py-14">
+        <div class="w-full max-w-[380px]">
+          <slot />
+        </div>
+      </div>
+    </div>
+
+    <aside class="dark hidden lg:flex flex-col justify-between gap-12 p-12 xl:p-16 bg-default text-default border-s border-default bg-[radial-gradient(var(--ui-border)_1px,transparent_1px)] bg-size-[24px_24px]">
+      <p class="self-end font-mono text-[13px] uppercase tracking-[0.04em] text-muted">
+        Built with Nuxt UI
+      </p>
+
+      <div
+        aria-hidden="true"
+        class="max-w-[576px] p-7 rounded-[14px] border border-default bg-default"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <p class="text-sm text-muted">
+            Monthly recurring revenue
+          </p>
+          <span class="font-mono text-xs text-dimmed">Demo data</span>
+        </div>
+
+        <p class="mt-2 text-4xl font-semibold tracking-tighter text-highlighted">
+          $48,210
+        </p>
+
+        <svg
+          viewBox="0 0 400 80"
+          preserveAspectRatio="none"
+          class="block mt-5 w-full h-20 text-primary"
+        >
+          <polyline
+            points="0,70 40,64 80,66 120,52 160,56 200,40 240,44 280,28 320,32 360,16 400,8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
+
+      <figure
+        v-if="testimonial"
+        class="max-w-[576px]"
+      >
+        <blockquote class="text-2xl/snug xl:text-[1.75rem]/snug font-medium tracking-tight text-highlighted">
+          “{{ testimonial.quote }}”
+        </blockquote>
+
+        <figcaption class="mt-6">
+          <UUser
+            v-bind="testimonial.user"
+            :avatar="{ ...testimonial.user.avatar, alt: testimonial.user.name, ui: { root: 'bg-accented', fallback: 'text-sm font-semibold text-highlighted' } }"
+            size="xl"
+            :ui="{ root: 'gap-3', name: 'text-[15px]', description: 'text-sm' }"
+          />
+        </figcaption>
+      </figure>
+    </aside>
   </div>
 </template>

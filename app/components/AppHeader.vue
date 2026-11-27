@@ -46,40 +46,54 @@ const items = computed(() => [{
       </NuxtLink>
 
       <TemplateMenu />
+
+      <UNavigationMenu
+        :items="items"
+        variant="pill"
+        color="neutral"
+        class="hidden lg:flex ms-6"
+        :ui="{ link: 'px-3 py-2 text-[15px] font-normal aria-[current=page]:font-medium before:rounded-lg' }"
+      />
     </template>
 
-    <UNavigationMenu
-      :items="items"
-      variant="link"
-    />
-
     <template #right>
-      <UColorModeButton />
-
       <UContentSearchButton class="lg:hidden" />
+
+      <UButton
+        icon="i-simple-icons-github"
+        color="neutral"
+        variant="ghost"
+        to="https://github.com/nuxt-ui-templates/saas"
+        target="_blank"
+        aria-label="GitHub repository"
+        size="lg"
+        class="hidden sm:inline-flex p-2.5 text-muted"
+      />
 
       <UButton
         icon="i-lucide-log-in"
         color="neutral"
         variant="ghost"
         to="/login"
+        aria-label="Sign in"
         class="lg:hidden"
       />
 
       <UButton
         label="Sign in"
         color="neutral"
-        variant="outline"
+        variant="ghost"
+        size="lg"
         to="/login"
         class="hidden lg:inline-flex"
       />
 
       <UButton
-        label="Sign up"
+        label="Get started"
         color="neutral"
-        trailing-icon="i-lucide-arrow-right"
-        class="hidden lg:inline-flex"
+        size="lg"
         to="/signup"
+        class="hidden lg:inline-flex px-4"
       />
     </template>
 
@@ -110,7 +124,7 @@ const items = computed(() => [{
         class="mb-3"
       />
       <UButton
-        label="Sign up"
+        label="Get started"
         color="neutral"
         to="/signup"
         block

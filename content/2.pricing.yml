@@ -1,72 +1,77 @@
-title: A plan for every need
-description: Our plans are designed to meet the requirements of both individuals and teams. Get the right plan that suits you.
+title: A plan for every stage.
+description: Start on your own, grow into a team. Every plan includes a 14 day free trial, no credit card required.
+headline: Pricing
 seo:
   title: Pricing
   description: Choose the plan that's right for you.
 navigation.icon: i-lucide-credit-card
 plans:
   - title: Basic
-    description: A basic plan for individuals.
+    description: For individuals getting started.
     price:
-      month: $9.9
-      year: $99.9
+      month: $9.90
+      year: $99.90
     button:
-      label: Get Started
+      label: Start free trial
+      to: /signup
       color: neutral
-      variant: subtle
+      variant: outline
     features:
-      - 1 GB Storage
-      - 1 Email Account
-      - 1 Domain
-      - 1 Website
-      - 1 Database
-      - 1 SSL Certificate
-      - 1 Support Ticket
+      - 1 GB storage
+      - 1 email account
+      - 1 domain
+      - 1 website
+      - 1 database
+      - 1 SSL certificate
+      - 1 support ticket
   - title: Standard
-    description: A standard plan for small teams.
+    description: For small teams shipping together.
     price:
-      month: $19.9
-      year: $199.9
+      month: $19.90
+      year: $199.90
+    badge: Most popular
     highlight: true
-    scale: true
     button:
-      label: Get Started
+      label: Start free trial
+      to: /signup
+      color: primary
     features:
-      - 10 GB Storage
-      - 10 Email Accounts
-      - 10 Domains
-      - 10 Websites
-      - 10 Databases
-      - 10 SSL Certificates
-      - 10 Support Tickets
+      - 10 GB storage
+      - 10 email accounts
+      - 10 domains
+      - 10 websites
+      - 10 databases
+      - 10 SSL certificates
+      - 10 support tickets
   - title: Premium
-    description: A premium plan for large teams.
+    description: For large teams at scale.
     price:
-      month: $29.9
-      year: $299.9
+      month: $29.90
+      year: $299.90
     button:
-      label: Get Started
+      label: Start free trial
+      to: /signup
       color: neutral
-      variant: subtle
+      variant: outline
     features:
-      - 100 GB Storage
-      - 100 Email Accounts
-      - 100 Domains
-      - 100 Websites
-      - 100 Databases
-      - 100 SSL Certificates
-      - 100 Support Tickets
+      - 100 GB storage
+      - 100 email accounts
+      - 100 domains
+      - 100 websites
+      - 100 databases
+      - 100 SSL certificates
+      - 100 support tickets
 logos:
-  title: Trusted by the world's best
-  icons:
-    - i-simple-icons-amazonwebservices
-    - i-simple-icons-heroku
-    - i-simple-icons-netlify
-    - i-simple-icons-vercel
-    - i-simple-icons-cloudflare
+  title: Deploys anywhere Nuxt runs
+  items:
+    - label: Vercel
+    - label: Netlify
+    - label: Cloudflare
+    - label: AWS
+    - label: Heroku
 faq:
-  title: Frequently asked questions
-  description: Everything you need to know about our plans and billing. Can't find the answer you're looking for? Reach out to our support team.
+  title: Questions, answered.
+  description: Everything about plans and billing. Can't find what you need? Reach out to our support team.
   items:
     - label: Is this a secure service?
       content: Yes. All data is encrypted in transit and at rest, and every plan includes SSL certificates. We follow industry best practices to keep your data safe.
@@ -78,5 +83,3 @@ faq:
       content: Yes, you can upgrade or downgrade at any time. Changes take effect immediately and we prorate the difference on your next invoice.
     - label: Do you offer refunds?
       content: If you're not satisfied within the first 30 days, contact us and we'll issue a full refund, no questions asked.
-    - label: Do you offer support?
-      content: All plans include email support. The Standard and Premium plans also come with priority support and faster response times.

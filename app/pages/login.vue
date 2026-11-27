@@ -15,32 +15,40 @@ const toast = useToast()
 
 const fields = [{
   name: 'email',
+  size: 'xl' as const,
   type: 'text' as const,
   label: 'Email',
-  placeholder: 'Enter your email',
-  required: true
+  placeholder: 'you@company.com'
 }, {
   name: 'password',
+  size: 'xl' as const,
   label: 'Password',
   type: 'password' as const,
   placeholder: 'Enter your password'
 }, {
   name: 'remember',
+  size: 'xl' as const,
   label: 'Remember me',
   type: 'checkbox' as const
 }]
 
 const providers = [{
-  label: 'Google',
-  icon: 'i-simple-icons-google',
-  onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
-  }
-}, {
-  label: 'GitHub',
+  label: 'Continue with GitHub',
+  size: 'xl' as const,
+  variant: 'outline' as const,
   icon: 'i-simple-icons-github',
+  class: 'py-[11px] text-[15px]/6',
   onClick: () => {
     toast.add({ title: 'GitHub', description: 'Login with GitHub' })
+  }
+}, {
+  label: 'Email me a magic link',
+  size: 'xl' as const,
+  variant: 'outline' as const,
+  icon: 'i-lucide-mail',
+  class: 'py-[11px] text-[15px]/6',
+  onClick: () => {
+    toast.add({ title: 'Magic link', description: 'Check your inbox for a sign in link' })
   }
 }]
 
@@ -61,21 +69,22 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :fields="fields"
     :schema="schema"
     :providers="providers"
-    title="Welcome back"
-    icon="i-lucide-lock"
+    title="Welcome back."
+    :submit="{ label: 'Sign in', color: 'neutral', size: 'xl' }"
+    :separator="{ label: 'or', ui: { label: 'font-mono text-xs font-normal uppercase tracking-[0.04em] text-dimmed' } }"
     @submit="onSubmit"
   >
     <template #description>
       Don't have an account? <ULink
         to="/signup"
-        class="text-primary font-medium"
-      >Sign up</ULink>.
+        class="text-highlighted font-medium underline decoration-(--ui-border-accented) underline-offset-4 hover:decoration-current"
+      >Sign up</ULink>
     </template>
 
     <template #password-hint>
       <ULink
         to="/"
-        class="text-primary font-medium"
+        class="text-muted hover:text-highlighted"
         tabindex="-1"
       >Forgot password?</ULink>
     </template>
@@ -83,8 +92,11 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     <template #footer>
       By signing in, you agree to our <ULink
         to="/"
-        class="text-primary font-medium"
-      >Terms of Service</ULink>.
+        class="text-toned underline decoration-(--ui-border-accented) underline-offset-4 hover:text-highlighted hover:decoration-current"
+      >Terms of Service</ULink> and <ULink
+        to="/"
+        class="text-toned underline decoration-(--ui-border-accented) underline-offset-4 hover:text-highlighted hover:decoration-current"
+      >Privacy Policy</ULink>.
     </template>
   </UAuthForm>
 </template>

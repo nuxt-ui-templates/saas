@@ -33,7 +33,10 @@ if (post.value.image?.src) {
 </script>
 
 <template>
-  <UContainer v-if="post">
+  <UContainer
+    v-if="post"
+    class="border-x border-default"
+  >
     <UPageHeader
       :title="post.title"
       :description="post.description"
