@@ -42,7 +42,7 @@ function onSubmit() {
 }
 
 // Grid lines are drawn by each cell so a partially filled row leaves no gap
-const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--ui-border),inset_0_-1px_0_0_var(--ui-border)]'
+const cell = 'rounded-none bg-default px-5 pt-8 pb-10 sm:px-9 sm:pt-8 sm:pb-10 shadow-[inset_-1px_0_0_0_var(--ui-border),inset_0_-1px_0_0_var(--ui-border)]'
 </script>
 
 <template>
@@ -52,9 +52,10 @@ const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--
       :title="page.title"
       :description="page.description"
       :ui="{
-        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16',
-        title: 'max-w-xl text-5xl sm:text-6xl lg:text-7xl',
-        description: 'max-w-md'
+        container: 'pt-16 pb-10 sm:pt-20 sm:pb-10 lg:pt-26 lg:pb-10',
+        title: 'max-w-[640px]',
+        description: 'max-w-[420px] text-[17px]/[1.6] sm:text-[17px]/[1.6]',
+        footer: 'mt-10 lg:mt-12'
       }"
     >
       <template #links>
@@ -68,7 +69,7 @@ const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--
             color="neutral"
             :variant="!category ? 'solid' : 'outline'"
             :aria-pressed="!category"
-            class="rounded-full px-3.5"
+            :class="['rounded-full px-3.5 py-2 font-normal', category && 'ring-default text-toned']"
             @click="category = undefined"
           />
           <UButton
@@ -78,7 +79,7 @@ const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--
             color="neutral"
             :variant="category === item ? 'solid' : 'outline'"
             :aria-pressed="category === item"
-            class="rounded-full px-3.5"
+            :class="['rounded-full px-3.5 py-2 font-normal', category !== item && 'ring-default text-toned']"
             @click="category = item"
           />
         </div>
@@ -96,50 +97,69 @@ const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--
             :description="post.description"
             :image="post.image"
             :date="post.date"
-            :authors="post.authors?.map(({ name }) => ({ name }))"
+            :authors="post.authors?.map(({ name }) => index === 0 && !category ? { name, avatar: { alt: name }, size: 'lg' as const } : { name })"
             :badge="index === 0 && !category ? { label: 'Latest', color: 'primary', variant: 'solid', class: 'font-mono' } : undefined"
             :orientation="index === 0 && !category ? 'horizontal' : 'vertical'"
             :class="[index === 0 && !category && 'col-span-full']"
             variant="naked"
-            :ui="{
-              root: [cell, index === 0 && !category ? 'lg:gap-12 sm:p-8 lg:p-10' : 'gap-0'],
-              header: index === 0 && !category ? 'aspect-[16/10] rounded-lg' : 'aspect-[16/10] rounded-lg mb-6',
+            :ui="index === 0 && !category ? {
+              root: [cell, 'sm:p-12 lg:grid-cols-[5fr_4fr] lg:gap-x-14'],
+              header: 'aspect-[16/10] rounded-[14px] ring ring-default shadow-none',
+              body: 'p-0 sm:p-0 lg:px-0 pt-8 lg:pt-0',
+              meta: 'mb-5 gap-3',
               date: 'text-sm text-muted',
-              title: index === 0 && !category ? 'text-3xl sm:text-4xl tracking-tight' : 'text-lg tracking-tight',
-              description: index === 0 && !category ? 'text-base text-muted' : 'text-sm text-muted line-clamp-2',
+              title: 'text-[1.875rem]/[1.05] sm:text-[2.75rem]/[1.05] tracking-[-0.035em]',
+              description: 'mt-4 text-[17px]/[1.6] text-muted',
+              authors: 'pt-7'
+            } : {
+              root: [cell, 'gap-0'],
+              header: 'aspect-[16/10] rounded-xl ring ring-default shadow-none',
+              body: 'p-0 sm:p-0 pt-5 sm:pt-5',
+              meta: 'mb-3',
+              date: 'text-[13px] text-muted',
+              title: 'text-[22px]/[1.2] tracking-[-0.025em]',
+              description: 'mt-3 text-[15px]/[1.6] text-muted line-clamp-2',
               authors: 'pt-5'
             }"
           >
             <template #date>
-              {{ [getCategory(post), formatDate(post.date)].filter(Boolean).join(' · ') }}
+              <span class="inline-flex flex-wrap gap-x-2.5">
+                <template v-if="getCategory(post)">
+                  <span>{{ getCategory(post) }}</span>
+                  <span aria-hidden="true">·</span>
+                </template>
+                <time :datetime="post.date">{{ formatDate(post.date) }}</time>
+              </span>
             </template>
           </UBlogPost>
 
-          <div :class="['dark text-default flex flex-col gap-8', cell, 'in-[.dark]:bg-muted']">
+          <div :class="['dark text-default flex flex-col justify-between gap-8', cell, 'in-[.dark]:bg-muted']">
             <div>
-              <p class="text-2xl font-semibold tracking-tight text-highlighted text-pretty">
+              <p class="text-[26px]/[1.15] font-semibold tracking-[-0.03em] text-highlighted text-pretty">
                 Get new posts in your inbox.
               </p>
-              <p class="mt-3 text-sm text-muted">
+              <p class="mt-3 text-[15px]/[1.6] text-muted">
                 One email when something ships. No noise.
               </p>
             </div>
 
             <form
-              class="mt-auto flex flex-col gap-3"
+              class="flex flex-col gap-2.5"
               @submit.prevent="onSubmit"
             >
               <UFormField
                 name="email"
                 label="Email"
-                size="xl"
+                :ui="{ container: 'mt-2.5' }"
               >
                 <UInput
                   v-model="email"
                   type="email"
+                  size="xl"
                   placeholder="you@company.com"
                   required
                   class="w-full"
+                  :ui="{ base: 'py-[11px]' }"
                 />
               </UFormField>
 
@@ -148,6 +168,7 @@ const cell = 'rounded-none bg-default p-6 sm:p-8 shadow-[inset_-1px_0_0_0_var(--
                 label="Subscribe"
                 size="xl"
                 block
+                class="py-2.5 text-[15px]/6"
               />
             </form>
           </div>

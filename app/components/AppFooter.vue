@@ -61,7 +61,8 @@ function onSubmit() {
     :ui="{
       root: 'relative -mt-px border-t border-default',
       top: 'py-0 lg:py-0 border-b border-default',
-      container: 'border-x border-default lg:py-5'
+      container: 'border-x border-default lg:py-5',
+      left: 'text-sm text-muted'
     }"
   >
     <template #top>
@@ -69,10 +70,12 @@ function onSubmit() {
         <UFooterColumns
           :columns="columns"
           :ui="{
-            root: 'xl:gap-16',
-            label: 'font-mono text-xs font-normal uppercase tracking-wider text-muted',
-            list: 'mt-5 space-y-3',
-            link: 'text-[15px]',
+            root: 'lg:grid lg:grid-cols-[minmax(0,400px)_1fr] lg:gap-16 xl:grid-cols-[minmax(0,400px)_1fr] xl:gap-16',
+            left: 'mb-12 lg:mb-0',
+            center: 'grid grid-flow-row grid-cols-2 sm:grid-cols-3 gap-8 xl:col-span-1',
+            label: 'font-mono text-xs font-normal uppercase tracking-[0.04em] text-dimmed',
+            list: 'mt-4 space-y-3',
+            link: 'text-[15px] text-toned hover:text-highlighted',
             linkLabelExternalIcon: 'hidden'
           }"
         >
@@ -85,26 +88,28 @@ function onSubmit() {
               <AppLogo class="w-auto h-6 shrink-0" />
             </NuxtLink>
 
-            <p class="mt-4 text-[15px] text-muted">
+            <p class="mt-4 text-[15px]/[1.6] text-muted">
               A Nuxt UI template for shipping SaaS products.
             </p>
 
             <form
-              class="mt-8 max-w-sm"
+              class="mt-7"
               @submit.prevent="onSubmit"
             >
               <UFormField
                 name="email"
                 label="Subscribe to our newsletter"
-                size="xl"
+                :ui="{ container: 'mt-2.5' }"
               >
                 <div class="flex gap-2">
                   <UInput
                     v-model="email"
                     type="email"
+                    size="xl"
                     class="flex-1"
                     placeholder="you@company.com"
                     required
+                    :ui="{ base: 'py-[11px]' }"
                   />
 
                   <UButton
@@ -112,6 +117,7 @@ function onSubmit() {
                     color="neutral"
                     size="xl"
                     label="Subscribe"
+                    class="py-2.5 px-[18px] text-[15px]/6"
                   />
                 </div>
               </UFormField>

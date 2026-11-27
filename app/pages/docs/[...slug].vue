@@ -53,14 +53,19 @@ defineOgImage('Saas', { title, description, headline: 'Docs' })
 </script>
 
 <template>
-  <UPage v-if="page">
+  <UPage
+    v-if="page"
+    :ui="{ root: 'lg:grid-cols-[minmax(0,1fr)_200px] lg:gap-0', center: 'lg:col-span-1 lg:px-14 lg:pt-12 lg:pb-20', right: 'lg:col-span-1 lg:border-s lg:border-default' }"
+  >
     <UPageHeader
       :title="page.title"
       :description="page.description"
       :headline="headline"
       :ui="{
-        headline: 'font-mono text-xs font-normal uppercase tracking-wider text-muted',
-        title: 'text-4xl sm:text-5xl tracking-tighter'
+        root: 'pt-8 pb-9 lg:pt-0 border-default',
+        headline: 'mb-3 font-mono text-[13px] font-normal uppercase tracking-[0.04em] text-muted',
+        title: 'text-[34px]/[1.04] sm:text-5xl/[1.04] tracking-[-0.04em]',
+        description: 'mt-4 text-lg/[1.6] sm:text-[19px]/[1.6]'
       }"
     />
 
@@ -75,7 +80,8 @@ defineOgImage('Saas', { title, description, headline: 'Docs' })
       <UContentSurround
         :surround="surround"
         :ui="{
-          link: 'px-5 py-4',
+          link: 'px-5 py-[18px] rounded-xl bg-surface ring-default',
+          linkTitle: 'text-base font-medium',
           linkLeading: 'hidden',
           linkDescription: 'hidden'
         }"
@@ -90,17 +96,25 @@ defineOgImage('Saas', { title, description, headline: 'Docs' })
         :links="page.body.toc.links"
         title="On this page"
         highlight
+        color="neutral"
         highlight-color="neutral"
-        :ui="{ trigger: 'font-mono text-xs font-normal uppercase tracking-wider text-muted' }"
+        :ui="{
+          root: 'lg:px-6 lg:mx-0',
+          container: 'lg:pt-12',
+          trigger: 'font-mono text-xs font-normal uppercase tracking-[0.04em] text-dimmed',
+          link: 'text-sm py-1.5',
+          bottom: 'mt-7 gap-7'
+        }"
       >
         <template #bottom>
-          <USeparator type="dashed" />
+          <USeparator />
 
           <UPageLinks
             title="Community"
             :links="communityLinks"
             :ui="{
-              title: 'font-mono text-xs font-normal uppercase tracking-wider text-muted',
+              title: 'font-mono text-xs font-normal uppercase tracking-[0.04em] text-dimmed',
+              link: 'text-sm',
               linkLabelExternalIcon: 'hidden'
             }"
           />

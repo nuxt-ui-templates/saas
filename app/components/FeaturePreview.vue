@@ -10,7 +10,7 @@ const swatches = ['bg-primary', 'bg-inverted', 'bg-neutral-600', 'bg-neutral-400
   <div
     inert
     aria-hidden="true"
-    class="w-full h-44 rounded-lg ring ring-default bg-default overflow-hidden select-none"
+    class="w-full h-42 rounded-xl ring ring-default bg-surface overflow-hidden select-none"
   >
     <div
       v-if="name === 'components'"

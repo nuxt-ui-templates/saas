@@ -54,9 +54,9 @@ const items = computed(() => [{
       :description="page.description"
       orientation="horizontal"
       :ui="{
-        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16 lg:grid-cols-[1fr_auto] lg:items-end',
-        title: 'max-w-xl text-5xl sm:text-6xl lg:text-7xl',
-        description: 'max-w-xl'
+        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-26 lg:pb-14 gap-8 sm:gap-y-8 lg:grid-cols-[1fr_auto] lg:items-end',
+        title: 'max-w-[640px]',
+        description: 'mt-5 max-w-[640px] text-[17px]/[1.6] sm:text-lg/[1.6]'
       }"
     >
       <UTabs
@@ -64,7 +64,12 @@ const items = computed(() => [{
         :items="items"
         :content="false"
         color="neutral"
-        :ui="{ list: 'ring ring-default bg-default', trigger: 'px-4' }"
+        :ui="{
+          list: 'gap-1 rounded-xl ring ring-default bg-surface',
+          indicator: 'rounded-lg shadow-none',
+          trigger: 'px-4 py-2 text-[15px]/6 gap-2',
+          trailingBadge: 'font-mono text-[11px] px-1.5 py-0.5 rounded-sm'
+        }"
       />
     </UPageHero>
 
@@ -79,28 +84,28 @@ const items = computed(() => [{
             :key="index"
             :title="plan.title"
             :description="plan.description"
-            :badge="plan.badge ? { label: plan.badge, variant: 'solid', class: 'font-mono' } : undefined"
+            :badge="plan.badge ? { label: plan.badge, variant: 'solid', size: 'md', class: 'font-mono rounded-md px-2 py-[3px]' } : undefined"
             :features="plan.features.map(feature => ({ title: feature, icon: 'i-lucide-check' }))"
-            :button="{ ...plan.button, size: 'xl' }"
+            :button="{ ...plan.button, size: 'xl', block: true }"
             :price="isYearly === '1' ? plan.price.year : plan.price.month"
             :billing-cycle="isYearly === '1' ? '/ year' : '/ month'"
             variant="outline"
             :class="plan.highlight && 'dark in-[.dark]:bg-muted'"
             :ui="{
-              root: 'flex flex-col gap-0 rounded-none ring-0 bg-default p-8 lg:p-10',
+              root: 'flex flex-col gap-0 rounded-none ring-0 bg-default px-5 py-10 sm:px-10',
               body: 'contents',
               titleWrapper: 'justify-between',
-              title: 'text-xl sm:text-xl tracking-tight',
-              description: 'text-[15px]',
-              priceWrapper: 'mt-8 items-baseline gap-1.5',
-              price: 'text-5xl sm:text-6xl tracking-tighter',
+              title: 'text-xl sm:text-xl tracking-[-0.02em]',
+              description: 'mt-3 text-[15px]',
+              priceWrapper: 'mt-7 items-baseline gap-1.5',
+              price: 'text-5xl sm:text-[56px] tracking-[-0.05em]',
               billing: 'flex-row',
               billingPeriod: 'hidden',
               billingCycle: 'text-[15px] font-normal',
-              footer: 'mt-8',
-              features: 'order-last mt-8 pt-8 border-t border-default gap-3',
+              footer: 'mt-7',
+              features: 'order-last mt-7 pt-6 border-t border-default gap-3',
               featureIcon: plan.highlight ? 'size-4 text-primary' : 'size-4 text-highlighted',
-              featureTitle: 'text-sm text-default'
+              featureTitle: 'text-[15px]/[1.4] text-toned'
             }"
           />
         </UPricingPlans>
@@ -116,7 +121,11 @@ const items = computed(() => [{
       :title="page.faq.title"
       :description="page.faq.description"
       orientation="horizontal"
-      :ui="{ container: 'lg:grid-cols-[2fr_3fr] lg:items-start' }"
+      :ui="{
+        container: 'lg:py-26 lg:grid-cols-[300px_1fr] lg:gap-x-20 lg:items-start',
+        title: 'lg:text-5xl/[1.04]',
+        description: 'mt-4 text-base/[1.6] sm:text-base/[1.6]'
+      }"
     >
       <UAccordion
         :items="page.faq.items"
@@ -125,9 +134,9 @@ const items = computed(() => [{
         class="border-t border-default"
         trailing-icon="i-lucide-plus"
         :ui="{
-          trigger: 'text-base text-highlighted py-5',
+          trigger: 'min-h-16 py-[18px] gap-4 text-[17px]/7 text-highlighted',
           trailingIcon: 'size-5 text-highlighted group-data-[state=open]:rotate-45',
-          body: 'text-base text-muted pb-5 pe-12'
+          body: 'text-base/[1.65] text-muted pt-0 pb-6 pe-12'
         }"
       />
     </UPageSection>

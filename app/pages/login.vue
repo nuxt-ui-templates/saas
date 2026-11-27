@@ -18,8 +18,7 @@ const fields = [{
   size: 'xl' as const,
   type: 'text' as const,
   label: 'Email',
-  placeholder: 'you@company.com',
-  required: true
+  placeholder: 'you@company.com'
 }, {
   name: 'password',
   size: 'xl' as const,
@@ -34,20 +33,22 @@ const fields = [{
 }]
 
 const providers = [{
-  label: 'Continue with Google',
-  size: 'xl' as const,
-  variant: 'outline' as const,
-  icon: 'i-simple-icons-google',
-  onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
-  }
-}, {
   label: 'Continue with GitHub',
   size: 'xl' as const,
   variant: 'outline' as const,
   icon: 'i-simple-icons-github',
+  class: 'py-[11px] text-[15px]/6',
   onClick: () => {
     toast.add({ title: 'GitHub', description: 'Login with GitHub' })
+  }
+}, {
+  label: 'Email me a magic link',
+  size: 'xl' as const,
+  variant: 'outline' as const,
+  icon: 'i-lucide-mail',
+  class: 'py-[11px] text-[15px]/6',
+  onClick: () => {
+    toast.add({ title: 'Magic link', description: 'Check your inbox for a sign in link' })
   }
 }]
 
@@ -70,7 +71,7 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
     :providers="providers"
     title="Welcome back."
     :submit="{ label: 'Sign in', color: 'neutral', size: 'xl' }"
-    :separator="{ label: 'or', ui: { label: 'font-mono text-xs uppercase tracking-wider text-dimmed' } }"
+    :separator="{ label: 'or', ui: { label: 'font-mono text-xs font-normal uppercase tracking-[0.04em] text-dimmed' } }"
     @submit="onSubmit"
   >
     <template #description>

@@ -22,28 +22,31 @@ defineOgImage('Saas', { title, description })
       :title="page.title"
       :description="page.description"
       :ui="{
-        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16',
-        title: 'max-w-xl text-5xl sm:text-6xl lg:text-7xl',
-        description: 'max-w-md'
+        container: 'pt-16 pb-12 sm:pt-20 sm:pb-14 lg:pt-26 lg:pb-14',
+        title: 'max-w-[640px]',
+        description: 'mt-5 max-w-[640px] text-[17px]/[1.6] sm:text-lg/[1.6]'
       }"
     />
 
     <section class="border-b border-default">
-      <UContainer class="border-x border-default py-16 sm:py-24">
-        <UChangelogVersions :ui="{ indicator: 'start-40' }">
+      <UContainer class="border-x border-default pt-6 pb-18">
+        <UChangelogVersions :ui="{ container: 'gap-y-0 sm:gap-y-0 lg:gap-y-0', indicator: 'inset-y-0 start-57 ms-0' }">
           <UChangelogVersion
             v-for="(version, index) in versions"
             :key="index"
             v-bind="version"
-            :badge="index === 0 ? { label: 'Latest', color: 'primary', variant: 'solid', class: 'font-mono' } : undefined"
+            :image="index < 2 ? version.image : undefined"
+            :badge="index === 0 ? { label: 'Latest', color: 'primary', variant: 'solid', size: 'md', class: 'font-mono rounded-md px-2 py-[3px]' } : undefined"
             :ui="{
-              container: 'max-w-none lg:ms-48',
-              indicator: 'w-40',
-              date: 'font-mono',
-              title: 'text-2xl sm:text-[1.625rem] tracking-tight',
-              description: 'text-base max-w-2xl mt-2',
-              imageWrapper: 'aspect-[2/1] mt-6',
-              dotInner: index === 0 ? 'bg-primary' : 'hidden'
+              container: 'max-w-none py-8 lg:py-10 lg:ms-57 lg:ps-8',
+              indicator: 'top-11 w-[calc(var(--spacing)*57+5.5px)] items-start justify-between',
+              meta: 'mb-3',
+              date: 'font-mono text-sm text-muted',
+              title: 'text-[22px]/[1.15] sm:text-[26px]/[1.15] lg:text-[30px]/[1.15] tracking-[-0.03em]',
+              description: 'mt-3 max-w-[640px] text-base/[1.65]',
+              imageWrapper: 'aspect-[2/1] mt-6 rounded-xl ring ring-default',
+              dot: index === 0 ? 'size-[11px] my-0 mt-1 bg-primary ring-2 ring-inverted' : 'size-[11px] my-0 mt-1 bg-default ring-2 ring-accented',
+              dotInner: 'hidden'
             }"
           />
         </UChangelogVersions>

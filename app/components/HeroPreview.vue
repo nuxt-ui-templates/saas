@@ -38,9 +38,9 @@ const bars = [38, 42, 40, 51, 47, 55, 52, 60, 58, 64, 61, 70, 66, 72, 69, 78, 74
 <template>
   <div
     aria-hidden="true"
-    class="-mb-px rounded-t-xl border border-b-0 border-default bg-default overflow-hidden shadow-2xl shadow-neutral-950/10 select-none"
+    class="-mb-px rounded-t-xl border border-b-0 border-default bg-surface overflow-hidden shadow-2xl shadow-neutral-950/10 select-none"
   >
-    <div class="flex items-center gap-3 h-11 px-4 border-b border-default">
+    <div class="flex items-center gap-3 h-11 px-4 border-b border-muted">
       <div class="flex gap-1.5">
         <span
           v-for="i in 3"
@@ -59,7 +59,7 @@ const bars = [38, 42, 40, 51, 47, 55, 52, 60, 58, 64, 61, 70, 66, 72, 69, 78, 74
     </div>
 
     <div class="flex min-h-96">
-      <div class="hidden md:flex flex-col gap-0.5 w-56 shrink-0 p-3 border-e border-default text-sm">
+      <div class="hidden md:flex flex-col gap-0.5 w-56 shrink-0 p-3 border-e border-muted text-sm">
         <div class="flex items-center gap-2.5 px-2 pt-1.5 pb-3.5">
           <span class="grid place-items-center size-6 rounded-md bg-primary text-primary-950 text-xs font-semibold">L</span>
           <span class="font-medium text-highlighted">Lumen Labs</span>
@@ -131,7 +131,7 @@ const bars = [38, 42, 40, 51, 47, 55, 52, 60, 58, 64, 61, 70, 66, 72, 69, 78, 74
               v-for="(bar, index) in bars"
               :key="index"
               class="flex-1 rounded-xs"
-              :class="index === bars.length - 1 ? 'bg-primary' : index >= bars.length - 5 ? 'bg-accented' : 'bg-elevated'"
+              :class="index === bars.length - 1 ? 'bg-primary' : index >= bars.length - 5 ? 'bg-(--ui-border-accented)' : 'bg-accented'"
               :style="{ height: `${bar}%` }"
             />
           </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
 
-const testimonial = computed(() => page.value?.testimonials.items[1])
+const testimonial = computed(() => page.value?.testimonials.items[0])
 </script>
 
 <template>
@@ -16,20 +16,20 @@ const testimonial = computed(() => page.value?.testimonials.items[1])
       </NuxtLink>
 
       <div class="flex-1 flex items-center justify-center py-14">
-        <div class="w-full max-w-sm">
+        <div class="w-full max-w-[380px]">
           <slot />
         </div>
       </div>
     </div>
 
     <aside class="dark hidden lg:flex flex-col justify-between gap-12 p-12 xl:p-16 bg-default text-default border-s border-default bg-[radial-gradient(var(--ui-border)_1px,transparent_1px)] bg-size-[24px_24px]">
-      <p class="self-end font-mono text-sm uppercase tracking-wider text-muted">
+      <p class="self-end font-mono text-[13px] uppercase tracking-[0.04em] text-muted">
         Built with Nuxt UI
       </p>
 
       <div
         aria-hidden="true"
-        class="max-w-lg p-7 rounded-xl border border-default bg-default"
+        class="max-w-[576px] p-7 rounded-[14px] border border-default bg-default"
       >
         <div class="flex items-center justify-between gap-3">
           <p class="text-sm text-muted">
@@ -61,7 +61,7 @@ const testimonial = computed(() => page.value?.testimonials.items[1])
 
       <figure
         v-if="testimonial"
-        class="max-w-xl"
+        class="max-w-[576px]"
       >
         <blockquote class="text-2xl/snug xl:text-[1.75rem]/snug font-medium tracking-tight text-highlighted">
           “{{ testimonial.quote }}”
@@ -70,7 +70,9 @@ const testimonial = computed(() => page.value?.testimonials.items[1])
         <figcaption class="mt-6">
           <UUser
             v-bind="testimonial.user"
-            size="lg"
+            :avatar="{ ...testimonial.user.avatar, alt: testimonial.user.name, ui: { root: 'bg-accented', fallback: 'text-sm font-semibold text-highlighted' } }"
+            size="xl"
+            :ui="{ root: 'gap-3', name: 'text-[15px]', description: 'text-sm' }"
           />
         </figcaption>
       </figure>

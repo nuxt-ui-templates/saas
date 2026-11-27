@@ -71,7 +71,7 @@ logos:
     - label: Heroku
 faq:
   title: Questions, answered.
-  description: Everything you need to know about our plans and billing. Can't find the answer you're looking for? Reach out to our support team.
+  description: Everything about plans and billing. Can't find what you need? Reach out to our support team.
   items:
     - label: Is this a secure service?
       content: Yes. All data is encrypted in transit and at rest, and every plan includes SSL certificates. We follow industry best practices to keep your data safe.

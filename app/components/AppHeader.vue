@@ -52,7 +52,7 @@ const items = computed(() => [{
         variant="pill"
         color="neutral"
         class="hidden lg:flex ms-6"
-        :ui="{ link: 'px-3 py-2 text-[15px]' }"
+        :ui="{ link: 'px-3 py-2 text-[15px] font-normal aria-[current=page]:font-medium before:rounded-lg' }"
       />
     </template>
 
@@ -66,7 +66,8 @@ const items = computed(() => [{
         to="https://github.com/nuxt-ui-templates/saas"
         target="_blank"
         aria-label="GitHub repository"
-        class="hidden sm:inline-flex"
+        size="lg"
+        class="hidden sm:inline-flex p-2.5 text-muted"
       />
 
       <UButton
@@ -92,7 +93,7 @@ const items = computed(() => [{
         color="neutral"
         size="lg"
         to="/signup"
-        class="hidden lg:inline-flex ms-1.5"
+        class="hidden lg:inline-flex px-4"
       />
     </template>
 

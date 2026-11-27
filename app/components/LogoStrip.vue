@@ -18,7 +18,7 @@ defineProps<{
         <li
           v-for="item in items"
           :key="item.label"
-          class="font-mono text-sm font-medium uppercase tracking-wider text-highlighted"
+          class="font-mono text-[15px] font-medium uppercase tracking-[0.04em] text-toned"
         >
           {{ item.label }}
         </li>

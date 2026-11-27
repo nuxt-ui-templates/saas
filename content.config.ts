@@ -81,7 +81,7 @@ export const collections = {
               description: z.string().nonempty(),
               to: z.string().optional(),
               target: z.string().optional(),
-              avatar: createImageSchema()
+              avatar: createImageSchema().optional()
             })
           })
         )

@@ -21,7 +21,7 @@ const modes = [{
     <div
       role="group"
       aria-label="Color mode"
-      class="inline-flex gap-0.5 p-0.5 rounded-full ring ring-default"
+      class="inline-flex gap-0.5 p-[3px] rounded-full ring ring-default bg-surface"
     >
       <UButton
         v-for="mode in modes"
@@ -32,7 +32,7 @@ const modes = [{
         color="neutral"
         :variant="colorMode.preference === mode.value ? 'soft' : 'ghost'"
         size="sm"
-        class="rounded-full"
+        class="rounded-full p-2"
         @click="colorMode.preference = mode.value"
       />
     </div>
